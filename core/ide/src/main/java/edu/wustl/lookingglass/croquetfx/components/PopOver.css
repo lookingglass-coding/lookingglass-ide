@@ -1,0 +1,28 @@
+.popover {
+	-fx-background-color: transparent;
+}
+
+.popover > .border {
+	-fx-stroke: #c0c0c0;
+	-fx-stroke-width: 1.0px;
+	-fx-fill: #ffffff;
+	-fx-effect: dropshadow(gaussian, rgba(0,0,0,.2), 10.0, 0.5, 2.0, 2.0);
+}
+
+.popover > .content {
+}
+
+#content-pane {
+	-fx-background-color: transparent;
+}
+
+/* Button borrowed from Modena stylesheet for tab close button */
+#close-button {
+    -fx-background-color: -fx-mark-color;
+    -fx-shape: "M 0,0 H1 L 4,3 7,0 H8 V1 L 5,4 8,7 V8 H7 L 4,5 1,8 H0 V7 L 3,4 0,1 Z";
+    -fx-scale-shape: false;
+    -fx-effect: dropshadow(two-pass-box , rgba(255, 255, 255, 0.4), 1, 0.0 , 0, 1);
+}
+#close-button:hover {
+    -fx-background-color: derive(-fx-mark-color, -30%);
+}

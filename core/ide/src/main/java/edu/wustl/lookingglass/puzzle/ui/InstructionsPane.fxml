@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<HBox fx:id="instructionsPane" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" styleClass="puzzle-instructions" stylesheets="@CompletionPuzzle.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fx:id="face" pickOnBounds="true" preserveRatio="true" />
+      <VBox styleClass="puzzle-instructions-textbox">
+         <children>
+            <Label fx:id="title" styleClass="puzzle-instructions-title" text="%InstructionsPane.title" />
+            <Label fx:id="directions" styleClass="puzzle-instructions-directions" text="%InstructionsPane.directions" />
+         </children>
+      </VBox>
+   </children>
+</HBox>

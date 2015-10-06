@@ -1,0 +1,14 @@
+2000_turn_with_part:
+  crawler_param2: 1
+  crawler_param3: -1
+  type_cd: <%= CodeTest.skill %>
+  snippet: "if not MethodsAPI.getCallerGetPartMethod(expressionStatement) == None:\n\treturn MethodsAPI.getMethod(expressionStatement).getName() == \"turn\""
+  id: 2000
+  title: turn_with_part
+  description: make a character's part turn
+  crawler_cd: <%= CodeTest.expression_statement %>
+  user_id: 1
+  crawler_param1: 1
+  crawl_cd: <%= CodeTest.expressionstatement %>
+  published_cd: <%= CodeTest.ispublished %>
+  return_cd: <%= CodeTest.expressionstatement %>

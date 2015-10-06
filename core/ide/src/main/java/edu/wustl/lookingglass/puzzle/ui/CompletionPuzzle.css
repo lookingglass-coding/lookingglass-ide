@@ -1,0 +1,186 @@
+* {
+	puzzle-background: #e6e9fb;
+	puzzle-editable: #a5abe0;
+
+	puzzle-play-correct: #91d29e;
+	puzzle-play-mine: #a9c8f8;
+
+	puzzle-chat-bubble: #e6e9fa;
+}
+
+.puzzle-background {
+	-fx-background-color: puzzle-background;
+}
+
+.puzzle-scene-letterbox {
+	-fx-background-color: black;
+}
+
+.puzzle-play-box {
+	-fx-hgap: 20px;
+	-fx-padding: 16px;
+}
+
+.puzzle-play-correct-button {
+	-fx-base: puzzle-play-correct;
+}
+
+.puzzle-play-mine-button {
+	-fx-base: puzzle-play-mine;
+}
+
+.puzzle-fast-forward-button {
+	-fx-base: #a5abe0;
+}
+
+.puzzle-next-button {
+	-fx-base: #e6e9fa;
+	-fx-padding: .33em 1.6em .33em 2.0em;
+}
+
+.puzzle-toolbar {
+	-fx-background-color: puzzle-editable;
+	-fx-hgap: 8px;
+}
+
+.puzzle-toolbar-button {
+	-fx-base: puzzle-background;
+	-fx-padding: .33em 1.2em .33em 1em;
+}
+
+.puzzle-toolbar-quit-button {
+	-fx-base: white;
+	-fx-padding: .33em 1.2em .33em 1em;
+}
+
+.puzzle-instructions {
+	-fx-background: #f7f8ff;
+	-fx-padding: 8px 32px 8px 32px;
+	-fx-spacing: 14px;
+}
+
+.puzzle-instructions-textbox {
+	-fx-spacing: 2px;
+}
+
+.puzzle-instructions-title {
+	-fx-font-size: 14px;
+	-fx-font-weight: bold;
+}
+
+.puzzle-instructions-directions {
+}
+
+.puzzle-overlay {
+	-fx-background: white;
+	-fx-padding: 30px;
+}
+
+.puzzle-overlay-with-close {
+	-fx-background: white;
+	-fx-padding: 4px 4px 30px 30px;
+}
+
+.puzzle-overlay-close {
+	-fx-background-color: transparent;
+	-fx-padding: 8px;
+}
+
+.overlay-text-message {
+	-fx-font-size: 22px;
+	-fx-font-weight: bold;
+}
+
+.overlay-text-advice {
+}
+
+.overlay-button-default {
+	-fx-base: #a9c7fd;
+	-fx-padding: .42em 1.6em .42em 1.6em;
+}
+
+.overlay-button {
+	-fx-base: #e6e9fa;
+	-fx-padding: .42em 1.6em .42em 1.6em;
+}
+
+.indicator-correct-puzzle {
+	-fx-status-color: #eeeeec;
+}
+
+.play-border-correct {
+	-fx-border-color: puzzle-play-correct;
+	-fx-border-width: 14 0 14 0;
+}
+
+.play-border-mine {
+	-fx-border-color: puzzle-play-mine;
+	-fx-border-width: 14 0 14 0;
+}
+
+.puzzle-intro-title {
+	-fx-font-size: 22px;
+	-fx-font-weight: bold;
+}
+
+.puzzle-intro-directions {
+	-fx-font-size: 16px;
+}
+
+.puzzle-face {
+	-fx-effect: dropshadow(gaussian, #00000044, 10.0, .12, 0.0, 2.0);
+}
+
+.chat-bubble {
+	-fx-effect: dropshadow(gaussian, #00000044, 10.0, .12, 0.0, 2.0);
+}
+
+.chat-bubble-text {
+	-fx-background-color: puzzle-chat-bubble;
+	-fx-font-size: 16px;
+}
+
+.chat-bubble-top-left {
+	-fx-shape: "m 255.50197,472.09663 c -6.80933,0 -13.61718,6.80809 -13.61718,13.61718 l 13.61718,0 0,-13.61718 z";
+	-fx-background-color: puzzle-chat-bubble;
+}
+
+.chat-bubble-top-center {
+	-fx-shape: "m 255.50197,472.09663 0,13.61718 59.66211,0 0,-13.61718 -59.66211,0 z";
+	-fx-background-color: puzzle-chat-bubble;
+}
+
+.chat-bubble-top-right {
+	-fx-shape: "m 315.16408,472.09663 0,13.61718 13.61719,0 c -2.4e-4,-6.80909 -6.80857,-13.61718 -13.61719,-13.61718 z";
+	-fx-background-color: puzzle-chat-bubble;
+}
+
+.chat-bubble-middle-right {
+	-fx-shape: "m 315.16408,485.71381 0,27.23633 13.61719,0 0,-27.23633 -13.61719,0 z";
+	-fx-background-color: puzzle-chat-bubble;
+}
+
+.chat-bubble-bottom-right {
+	-fx-shape: "m 315.16408,512.95014 0,13.61719 c 6.80885,0 13.61719,-6.80833 13.61719,-13.61719 l -13.61719,0 z";
+	-fx-background-color: puzzle-chat-bubble;
+}
+
+.chat-bubble-bottom-center1 {
+	-fx-shape: "m 255.50195,512.94922 c 0,9.13151 0,18.26302 0,27.39453 6.03646,-3.99023 12.07292,-7.98047 18.10938,-11.9707 2.66207,-1.37807 5.68946,-1.93506 8.67063,-1.80664 0.57138,0 1.14275,0 1.71413,0 0,-4.53906 0,-9.07813 0,-13.61719 -9.49805,0 -18.99609,0 -28.49414,0 z";
+	-fx-background-color: puzzle-chat-bubble;
+}
+
+.chat-bubble-bottom-center2 {
+	-fx-shape: "m 283.99611,512.95014 0,13.61719 31.16797,0 0,-13.61719 -31.16797,0 z";
+	-fx-background-color: puzzle-chat-bubble;
+}
+
+.chat-bubble-bottom-left {
+	-fx-shape: "m 241.88479,512.95014 c 0.0645,4.67425 2.89492,9.03839 6.74774,11.55327 1.36585,0.92161 2.94169,1.44269 4.52461,1.83709 1.57133,0.7151 1.6391,2.69714 1.49509,4.18263 -0.50808,4.09349 -2.18522,7.92597 -3.88113,11.64819 -0.0731,0.46911 -1.49296,2.4052 -0.4931,1.62545 1.74133,-1.1507 3.48265,-2.3014 5.22397,-3.4521 0,-9.13151 0,-18.26302 0,-27.39453 -4.53906,0 -9.07812,0 -13.61718,0 z";
+	-fx-background-color: puzzle-chat-bubble;
+}
+
+.chat-bubble-middle-left {
+	-fx-shape: "m 241.88479,485.71381 0,27.23633 13.61718,0 0,-27.23633 -13.61718,0 z";
+	-fx-background-color: puzzle-chat-bubble;
+}

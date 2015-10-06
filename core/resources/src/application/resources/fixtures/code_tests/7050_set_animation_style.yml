@@ -1,0 +1,14 @@
+7050_set_animation_style:
+  crawler_param2: 1
+  crawler_param3: -1
+  type_cd: <%= CodeTest.skill %>
+  snippet: return MethodsAPI.getParameter(expressionStatement, "animationStyle")
+  id: 7050
+  title: set_animation_style
+  description: specify the animation style of an action
+  crawler_cd: <%= CodeTest.expression_statement %>
+  user_id: 1
+  crawler_param1: 1
+  crawl_cd: <%= CodeTest.expressionstatement %>
+  published_cd: <%= CodeTest.ispublished %>
+  return_cd: <%= CodeTest.expressionstatement %>

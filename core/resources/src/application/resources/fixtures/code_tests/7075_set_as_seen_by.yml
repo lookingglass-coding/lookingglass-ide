@@ -1,0 +1,14 @@
+7075_set_as_seen_by:
+  crawler_param2: 1
+  crawler_param3: -1
+  type_cd: <%= CodeTest.skill %>
+  snippet: return MethodsAPI.getParameter(expressionStatement, "asSeenBy")
+  id: 7075
+  title: set_as_seen_by
+  description: amakes a character's movement happen from specific object's point of view
+  crawler_cd: <%= CodeTest.expression_statement %>
+  user_id: 1
+  crawler_param1: 1
+  crawl_cd: <%= CodeTest.expressionstatement %>
+  published_cd: <%= CodeTest.ispublished %>
+  return_cd: <%= CodeTest.expressionstatement %>

@@ -1,0 +1,14 @@
+4050_count_loop:
+  crawler_param2: -1
+  crawler_param3: -1
+  type_cd: <%= CodeTest.skill %>
+  snippet: "#first checks to see if there is at least 1 statement inside\nif countLoop.body.getValue().statements.size()>0:\n\t#then checks to see that the loop is performing more than once\n\treturn ControlConstructAPI.getCounter(countLoop)>1"
+  id: 4050
+  title: count_loop
+  description: goes through a set of actions a given number of times
+  crawler_cd: <%= CodeTest.construct %>
+  user_id: 1
+  crawler_param1: -1
+  crawl_cd: <%= CodeTest.countloop %>
+  published_cd: <%= CodeTest.ispublished %>
+  return_cd: <%= CodeTest.countloop %>

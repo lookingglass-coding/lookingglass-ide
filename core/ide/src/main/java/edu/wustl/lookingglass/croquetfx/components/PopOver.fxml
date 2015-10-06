@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox id="content-pane" fx:id="contentBox" alignment="CENTER" stylesheets="@PopOver.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox fx:id="closeBox" alignment="TOP_RIGHT" maxWidth="1.7976931348623157E308" VBox.vgrow="NEVER">
+         <children>
+            <Button id="close-button" fx:id="close" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="10.0" prefWidth="10.0" HBox.hgrow="NEVER" />
+         </children>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+   </padding>
+</VBox>

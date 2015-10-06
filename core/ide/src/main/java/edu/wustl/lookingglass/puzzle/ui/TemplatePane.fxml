@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.embed.swing.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="templatePane" alignment="CENTER" spacing="12.0" stylesheets="@CompletionPuzzle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <StackPane maxWidth="1.7976931348623157E308">
+         <children>
+            <Label fx:id="title" style="-fx-font-weight: bold; -fx-font-size: 14;" text="%TemplatePane.title" />
+            <HBox fx:id="closePane" alignment="CENTER" maxWidth="1.7976931348623157E308">
+               <children>
+                  <Region maxWidth="1.7976931348623157E308" HBox.hgrow="SOMETIMES" />
+                  <Button fx:id="close" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" styleClass="window-close">
+                     <HBox.margin>
+                        <Insets bottom="4.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
+         </children>
+      </StackPane>
+      <Pane fx:id="deleteMePlaceHolder" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: red;" />
+      <HBox fx:id="buttonBox" alignment="CENTER" maxWidth="640.0" spacing="8.0">
+         <children>
+            <HBox alignment="CENTER_LEFT" fillHeight="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+            <Button fx:id="button" minWidth="-Infinity" mnemonicParsing="false" style="-fx-base: red;" text="%TemplatePane.button" textOverrun="CLIP" />
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+   </padding>
+</VBox>

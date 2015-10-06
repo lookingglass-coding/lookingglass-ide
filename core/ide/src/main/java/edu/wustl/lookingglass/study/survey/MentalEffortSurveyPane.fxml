@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox fx:id="surveyBox" alignment="CENTER" spacing="8.0" stylesheets="@MentalEffortSurveyPane.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<children>
+<Label fx:id="directions" alignment="BOTTOM_CENTER" layoutX="273.0" layoutY="51.0" text="%MentalEffortSurvey.directions" textAlignment="CENTER" wrapText="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0" />
+<HBox fx:id="scaleBox" alignment="CENTER" layoutX="1.0" layoutY="99.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="780.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+<children>
+<ToggleButton fx:id="level1" focusTraversable="false" layoutX="143.0" layoutY="280.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefWidth="112.0" styleClass="left-pill,mental-effort-scale,level1" text="%MentalEffortSurvey.level_1" textAlignment="CENTER" wrapText="true" />
+<ToggleButton fx:id="level2" focusTraversable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefWidth="112.0" styleClass="center-pill,mental-effort-scale,level2" text="%MentalEffortSurvey.level_2" textAlignment="CENTER" wrapText="true" />
+<ToggleButton fx:id="level3" focusTraversable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefWidth="112.0" styleClass="center-pill,mental-effort-scale,level3" text="%MentalEffortSurvey.level_3" textAlignment="CENTER" wrapText="true" />
+<ToggleButton fx:id="level4" focusTraversable="false" layoutX="245.0" layoutY="18.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefWidth="112.0" styleClass="center-pill,mental-effort-scale,level4" text="%MentalEffortSurvey.level_4" textAlignment="CENTER" wrapText="true" />
+<ToggleButton fx:id="level5" focusTraversable="false" layoutX="245.0" layoutY="18.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefWidth="112.0" styleClass="center-pill,mental-effort-scale,level5" text="%MentalEffortSurvey.level_5" textAlignment="CENTER" wrapText="true" />
+<ToggleButton fx:id="level6" focusTraversable="false" layoutX="245.0" layoutY="18.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefWidth="112.0" styleClass="center-pill,mental-effort-scale,level6" text="%MentalEffortSurvey.level_6" textAlignment="CENTER" wrapText="true" />
+<ToggleButton fx:id="level7" focusTraversable="false" layoutX="245.0" layoutY="18.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefWidth="112.0" styleClass="center-pill,mental-effort-scale,level7" text="%MentalEffortSurvey.level_7" textAlignment="CENTER" wrapText="true" />
+<ToggleButton fx:id="level8" focusTraversable="false" layoutX="245.0" layoutY="18.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefWidth="112.0" styleClass="center-pill,mental-effort-scale,level8" text="%MentalEffortSurvey.level_8" textAlignment="CENTER" wrapText="true" />
+<ToggleButton fx:id="level9" focusTraversable="false" layoutX="245.0" layoutY="18.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefWidth="112.0" styleClass="right-pill,mental-effort-scale,level9" text="%MentalEffortSurvey.level_9" textAlignment="CENTER" wrapText="true" />
+</children>
+</HBox>
+</children>
+</VBox>

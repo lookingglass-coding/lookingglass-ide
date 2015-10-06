@@ -1,0 +1,29 @@
+.scale {
+  -scale-color: #a8a8a8;
+  -fx-padding: 5px;
+}
+.scale:selected {
+  -fx-base: -fx-default-button;
+}
+
+.level1 {
+  -fx-base: derive(-scale-color, 100%);
+}
+.level2 {
+  -fx-base: derive(-scale-color, 83%);
+}
+.level3 {
+  -fx-base: derive(-scale-color, 67%);
+}
+.level4 {
+  -fx-base: derive(-scale-color, 50%);
+}
+.level5 {
+  -fx-base: derive(-scale-color, 33%);
+}
+.level6 {
+  -fx-base: derive(-scale-color, 17%);
+}
+.level7 {
+  -fx-base: derive(-scale-color, 0%);
+}

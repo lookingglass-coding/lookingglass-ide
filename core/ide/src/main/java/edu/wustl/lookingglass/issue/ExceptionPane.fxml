@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="rootContainer" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label text="%ExceptionPane.description">
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </Label>
+      <TextArea fx:id="description" prefHeight="80.0" promptText="%ExceptionPane.descriptionHelp" wrapText="true">
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </TextArea>
+      <Label text="%ExceptionPane.email">
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </Label>
+      <TextField fx:id="email" promptText="%ExceptionPane.emailHelp">
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </TextField>
+      <HBox alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+         <children>
+            <Label text="%ExceptionPane.attachProject">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </Label>
+            <CheckBox fx:id="attach" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" selected="true" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

@@ -1,0 +1,16 @@
+7000_get_part:
+  crawler_param2: 1
+  crawler_param3: -1
+  type_cd: <%= CodeTest.skill %>
+  snippet: |-
+    #if the expressionStatment has a getPart method inside, passes
+    return MethodsAPI.getCallerGetPartMethod(expressionStatement)
+  id: 7000
+  title: get_part
+  description: animate the part of a character
+  crawler_cd: <%= CodeTest.expression_statement %>
+  user_id: 1
+  crawler_param1: 1
+  crawl_cd: <%= CodeTest.expressionstatement %>
+  published_cd: <%= CodeTest.ispublished %>
+  return_cd: <%= CodeTest.expressionstatement %>

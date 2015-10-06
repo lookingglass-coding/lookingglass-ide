@@ -1,0 +1,14 @@
+3025_for_each_in:
+  crawler_param2: -1
+  crawler_param3: -1
+  type_cd: <%= CodeTest.skill %>
+  snippet: "#first checks to see if there is at least 1 statement inside\nif forEachInArrayLoop.body.getValue().statements.size() > 0:\n\t#then checks to see that the array has length greater than one\n\treturn forEachInArrayLoop.array.getValue().lengths.getValue().get(0) > 1"
+  id: 3025
+  title: for_each_in
+  description: makes each member of your group individually do a particular action or actions
+  crawler_cd: <%= CodeTest.construct %>
+  user_id: 1
+  crawler_param1: -1
+  crawl_cd: <%= CodeTest.foreachinarrayloop %>
+  published_cd: <%= CodeTest.ispublished %>
+  return_cd: <%= CodeTest.foreachinarrayloop %>

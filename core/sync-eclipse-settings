@@ -1,0 +1,44 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+require 'pathname'
+
+def process_dir( directory )
+  Dir.new( directory ).each do |file|
+    unless ['.', '..'].include? file
+      path = directory + "/" + file
+      absolute_path = Pathname.new( File.expand_path( path ) )
+      relative_path = absolute_path.relative_path_from( Pathname.new( WORKING_DIR ) ).to_s
+
+      if File.directory?( path ) then
+        ignore_dir = false
+        IGNORE_DIRS.each do |ignore_pattern|
+          ignore_dir = true if ignore_pattern.match relative_path
+        end
+        process_dir( path ) unless ignore_dir
+      end
+
+      if File.basename( path ) == ".project" then
+        settings_dir = File.expand_path( directory + "/.settings" )
+        if ( File.exists? settings_dir ) && ( settings_dir != SETTINGS_DIR ) then
+          puts "copying settings for #{Pathname.new( File.expand_path( settings_dir ) ).relative_path_from( Pathname.new( WORKING_DIR ) )}"
+          SETTING_FILES.each do |setting_file|
+            FileUtils.cp( SETTINGS_DIR + "/" + setting_file, settings_dir + "/" + setting_file )
+          end
+        end
+      end
+    end
+  end
+end
+
+# tools/sync-eclipse-settings core/ide .
+begin
+  SETTINGS_DIR = File.expand_path( ARGV[0] + "/.settings" )
+  WORKING_DIR = File.expand_path( ARGV[1] )
+
+  SETTING_FILES = [ "org.eclipse.jdt.core.prefs", "org.eclipse.jdt.ui.prefs", "org.eclipse.mylyn.tasks.ui.prefs", "org.eclipse.mylyn.team.ui.prefs" ]
+  IGNORE_DIRS = [ /^\.git\// ]
+
+  process_dir( WORKING_DIR )
+end
+

@@ -1,0 +1,14 @@
+4000_do_together_with_part:
+  crawler_param2: 1
+  crawler_param3: -1
+  type_cd: <%= CodeTest.skill %>
+  snippet: "dtCallerPair = dict()\nsuccessPairs = dict()\nreturnList = list()\nmoveMethods = [\"turn\",\"roll\",\"turnToFace\",\"orientTo\",\"orientToUpright\",\"pointAt\"]\nfor es in esList:\n\tesName = MethodsAPI.getMethodName(es)\n\tesCaller = MethodsAPI.getCaller(es).field.getValue()\n\tdt = InternalAPI.getEncasingNodeOfType(es, DoTogether)\n\tif not dt == None:\n\t\t#if the method involves 'moving'\n\t\tif esName in moveMethods:\n\t\t\t#the method is moving a part\n\t\t\tif not MethodsAPI.getCallerGetPartMethod(es) == None:\n\t\t\t\t#dt doesn't yet exist in the dict\n\t\t\t\tif dt not in dtCallerPair.keys():\n\t\t\t\t\t#so add it\n\t\t\t\t\tdtCallerPair[dt] = {esCaller:[es]}\n\t\t\t\t#dt already exists in dict\n\t\t\t\telse:\n\t\t\t\t\t#caller isn't matched to this dt\n\t\t\t\t\tif esCaller not in dtCallerPair[dt].keys():\n\t\t\t\t\t\tdtCallerPair[dt][esCaller] = []\n\t\t\t\t\t\tdtCallerPair[dt][esCaller].append(es)\n\t\t\t\t\t#caller already in dict paired with this dt\n\t\t\t\t\telse:\n\t\t\t\t\t\tdtCallerPair[dt][esCaller].append(es)\n\t\t\t\t\t\t#dt is already in the success dict\n\t\t\t\t\t\tif dt in successPairs.keys():\n\t\t\t\t\t\t\t#caller is not paired with this dt in success dict\n\t\t\t\t\t\t\tif not esCaller in successPairs[dt]:\n\t\t\t\t\t\t\t\tsuccessPairs[dt].append(esCaller)\n\t\t\t\t\t\t#dt is not yet in the success dict\n\t\t\t\t\t\telse:\n\t\t\t\t\t\t\tsuccessPairs[dt] = [esCaller]\n#iterate through success dict to extract each es\nfor k in successPairs.keys():\n\tfor v in successPairs[k]:\n\t\tfor es in dtCallerPair[k][v]:\n\t\t\treturnList.append(es)\nreturn returnList"
+  id: 4000
+  title: do_together_with_part
+  description: makes more than one of the character's parts move at the same time
+  crawler_cd: <%= CodeTest.spread_expression_statement %>
+  user_id: 1
+  crawler_param1: 1
+  crawl_cd: <%= CodeTest.expressionstatement %>
+  published_cd: <%= CodeTest.ispublished %>
+  return_cd: <%= CodeTest.nodeholder %>

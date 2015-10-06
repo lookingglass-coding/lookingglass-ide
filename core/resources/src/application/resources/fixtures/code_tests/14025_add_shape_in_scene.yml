@@ -1,0 +1,14 @@
+14025_add_shape_in_scene:
+  crawler_param2: 0
+  crawler_param3: -1
+  type_cd: <%= CodeTest.skill %>
+  snippet: "shape_list = list()\nmin_len = 1\nfor es in esList:\n\tif InternalAPI.getEncasingUserMethod(es).getName() == \"performGeneratedSetUp\":\n\t\tif not MethodsAPI.getCaller(es) == None:\n\t\t\tsuperX2 = MethodsAPI.getCaller(es).getType().getSuperType().getSuperType().getName()\n\t\t\tif superX2 == \"SShape\":\n\t\t\t\tif MethodsAPI.getCaller(es).__str__() == \"FieldAccess[]\":\n\t\t\t\t\tshapeName = MethodsAPI.getCaller(es).field.getValue().getName()\n\t\t\t\t\tif shapeName not in shape_list:\n\t\t\t\t\t\tshape_list.append(shapeName)\nif len(shape_list) < min_len:\n\tprint \"Failed: not enough shapes present\"\nelse:\n\tprint \"Passed. Shapes in in scene:\"\n\tfor c in shape_list:\n\t\tprint \"  \",c\nreturn list()"
+  id: 14025
+  title: add_shape_in_scene
+  description: 'add shapes to your world '
+  crawler_cd: <%= CodeTest.spread_expression_statement %>
+  user_id: 1
+  crawler_param1: 1
+  crawl_cd: <%= CodeTest.expressionstatement %>
+  published_cd: <%= CodeTest.ispublished %>
+  return_cd: <%= CodeTest.nodeholder %>

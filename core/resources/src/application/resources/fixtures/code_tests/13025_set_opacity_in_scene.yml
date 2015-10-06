@@ -1,0 +1,14 @@
+13025_set_opacity_in_scene:
+  crawler_param2: 0
+  crawler_param3: -1
+  type_cd: <%= CodeTest.skill %>
+  snippet: "object_opac_map = {}\nmin_len = 1\nfor es in esList:\n\tif InternalAPI.getEncasingUserMethod(es).getName()==\"performGeneratedSetUp\":\n\t\tname = MethodsAPI.getMethod( es ).getName()\n\t\tif name == \"setOpacity\":\n\t\t\topacity = MethodsAPI.getParametersAsMap(es).get(\"opacity\").value.getValue()\n\t\t\tif not opacity == None and not opacity == 1.0:\n\t\t\t\tif not MethodsAPI.getCaller(es) == None and not MethodsAPI.getCallerUniqueName(es) == \"ground\":\n\t\t\t\t\tif MethodsAPI.getCaller(es).__str__() == \"FieldAccess[]\":\n\t\t\t\t\t\tobjName = MethodsAPI.getCaller(es).field.getValue().getName()\n\t\t\t\t\tif objName not in object_opac_map.keys():\n\t\t\t\t\t\tobject_opac_map[objName] = opacity\nif len(object_opac_map.keys()) < min_len:\n\tprint \"Failed: not enough objects had their opacity changed\"\n\treturn list()\nfor o in object_opac_map.keys():\n\tprint o,\"was changed to the opacity of\", object_opac_map[o],\"in scene setup\"\nreturn list()"
+  id: 13025
+  title: set_opacity_in_scene
+  description: change a character or object's opacity in scene setup mode
+  crawler_cd: <%= CodeTest.spread_expression_statement %>
+  user_id: 1
+  crawler_param1: 1
+  crawl_cd: <%= CodeTest.expressionstatement %>
+  published_cd: <%= CodeTest.ispublished %>
+  return_cd: <%= CodeTest.nodeholder %>

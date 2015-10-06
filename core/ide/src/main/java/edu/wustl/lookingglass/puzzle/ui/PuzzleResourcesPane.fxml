@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.embed.swing.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="resourcesPane" alignment="TOP_CENTER" minWidth="220.0" prefWidth="400.0" styleClass="puzzle-background" stylesheets="@CompletionPuzzle.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <BorderPane fx:id="letterBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="puzzle-scene-letterbox" VBox.vgrow="SOMETIMES">
+         <center>
+            <ImageView fx:id="scene" pickOnBounds="true" preserveRatio="true" />
+         </center>
+      </BorderPane>
+      <TilePane alignment="CENTER" prefColumns="2" prefRows="1" styleClass="puzzle-play-box">
+         <children>
+            <Button fx:id="playCorrect" alignment="BASELINE_LEFT" focusTraversable="false" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="puzzle-play-correct-button" text="%PuzzleResourcesPane.playCorrect" />
+            <Button fx:id="playMine" alignment="BASELINE_LEFT" focusTraversable="false" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="puzzle-play-mine-button" text="%PuzzleResourcesPane.playMine" />
+         </children>
+      </TilePane>
+   </children>
+</VBox>

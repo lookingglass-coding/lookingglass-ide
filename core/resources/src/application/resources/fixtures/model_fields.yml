@@ -1,0 +1,1936 @@
+---
+1:
+  id: 1
+  model_class: org.lgna.story.SThing
+  parent_id: 
+  gallery_thumb_path: 
+2:
+  id: 2
+  model_class: org.lgna.story.STurnable
+  parent_id: 1
+  gallery_thumb_path: 
+3:
+  id: 3
+  model_class: org.lgna.story.SMovableTurnable
+  parent_id: 2
+  gallery_thumb_path: 
+4:
+  id: 4
+  model_class: org.lgna.story.SModel
+  parent_id: 3
+  gallery_thumb_path: 
+5:
+  id: 5
+  model_class: org.lgna.story.SShape
+  parent_id: 4
+  gallery_thumb_path: 
+6:
+  id: 6
+  model_class: org.lgna.story.SCylinder
+  parent_id: 5
+  gallery_thumb_path: 
+7:
+  id: 7
+  model_class: org.lgna.story.SCone
+  parent_id: 5
+  gallery_thumb_path: 
+8:
+  id: 8
+  model_class: org.lgna.story.SBox
+  parent_id: 5
+  gallery_thumb_path: 
+9:
+  id: 9
+  model_class: org.lgna.story.SDisc
+  parent_id: 5
+  gallery_thumb_path: 
+10:
+  id: 10
+  model_class: org.lgna.story.SSphere
+  parent_id: 5
+  gallery_thumb_path: 
+11:
+  id: 11
+  model_class: org.lgna.story.STorus
+  parent_id: 5
+  gallery_thumb_path: 
+12:
+  id: 12
+  model_class: org.lgna.story.SJointedModel
+  parent_id: 4
+  gallery_thumb_path: 
+13:
+  id: 13
+  model_class: org.lgna.story.SFlyer
+  parent_id: 12
+  gallery_thumb_path: 
+14:
+  id: 14
+  model_class: org.lgna.story.resources.FlyerResource
+  parent_id: 13
+  gallery_thumb_path: 
+15:
+  id: 15
+  model_class: org.lgna.story.resources.flyer.BluebirdResource
+  parent_id: 14
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/flyer/bluebird/bluebird_cls.png
+16:
+  id: 16
+  model_class: org.lgna.story.resources.flyer.ChickenResource
+  parent_id: 14
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/flyer/chicken/chicken_cls.png
+17:
+  id: 17
+  model_class: org.lgna.story.resources.flyer.FalconResource
+  parent_id: 14
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/flyer/falcon/falcon_cls.png
+18:
+  id: 18
+  model_class: org.lgna.story.resources.flyer.FlamingoResource
+  parent_id: 14
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/flyer/flamingo/flamingo_cls.png
+19:
+  id: 19
+  model_class: org.lgna.story.resources.flyer.OstrichResource
+  parent_id: 14
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/flyer/ostrich/ostrich_cls.png
+20:
+  id: 20
+  model_class: org.lgna.story.resources.flyer.OstrichBabyResource
+  parent_id: 14
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/flyer/ostrichbaby/ostrichbaby_cls.png
+21:
+  id: 21
+  model_class: org.lgna.story.resources.flyer.OwlResource
+  parent_id: 14
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/flyer/owl/owl_cls.png
+22:
+  id: 22
+  model_class: org.lgna.story.resources.flyer.PeacockResource
+  parent_id: 14
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/flyer/peacock/peacock_cls.png
+23:
+  id: 23
+  model_class: org.lgna.story.resources.flyer.PenguinResource
+  parent_id: 14
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/flyer/penguin/penguin_cls.png
+24:
+  id: 24
+  model_class: org.lgna.story.resources.flyer.PhoenixResource
+  parent_id: 14
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/flyer/phoenix/phoenix_cls.png
+25:
+  id: 25
+  model_class: org.lgna.story.resources.flyer.SeagullResource
+  parent_id: 14
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/flyer/seagull/seagull_cls.png
+26:
+  id: 26
+  model_class: org.lgna.story.resources.flyer.ToucanResource
+  parent_id: 14
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/flyer/toucan/toucan_cls.png
+27:
+  id: 27
+  model_class: org.lgna.story.SSwimmer
+  parent_id: 12
+  gallery_thumb_path: 
+28:
+  id: 28
+  model_class: org.lgna.story.resources.SwimmerResource
+  parent_id: 27
+  gallery_thumb_path: 
+29:
+  id: 29
+  model_class: org.lgna.story.resources.FishResource
+  parent_id: 28
+  gallery_thumb_path: 
+30:
+  id: 30
+  model_class: org.lgna.story.resources.fish.ArapaimaResource
+  parent_id: 29
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/fish/arapaima/arapaima_cls.png
+31:
+  id: 31
+  model_class: org.lgna.story.resources.fish.BlueTangResource
+  parent_id: 29
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/fish/bluetang/bluetang_cls.png
+32:
+  id: 32
+  model_class: org.lgna.story.resources.fish.CarpResource
+  parent_id: 29
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/fish/carp/carp_cls.png
+33:
+  id: 33
+  model_class: org.lgna.story.resources.fish.ClownFishResource
+  parent_id: 29
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/fish/clownfish/clownfish_cls.png
+34:
+  id: 34
+  model_class: org.lgna.story.resources.fish.PajamaFishResource
+  parent_id: 29
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/fish/pajamafish/pajamafish_cls.png
+35:
+  id: 35
+  model_class: org.lgna.story.resources.fish.PiranhaResource
+  parent_id: 29
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/fish/piranha/piranha_cls.png
+36:
+  id: 36
+  model_class: org.lgna.story.resources.fish.SharkResource
+  parent_id: 29
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/fish/shark/shark_cls.png
+37:
+  id: 37
+  model_class: org.lgna.story.resources.MarineMammalResource
+  parent_id: 28
+  gallery_thumb_path: 
+38:
+  id: 38
+  model_class: org.lgna.story.resources.marinemammal.DolphinResource
+  parent_id: 37
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/marinemammal/dolphin/dolphin_cls.png
+39:
+  id: 39
+  model_class: org.lgna.story.resources.marinemammal.ManateeResource
+  parent_id: 37
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/marinemammal/manatee/manatee_cls.png
+40:
+  id: 40
+  model_class: org.lgna.story.resources.marinemammal.OrcaResource
+  parent_id: 37
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/marinemammal/orca/orca_cls.png
+41:
+  id: 41
+  model_class: org.lgna.story.resources.marinemammal.WalrusResource
+  parent_id: 37
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/marinemammal/walrus/walrus_cls.png
+42:
+  id: 42
+  model_class: org.lgna.story.resources.marinemammal.WalrusBabyResource
+  parent_id: 37
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/marinemammal/walrusbaby/walrusbaby_cls.png
+43:
+  id: 43
+  model_class: org.lgna.story.SBiped
+  parent_id: 12
+  gallery_thumb_path: 
+44:
+  id: 44
+  model_class: org.lgna.story.resources.BipedResource
+  parent_id: 43
+  gallery_thumb_path: 
+45:
+  id: 45
+  model_class: org.lgna.story.resources.biped.AlienResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/alien/alien_cls.png
+46:
+  id: 46
+  model_class: org.lgna.story.resources.biped.BigBadWolfResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/bigbadwolf/bigbadwolf_cls.png
+47:
+  id: 47
+  model_class: org.lgna.story.resources.biped.BunnyResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/bunny/bunny_cls.png
+48:
+  id: 48
+  model_class: org.lgna.story.resources.biped.CheshireCatResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/cheshirecat/cheshirecat_cls.png
+49:
+  id: 49
+  model_class: org.lgna.story.resources.biped.CurupiraResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/curupira/curupira_cls.png
+50:
+  id: 50
+  model_class: org.lgna.story.resources.biped.GoldenMonkeyResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/goldenmonkey/goldenmonkey_cls.png
+51:
+  id: 51
+  model_class: org.lgna.story.resources.biped.HareResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/hare/hare_cls.png
+52:
+  id: 52
+  model_class: org.lgna.story.resources.biped.MadHatterResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/madhatter/madhatter_cls.png
+53:
+  id: 53
+  model_class: org.lgna.story.resources.biped.MandrilResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/mandril/mandril_cls.png
+54:
+  id: 54
+  model_class: org.lgna.story.resources.biped.MapinguariResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/mapinguari/mapinguari_cls.png
+55:
+  id: 55
+  model_class: org.lgna.story.resources.biped.MarchHareResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/marchhare/marchhare_cls.png
+56:
+  id: 56
+  model_class: org.lgna.story.resources.biped.MonkeyKingResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/monkeyking/monkeyking_cls.png
+57:
+  id: 57
+  model_class: org.lgna.story.resources.biped.OgreResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/ogre/ogre_cls.png
+58:
+  id: 58
+  model_class: org.lgna.story.resources.biped.PandaResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/panda/panda_cls.png
+59:
+  id: 59
+  model_class: org.lgna.story.resources.biped.PigResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/pig/pig_cls.png
+60:
+  id: 60
+  model_class: org.lgna.story.resources.biped.PixieResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/pixie/pixie_cls.png
+61:
+  id: 61
+  model_class: org.lgna.story.resources.biped.PlayingCardResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/playingcard/playingcard_cls.png
+62:
+  id: 62
+  model_class: org.lgna.story.resources.biped.QueenOfHeartsResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/queenofhearts/queenofhearts_cls.png
+63:
+  id: 63
+  model_class: org.lgna.story.resources.biped.StuffedTigerResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/stuffedtiger/stuffedtiger_cls.png
+64:
+  id: 64
+  model_class: org.lgna.story.resources.biped.TortoiseResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/tortoise/tortoise_cls.png
+65:
+  id: 65
+  model_class: org.lgna.story.resources.biped.TrollResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/troll/troll_cls.png
+66:
+  id: 66
+  model_class: org.lgna.story.resources.biped.WhiteRabbitResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/whiterabbit/whiterabbit_cls.png
+67:
+  id: 67
+  model_class: org.lgna.story.resources.biped.WitchResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/witch/witch_cls.png
+68:
+  id: 68
+  model_class: org.lgna.story.resources.biped.YetiResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/yeti/yeti_cls.png
+69:
+  id: 69
+  model_class: org.lgna.story.resources.biped.YetiBabyResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/yetibaby/yetibaby_cls.png
+70:
+  id: 70
+  model_class: org.lgna.story.resources.sims2.PersonResource
+  parent_id: 44
+  gallery_thumb_path: 
+71:
+  id: 71
+  model_class: org.lgna.story.resources.sims2.ElderPersonResource
+  parent_id: 70
+  gallery_thumb_path: 
+72:
+  id: 72
+  model_class: org.lgna.story.resources.sims2.AdultPersonResource
+  parent_id: 70
+  gallery_thumb_path: 
+73:
+  id: 73
+  model_class: org.lgna.story.resources.sims2.TeenPersonResource
+  parent_id: 70
+  gallery_thumb_path: 
+74:
+  id: 74
+  model_class: org.lgna.story.resources.sims2.ChildPersonResource
+  parent_id: 70
+  gallery_thumb_path: 
+75:
+  id: 75
+  model_class: org.lgna.story.resources.sims2.ToddlerPersonResource
+  parent_id: 70
+  gallery_thumb_path: 
+76:
+  id: 76
+  model_class: org.lgna.story.SProp
+  parent_id: 12
+  gallery_thumb_path: 
+77:
+  id: 77
+  model_class: org.lgna.story.resources.PropResource
+  parent_id: 76
+  gallery_thumb_path: 
+78:
+  id: 78
+  model_class: org.lgna.story.resources.prop.AcaciaTreeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/acaciatree/acaciatree_cls.png
+79:
+  id: 79
+  model_class: org.lgna.story.resources.prop.AncientTempleArchResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/ancienttemplearch/ancienttemplearch_cls.png
+80:
+  id: 80
+  model_class: org.lgna.story.resources.prop.AncientTempleBlockResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/ancienttempleblock/ancienttempleblock_cls.png
+81:
+  id: 81
+  model_class: org.lgna.story.resources.prop.AncientTempleIvyResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/ancienttempleivy/ancienttempleivy_cls.png
+82:
+  id: 82
+  model_class: org.lgna.story.resources.prop.AncientTemplePieceResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/ancienttemplepiece/ancienttemplepiece_cls.png
+83:
+  id: 83
+  model_class: org.lgna.story.resources.prop.AncientTemplePillarResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/ancienttemplepillar/ancienttemplepillar_cls.png
+84:
+  id: 84
+  model_class: org.lgna.story.resources.prop.AncientTempleTreeStumpResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/ancienttempletreestump/ancienttempletreestump_cls.png
+85:
+  id: 85
+  model_class: org.lgna.story.resources.prop.AncientTempleWallResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/ancienttemplewall/ancienttemplewall_cls.png
+86:
+  id: 86
+  model_class: org.lgna.story.resources.prop.AncientTempleWellResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/ancienttemplewell/ancienttemplewell_cls.png
+87:
+  id: 87
+  model_class: org.lgna.story.resources.prop.ArmoireResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/armoire/armoire_cls.png
+88:
+  id: 88
+  model_class: org.lgna.story.resources.prop.BambooResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/bamboo/bamboo_cls.png
+89:
+  id: 89
+  model_class: org.lgna.story.resources.prop.BananaResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/banana/banana_cls.png
+90:
+  id: 90
+  model_class: org.lgna.story.resources.prop.BananaTreeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/bananatree/bananatree_cls.png
+91:
+  id: 91
+  model_class: org.lgna.story.resources.prop.BaobabTreeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/baobabtree/baobabtree_cls.png
+92:
+  id: 92
+  model_class: org.lgna.story.resources.prop.BathSinkResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/bathsink/bathsink_cls.png
+93:
+  id: 93
+  model_class: org.lgna.story.resources.prop.BathtubResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/bathtub/bathtub_cls.png
+94:
+  id: 94
+  model_class: org.lgna.story.resources.prop.BayLaurelTreeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/baylaureltree/baylaureltree_cls.png
+95:
+  id: 95
+  model_class: org.lgna.story.resources.prop.BedDoubleResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/beddouble/beddouble_cls.png
+96:
+  id: 96
+  model_class: org.lgna.story.resources.prop.BedSingleResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/bedsingle/bedsingle_cls.png
+97:
+  id: 97
+  model_class: org.lgna.story.resources.prop.BiotechStationResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/biotechstation/biotechstation_cls.png
+98:
+  id: 98
+  model_class: org.lgna.story.resources.prop.BirchTreeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/birchtree/birchtree_cls.png
+99:
+  id: 99
+  model_class: org.lgna.story.resources.prop.BonsaiTreeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/bonsaitree/bonsaitree_cls.png
+100:
+  id: 100
+  model_class: org.lgna.story.resources.prop.BookcaseResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/bookcase/bookcase_cls.png
+101:
+  id: 101
+  model_class: org.lgna.story.resources.prop.BoulderResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/boulder/boulder_cls.png
+102:
+  id: 102
+  model_class: org.lgna.story.resources.prop.BowlingPinResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/bowlingpin/bowlingpin_cls.png
+103:
+  id: 103
+  model_class: org.lgna.story.resources.prop.CakeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/cake/cake_cls.png
+104:
+  id: 104
+  model_class: org.lgna.story.resources.prop.CandyFactoryResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/candyfactory/candyfactory_cls.png
+105:
+  id: 105
+  model_class: org.lgna.story.resources.prop.CanyonSpiresResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/canyonspires/canyonspires_cls.png
+106:
+  id: 106
+  model_class: org.lgna.story.resources.prop.CastleGateResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/castlegate/castlegate_cls.png
+107:
+  id: 107
+  model_class: org.lgna.story.resources.prop.CastleTowerBaseResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/castletowerbase/castletowerbase_cls.png
+108:
+  id: 108
+  model_class: org.lgna.story.resources.prop.CastleTowerMiddleResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/castletowermiddle/castletowermiddle_cls.png
+109:
+  id: 109
+  model_class: org.lgna.story.resources.prop.CastleTowerTopResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/castletowertop/castletowertop_cls.png
+110:
+  id: 110
+  model_class: org.lgna.story.resources.prop.CastleWallResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/castlewall/castlewall_cls.png
+111:
+  id: 111
+  model_class: org.lgna.story.resources.prop.CattailsResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/cattails/cattails_cls.png
+112:
+  id: 112
+  model_class: org.lgna.story.resources.prop.CauldronResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/cauldron/cauldron_cls.png
+113:
+  id: 113
+  model_class: org.lgna.story.resources.prop.CauldronLidResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/cauldronlid/cauldronlid_cls.png
+114:
+  id: 114
+  model_class: org.lgna.story.resources.prop.CaveResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/cave/cave_cls.png
+115:
+  id: 115
+  model_class: org.lgna.story.resources.prop.CenturyPlantResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/centuryplant/centuryplant_cls.png
+116:
+  id: 116
+  model_class: org.lgna.story.resources.prop.ChairResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/chair/chair_cls.png
+117:
+  id: 117
+  model_class: org.lgna.story.resources.prop.CliffWallResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/cliffwall/cliffwall_cls.png
+118:
+  id: 118
+  model_class: org.lgna.story.resources.prop.ClothingRackResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/clothingrack/clothingrack_cls.png
+119:
+  id: 119
+  model_class: org.lgna.story.resources.prop.CoconutResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/coconut/coconut_cls.png
+120:
+  id: 120
+  model_class: org.lgna.story.resources.prop.CoconutPalmResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/coconutpalm/coconutpalm_cls.png
+121:
+  id: 121
+  model_class: org.lgna.story.resources.prop.CoffeeMakerResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/coffeemaker/coffeemaker_cls.png
+122:
+  id: 122
+  model_class: org.lgna.story.resources.prop.CoffeeTableResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/coffeetable/coffeetable_cls.png
+123:
+  id: 123
+  model_class: org.lgna.story.resources.prop.ColaBottleResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/colabottle/colabottle_cls.png
+124:
+  id: 124
+  model_class: org.lgna.story.resources.prop.ComputerResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/computer/computer_cls.png
+125:
+  id: 125
+  model_class: org.lgna.story.resources.prop.CoralShelfResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/coralshelf/coralshelf_cls.png
+126:
+  id: 126
+  model_class: org.lgna.story.resources.prop.CribResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/crib/crib_cls.png
+127:
+  id: 127
+  model_class: org.lgna.story.resources.prop.CypressTreeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/cypresstree/cypresstree_cls.png
+128:
+  id: 128
+  model_class: org.lgna.story.resources.prop.DaffodilVaseResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/daffodilvase/daffodilvase_cls.png
+129:
+  id: 129
+  model_class: org.lgna.story.resources.prop.DeskResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/desk/desk_cls.png
+130:
+  id: 130
+  model_class: org.lgna.story.resources.prop.DiningTableResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/diningtable/diningtable_cls.png
+131:
+  id: 131
+  model_class: org.lgna.story.resources.prop.DishwasherResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/dishwasher/dishwasher_cls.png
+132:
+  id: 132
+  model_class: org.lgna.story.resources.prop.DollhouseResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/dollhouse/dollhouse_cls.png
+133:
+  id: 133
+  model_class: org.lgna.story.resources.prop.DresserResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/dresser/dresser_cls.png
+134:
+  id: 134
+  model_class: org.lgna.story.resources.prop.EaselResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/easel/easel_cls.png
+135:
+  id: 135
+  model_class: org.lgna.story.resources.prop.EndTableResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/endtable/endtable_cls.png
+136:
+  id: 136
+  model_class: org.lgna.story.resources.prop.EspressoMachineResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/espressomachine/espressomachine_cls.png
+137:
+  id: 137
+  model_class: org.lgna.story.resources.prop.FernResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/fern/fern_cls.png
+138:
+  id: 138
+  model_class: org.lgna.story.resources.prop.FicusResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/ficus/ficus_cls.png
+139:
+  id: 139
+  model_class: org.lgna.story.resources.prop.FigTreeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/figtree/figtree_cls.png
+140:
+  id: 140
+  model_class: org.lgna.story.resources.prop.FireplaceResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/fireplace/fireplace_cls.png
+141:
+  id: 141
+  model_class: org.lgna.story.resources.prop.FishingBasketResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/fishingbasket/fishingbasket_cls.png
+142:
+  id: 142
+  model_class: org.lgna.story.resources.prop.FishingBasketLidResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/fishingbasketlid/fishingbasketlid_cls.png
+143:
+  id: 143
+  model_class: org.lgna.story.resources.prop.FishingBoatCanopyResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/fishingboatcanopy/fishingboatcanopy_cls.png
+144:
+  id: 144
+  model_class: org.lgna.story.resources.prop.FishingLanternResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/fishinglantern/fishinglantern_cls.png
+145:
+  id: 145
+  model_class: org.lgna.story.resources.prop.FishingLanternPoleResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/fishinglanternpole/fishinglanternpole_cls.png
+146:
+  id: 146
+  model_class: org.lgna.story.resources.prop.FishingNetResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/fishingnet/fishingnet_cls.png
+147:
+  id: 147
+  model_class: org.lgna.story.resources.prop.FlatRocksResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/flatrocks/flatrocks_cls.png
+148:
+  id: 148
+  model_class: org.lgna.story.resources.prop.FoodProcessorResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/foodprocessor/foodprocessor_cls.png
+149:
+  id: 149
+  model_class: org.lgna.story.resources.prop.GardenGnomeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/gardengnome/gardengnome_cls.png
+150:
+  id: 150
+  model_class: org.lgna.story.resources.prop.GongResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/gong/gong_cls.png
+151:
+  id: 151
+  model_class: org.lgna.story.resources.prop.GongMalletResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/gongmallet/gongmallet_cls.png
+152:
+  id: 152
+  model_class: org.lgna.story.resources.prop.GrandfatherClockResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/grandfatherclock/grandfatherclock_cls.png
+153:
+  id: 153
+  model_class: org.lgna.story.resources.prop.GrillResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/grill/grill_cls.png
+154:
+  id: 154
+  model_class: org.lgna.story.resources.prop.HedgeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/hedge/hedge_cls.png
+155:
+  id: 155
+  model_class: org.lgna.story.resources.prop.HibiscusTreeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/hibiscustree/hibiscustree_cls.png
+156:
+  id: 156
+  model_class: org.lgna.story.resources.prop.HoganResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/hogan/hogan_cls.png
+157:
+  id: 157
+  model_class: org.lgna.story.resources.prop.HotTubResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/hottub/hottub_cls.png
+158:
+  id: 158
+  model_class: org.lgna.story.resources.prop.IcebergResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/iceberg/iceberg_cls.png
+159:
+  id: 159
+  model_class: org.lgna.story.resources.prop.IceFloeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/icefloe/icefloe_cls.png
+160:
+  id: 160
+  model_class: org.lgna.story.resources.prop.IceMountainResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/icemountain/icemountain_cls.png
+161:
+  id: 161
+  model_class: org.lgna.story.resources.prop.IceSkateResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/iceskate/iceskate_cls.png
+162:
+  id: 162
+  model_class: org.lgna.story.resources.prop.JadeHouseplantResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/jadehouseplant/jadehouseplant_cls.png
+163:
+  id: 163
+  model_class: org.lgna.story.resources.prop.JapaneseCypressResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/japanesecypress/japanesecypress_cls.png
+164:
+  id: 164
+  model_class: org.lgna.story.resources.prop.JapaneseMapleTreeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/japanesemapletree/japanesemapletree_cls.png
+165:
+  id: 165
+  model_class: org.lgna.story.resources.prop.JoshuaTreeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/joshuatree/joshuatree_cls.png
+166:
+  id: 166
+  model_class: org.lgna.story.resources.prop.JungleHillResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/junglehill/junglehill_cls.png
+167:
+  id: 167
+  model_class: org.lgna.story.resources.prop.JungleLogResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/junglelog/junglelog_cls.png
+168:
+  id: 168
+  model_class: org.lgna.story.resources.prop.JunglePlantResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/jungleplant/jungleplant_cls.png
+169:
+  id: 169
+  model_class: org.lgna.story.resources.prop.JungleTreeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/jungletree/jungletree_cls.png
+170:
+  id: 170
+  model_class: org.lgna.story.resources.prop.KitchenCounterResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/kitchencounter/kitchencounter_cls.png
+171:
+  id: 171
+  model_class: org.lgna.story.resources.prop.KitchenCounterCornerResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/kitchencountercorner/kitchencountercorner_cls.png
+172:
+  id: 172
+  model_class: org.lgna.story.resources.prop.KiteResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/kite/kite_cls.png
+173:
+  id: 173
+  model_class: org.lgna.story.resources.prop.KiteSpoolResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/kitespool/kitespool_cls.png
+174:
+  id: 174
+  model_class: org.lgna.story.resources.prop.LampResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/lamp/lamp_cls.png
+175:
+  id: 175
+  model_class: org.lgna.story.resources.prop.LilyPadsResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/lilypads/lilypads_cls.png
+176:
+  id: 176
+  model_class: org.lgna.story.resources.prop.LoveseatResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/loveseat/loveseat_cls.png
+177:
+  id: 177
+  model_class: org.lgna.story.resources.prop.MagicSpoonResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/magicspoon/magicspoon_cls.png
+178:
+  id: 178
+  model_class: org.lgna.story.resources.prop.MagicStaffResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/magicstaff/magicstaff_cls.png
+179:
+  id: 179
+  model_class: org.lgna.story.resources.prop.MagicStoneResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/magicstone/magicstone_cls.png
+180:
+  id: 180
+  model_class: org.lgna.story.resources.prop.MagicWandResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/magicwand/magicwand_cls.png
+181:
+  id: 181
+  model_class: org.lgna.story.resources.prop.MangoResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/mango/mango_cls.png
+182:
+  id: 182
+  model_class: org.lgna.story.resources.prop.MangoTreeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/mangotree/mangotree_cls.png
+183:
+  id: 183
+  model_class: org.lgna.story.resources.prop.MicrowaveResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/microwave/microwave_cls.png
+184:
+  id: 184
+  model_class: org.lgna.story.resources.prop.MoonFaceResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/moonface/moonface_cls.png
+185:
+  id: 185
+  model_class: org.lgna.story.resources.prop.MushroomResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/mushroom/mushroom_cls.png
+186:
+  id: 186
+  model_class: org.lgna.story.resources.prop.NavajoBlanketResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/navajoblanket/navajoblanket_cls.png
+187:
+  id: 187
+  model_class: org.lgna.story.resources.prop.OarResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/oar/oar_cls.png
+188:
+  id: 188
+  model_class: org.lgna.story.resources.prop.OrchidResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/orchid/orchid_cls.png
+189:
+  id: 189
+  model_class: org.lgna.story.resources.prop.PaintBrushResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/paintbrush/paintbrush_cls.png
+190:
+  id: 190
+  model_class: org.lgna.story.resources.prop.PaintingCanvasResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/paintingcanvas/paintingcanvas_cls.png
+191:
+  id: 191
+  model_class: org.lgna.story.resources.prop.PaintPaletteResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/paintpalette/paintpalette_cls.png
+192:
+  id: 192
+  model_class: org.lgna.story.resources.prop.PalmTreeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/palmtree/palmtree_cls.png
+193:
+  id: 193
+  model_class: org.lgna.story.resources.prop.PaperLanternResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/paperlantern/paperlantern_cls.png
+194:
+  id: 194
+  model_class: org.lgna.story.resources.prop.PeridexionTreeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/peridexiontree/peridexiontree_cls.png
+195:
+  id: 195
+  model_class: org.lgna.story.resources.prop.PhilodendronResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/philodendron/philodendron_cls.png
+196:
+  id: 196
+  model_class: org.lgna.story.resources.prop.PinballMachineResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/pinballmachine/pinballmachine_cls.png
+197:
+  id: 197
+  model_class: org.lgna.story.resources.prop.PineTreeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/pinetree/pinetree_cls.png
+198:
+  id: 198
+  model_class: org.lgna.story.resources.prop.PlateauResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/plateau/plateau_cls.png
+199:
+  id: 199
+  model_class: org.lgna.story.resources.prop.PocketWatchResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/pocketwatch/pocketwatch_cls.png
+200:
+  id: 200
+  model_class: org.lgna.story.resources.prop.PondResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/pond/pond_cls.png
+201:
+  id: 201
+  model_class: org.lgna.story.resources.prop.PotionResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/potion/potion_cls.png
+202:
+  id: 202
+  model_class: org.lgna.story.resources.prop.PrayerFlagsResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/prayerflags/prayerflags_cls.png
+203:
+  id: 203
+  model_class: org.lgna.story.resources.prop.PricklyPearCactusResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/pricklypearcactus/pricklypearcactus_cls.png
+204:
+  id: 204
+  model_class: org.lgna.story.resources.prop.RedRoverResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/redrover/redrover_cls.png
+205:
+  id: 205
+  model_class: org.lgna.story.resources.prop.RefrigeratorResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/refrigerator/refrigerator_cls.png
+206:
+  id: 206
+  model_class: org.lgna.story.resources.prop.RiverPieceResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/riverpiece/riverpiece_cls.png
+207:
+  id: 207
+  model_class: org.lgna.story.resources.prop.RiverRockResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/riverrock/riverrock_cls.png
+208:
+  id: 208
+  model_class: org.lgna.story.resources.prop.RockyOutcropResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/rockyoutcrop/rockyoutcrop_cls.png
+209:
+  id: 209
+  model_class: org.lgna.story.resources.prop.RoseResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/rose/rose_cls.png
+210:
+  id: 210
+  model_class: org.lgna.story.resources.prop.SaguaroCactusResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/saguarocactus/saguarocactus_cls.png
+211:
+  id: 211
+  model_class: org.lgna.story.resources.prop.SaucerResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/saucer/saucer_cls.png
+212:
+  id: 212
+  model_class: org.lgna.story.resources.prop.SavanaGrassResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/savanagrass/savanagrass_cls.png
+213:
+  id: 213
+  model_class: org.lgna.story.resources.prop.SeaSpongeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/seasponge/seasponge_cls.png
+214:
+  id: 214
+  model_class: org.lgna.story.resources.prop.SeaweedResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/seaweed/seaweed_cls.png
+215:
+  id: 215
+  model_class: org.lgna.story.resources.prop.ShowerResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/shower/shower_cls.png
+216:
+  id: 216
+  model_class: org.lgna.story.resources.prop.ShowerBathResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/showerbath/showerbath_cls.png
+217:
+  id: 217
+  model_class: org.lgna.story.resources.prop.ShrineResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/shrine/shrine_cls.png
+218:
+  id: 218
+  model_class: org.lgna.story.resources.prop.ShrineLanternResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/shrinelantern/shrinelantern_cls.png
+219:
+  id: 219
+  model_class: org.lgna.story.resources.prop.SledResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/sled/sled_cls.png
+220:
+  id: 220
+  model_class: org.lgna.story.resources.prop.SnowboardResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/snowboard/snowboard_cls.png
+221:
+  id: 221
+  model_class: org.lgna.story.resources.prop.SoccerBallResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/soccerball/soccerball_cls.png
+222:
+  id: 222
+  model_class: org.lgna.story.resources.prop.SofaResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/sofa/sofa_cls.png
+223:
+  id: 223
+  model_class: org.lgna.story.resources.prop.SpellBookResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/spellbook/spellbook_cls.png
+224:
+  id: 224
+  model_class: org.lgna.story.resources.prop.StaffResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/staff/staff_cls.png
+225:
+  id: 225
+  model_class: org.lgna.story.resources.prop.StereoResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/stereo/stereo_cls.png
+226:
+  id: 226
+  model_class: org.lgna.story.resources.prop.StoneBridgeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/stonebridge/stonebridge_cls.png
+227:
+  id: 227
+  model_class: org.lgna.story.resources.prop.StoveResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/stove/stove_cls.png
+228:
+  id: 228
+  model_class: org.lgna.story.resources.prop.SuitcaseResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/suitcase/suitcase_cls.png
+229:
+  id: 229
+  model_class: org.lgna.story.resources.prop.SunFaceResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/sunface/sunface_cls.png
+230:
+  id: 230
+  model_class: org.lgna.story.resources.prop.SunflowerHouseplantResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/sunflowerhouseplant/sunflowerhouseplant_cls.png
+231:
+  id: 231
+  model_class: org.lgna.story.resources.prop.TeacupResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/teacup/teacup_cls.png
+232:
+  id: 232
+  model_class: org.lgna.story.resources.prop.TeapotResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/teapot/teapot_cls.png
+233:
+  id: 233
+  model_class: org.lgna.story.resources.prop.TeaTableResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/teatable/teatable_cls.png
+234:
+  id: 234
+  model_class: org.lgna.story.resources.prop.TeaTrayResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/teatray/teatray_cls.png
+235:
+  id: 235
+  model_class: org.lgna.story.resources.prop.TelevisionResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/television/television_cls.png
+236:
+  id: 236
+  model_class: org.lgna.story.resources.prop.TelevisionRemoteResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/televisionremote/televisionremote_cls.png
+237:
+  id: 237
+  model_class: org.lgna.story.resources.prop.TentResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/tent/tent_cls.png
+238:
+  id: 238
+  model_class: org.lgna.story.resources.prop.TermiteMoundResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/termitemound/termitemound_cls.png
+239:
+  id: 239
+  model_class: org.lgna.story.resources.prop.ThistlePatchResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/thistlepatch/thistlepatch_cls.png
+240:
+  id: 240
+  model_class: org.lgna.story.resources.prop.ToiletResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/toilet/toilet_cls.png
+241:
+  id: 241
+  model_class: org.lgna.story.resources.prop.TrashcanResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/trashcan/trashcan_cls.png
+242:
+  id: 242
+  model_class: org.lgna.story.resources.prop.TreasureChestResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/treasurechest/treasurechest_cls.png
+243:
+  id: 243
+  model_class: org.lgna.story.resources.prop.TreehouseResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/treehouse/treehouse_cls.png
+244:
+  id: 244
+  model_class: org.lgna.story.resources.prop.TreeTrunkResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/treetrunk/treetrunk_cls.png
+245:
+  id: 245
+  model_class: org.lgna.story.resources.prop.TumbleweedResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/tumbleweed/tumbleweed_cls.png
+246:
+  id: 246
+  model_class: org.lgna.story.resources.prop.VolleyballResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/volleyball/volleyball_cls.png
+247:
+  id: 247
+  model_class: org.lgna.story.resources.prop.WillowTreeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/willowtree/willowtree_cls.png
+248:
+  id: 248
+  model_class: org.lgna.story.resources.prop.WonderlandBushResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/wonderlandbush/wonderlandbush_cls.png
+249:
+  id: 249
+  model_class: org.lgna.story.resources.prop.WonderlandTreeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/wonderlandtree/wonderlandtree_cls.png
+250:
+  id: 250
+  model_class: org.lgna.story.resources.prop.ZumaRockResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/zumarock/zumarock_cls.png
+251:
+  id: 251
+  model_class: org.lgna.story.STransport
+  parent_id: 12
+  gallery_thumb_path: 
+252:
+  id: 252
+  model_class: org.lgna.story.resources.TransportResource
+  parent_id: 251
+  gallery_thumb_path: 
+253:
+  id: 253
+  model_class: org.lgna.story.resources.AircraftResource
+  parent_id: 252
+  gallery_thumb_path: 
+254:
+  id: 254
+  model_class: org.lgna.story.resources.aircraft.HangGliderResource
+  parent_id: 253
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/aircraft/hangglider/hangglider_cls.png
+255:
+  id: 255
+  model_class: org.lgna.story.resources.aircraft.HelicopterResource
+  parent_id: 253
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/aircraft/helicopter/helicopter_cls.png
+256:
+  id: 256
+  model_class: org.lgna.story.resources.aircraft.HotAirBalloonResource
+  parent_id: 253
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/aircraft/hotairballoon/hotairballoon_cls.png
+257:
+  id: 257
+  model_class: org.lgna.story.resources.aircraft.UFOResource
+  parent_id: 253
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/aircraft/ufo/ufo_cls.png
+258:
+  id: 258
+  model_class: org.lgna.story.resources.AutomobileResource
+  parent_id: 252
+  gallery_thumb_path: 
+259:
+  id: 259
+  model_class: org.lgna.story.resources.automobile.AmbulanceResource
+  parent_id: 258
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/automobile/ambulance/ambulance_cls.png
+260:
+  id: 260
+  model_class: org.lgna.story.resources.automobile.BoxTruckResource
+  parent_id: 258
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/automobile/boxtruck/boxtruck_cls.png
+261:
+  id: 261
+  model_class: org.lgna.story.resources.automobile.BusResource
+  parent_id: 258
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/automobile/bus/bus_cls.png
+262:
+  id: 262
+  model_class: org.lgna.story.resources.automobile.FireEngineResource
+  parent_id: 258
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/automobile/fireengine/fireengine_cls.png
+263:
+  id: 263
+  model_class: org.lgna.story.resources.automobile.HatchbackResource
+  parent_id: 258
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/automobile/hatchback/hatchback_cls.png
+264:
+  id: 264
+  model_class: org.lgna.story.resources.automobile.HumveeResource
+  parent_id: 258
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/automobile/humvee/humvee_cls.png
+265:
+  id: 265
+  model_class: org.lgna.story.resources.automobile.LimousineResource
+  parent_id: 258
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/automobile/limousine/limousine_cls.png
+266:
+  id: 266
+  model_class: org.lgna.story.resources.automobile.PickupTruckResource
+  parent_id: 258
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/automobile/pickuptruck/pickuptruck_cls.png
+267:
+  id: 267
+  model_class: org.lgna.story.resources.automobile.PoliceCarResource
+  parent_id: 258
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/automobile/policecar/policecar_cls.png
+268:
+  id: 268
+  model_class: org.lgna.story.resources.automobile.SedanResource
+  parent_id: 258
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/automobile/sedan/sedan_cls.png
+269:
+  id: 269
+  model_class: org.lgna.story.resources.automobile.SportsCarResource
+  parent_id: 258
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/automobile/sportscar/sportscar_cls.png
+270:
+  id: 270
+  model_class: org.lgna.story.resources.automobile.TaxiResource
+  parent_id: 258
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/automobile/taxi/taxi_cls.png
+271:
+  id: 271
+  model_class: org.lgna.story.resources.automobile.TowncarResource
+  parent_id: 258
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/automobile/towncar/towncar_cls.png
+272:
+  id: 272
+  model_class: org.lgna.story.resources.automobile.VanResource
+  parent_id: 258
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/automobile/van/van_cls.png
+273:
+  id: 273
+  model_class: org.lgna.story.resources.WatercraftResource
+  parent_id: 252
+  gallery_thumb_path: 
+274:
+  id: 274
+  model_class: org.lgna.story.resources.watercraft.FishingBoatResource
+  parent_id: 273
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/watercraft/fishingboat/fishingboat_cls.png
+275:
+  id: 275
+  model_class: org.lgna.story.resources.watercraft.PirateShipResource
+  parent_id: 273
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/watercraft/pirateship/pirateship_cls.png
+276:
+  id: 276
+  model_class: org.lgna.story.resources.watercraft.SailboatResource
+  parent_id: 273
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/watercraft/sailboat/sailboat_cls.png
+277:
+  id: 277
+  model_class: org.lgna.story.resources.watercraft.SubmarineResource
+  parent_id: 273
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/watercraft/submarine/submarine_cls.png
+278:
+  id: 278
+  model_class: org.lgna.story.resources.watercraft.WoodenBoatResource
+  parent_id: 273
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/watercraft/woodenboat/woodenboat_cls.png
+279:
+  id: 279
+  model_class: org.lgna.story.SQuadruped
+  parent_id: 12
+  gallery_thumb_path: 
+280:
+  id: 280
+  model_class: org.lgna.story.resources.QuadrupedResource
+  parent_id: 279
+  gallery_thumb_path: 
+281:
+  id: 281
+  model_class: org.lgna.story.resources.quadruped.AbyssinianCatResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/abyssiniancat/abyssiniancat_cls.png
+282:
+  id: 282
+  model_class: org.lgna.story.resources.quadruped.AlienRobotResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/alienrobot/alienrobot_cls.png
+283:
+  id: 283
+  model_class: org.lgna.story.resources.quadruped.BillyGoatResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/billygoat/billygoat_cls.png
+284:
+  id: 284
+  model_class: org.lgna.story.resources.quadruped.BisonResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/bison/bison_cls.png
+285:
+  id: 285
+  model_class: org.lgna.story.resources.quadruped.CaimanResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/caiman/caiman_cls.png
+286:
+  id: 286
+  model_class: org.lgna.story.resources.quadruped.CamelResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/camel/camel_cls.png
+287:
+  id: 287
+  model_class: org.lgna.story.resources.quadruped.CowResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/cow/cow_cls.png
+288:
+  id: 288
+  model_class: org.lgna.story.resources.quadruped.CoyoteResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/coyote/coyote_cls.png
+289:
+  id: 289
+  model_class: org.lgna.story.resources.quadruped.DalmatianResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/dalmatian/dalmatian_cls.png
+290:
+  id: 290
+  model_class: org.lgna.story.resources.quadruped.DesertTortoiseResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/deserttortoise/deserttortoise_cls.png
+291:
+  id: 291
+  model_class: org.lgna.story.resources.quadruped.DragonResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/dragon/dragon_cls.png
+292:
+  id: 292
+  model_class: org.lgna.story.resources.quadruped.DragonBabyResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/dragonbaby/dragonbaby_cls.png
+293:
+  id: 293
+  model_class: org.lgna.story.resources.quadruped.ElephantResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/elephant/elephant_cls.png
+294:
+  id: 294
+  model_class: org.lgna.story.resources.quadruped.FoxResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/fox/fox_cls.png
+295:
+  id: 295
+  model_class: org.lgna.story.resources.quadruped.HippoResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/hippo/hippo_cls.png
+296:
+  id: 296
+  model_class: org.lgna.story.resources.quadruped.HornedLizardResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/hornedlizard/hornedlizard_cls.png
+297:
+  id: 297
+  model_class: org.lgna.story.resources.quadruped.HorseResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/horse/horse_cls.png
+298:
+  id: 298
+  model_class: org.lgna.story.resources.quadruped.HyenaResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/hyena/hyena_cls.png
+299:
+  id: 299
+  model_class: org.lgna.story.resources.quadruped.JaguarResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/jaguar/jaguar_cls.png
+300:
+  id: 300
+  model_class: org.lgna.story.resources.quadruped.LionessResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/lioness/lioness_cls.png
+301:
+  id: 301
+  model_class: org.lgna.story.resources.quadruped.ManxCatResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/manxcat/manxcat_cls.png
+302:
+  id: 302
+  model_class: org.lgna.story.resources.quadruped.PeccaryResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/peccary/peccary_cls.png
+303:
+  id: 303
+  model_class: org.lgna.story.resources.quadruped.PoodleResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/poodle/poodle_cls.png
+304:
+  id: 304
+  model_class: org.lgna.story.resources.quadruped.RhinoResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/rhino/rhino_cls.png
+305:
+  id: 305
+  model_class: org.lgna.story.resources.quadruped.ScottyDogResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/scottydog/scottydog_cls.png
+306:
+  id: 306
+  model_class: org.lgna.story.resources.quadruped.ShortHairCatResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/shorthaircat/shorthaircat_cls.png
+307:
+  id: 307
+  model_class: org.lgna.story.resources.quadruped.WolfResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/wolf/wolf_cls.png
+308:
+  id: 308
+  model_class: org.lgna.story.resources.quadruped.YakResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/yak/yak_cls.png
+309:
+  id: 309
+  model_class: org.lgna.story.resources.quadruped.YaliResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/yali/yali_cls.png
+310:
+  id: 310
+  model_class: org.lgna.story.SBillboard
+  parent_id: 4
+  gallery_thumb_path: 
+311:
+  id: 311
+  model_class: org.lgna.story.STextModel
+  parent_id: 4
+  gallery_thumb_path: 
+312:
+  id: 312
+  model_class: org.lgna.story.SMarker
+  parent_id: 3
+  gallery_thumb_path: 
+313:
+  id: 313
+  model_class: org.lgna.story.CameraMarker
+  parent_id: 312
+  gallery_thumb_path: 
+314:
+  id: 314
+  model_class: org.lgna.story.OrthographicCameraMarker
+  parent_id: 313
+  gallery_thumb_path: 
+315:
+  id: 315
+  model_class: org.lgna.story.PerspectiveCameraMarker
+  parent_id: 313
+  gallery_thumb_path: 
+316:
+  id: 316
+  model_class: org.lgna.story.SCameraMarker
+  parent_id: 315
+  gallery_thumb_path: 
+317:
+  id: 317
+  model_class: org.lgna.story.SThingMarker
+  parent_id: 312
+  gallery_thumb_path: 
+318:
+  id: 318
+  model_class: org.lgna.story.SAxes
+  parent_id: 3
+  gallery_thumb_path: 
+319:
+  id: 319
+  model_class: org.lgna.story.SCamera
+  parent_id: 3
+  gallery_thumb_path: 
+320:
+  id: 320
+  model_class: org.lgna.story.STarget
+  parent_id: 3
+  gallery_thumb_path: 
+321:
+  id: 321
+  model_class: org.lgna.story.SSun
+  parent_id: 2
+  gallery_thumb_path: 
+322:
+  id: 322
+  model_class: org.lgna.story.SJoint
+  parent_id: 2
+  gallery_thumb_path: 
+323:
+  id: 323
+  model_class: org.lgna.story.SScene
+  parent_id: 1
+  gallery_thumb_path: 
+324:
+  id: 324
+  model_class: org.lgna.story.SGround
+  parent_id: 1
+  gallery_thumb_path: 
+325:
+  id: 325
+  model_class: org.lgna.story.SRoom
+  parent_id: 1
+  gallery_thumb_path: 
+326:
+  id: 326
+  model_class: org.lgna.story.resources.biped.AliceResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/alice/alice_cls.png
+327:
+  id: 327
+  model_class: org.lgna.story.resources.biped.FreyaResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/freya/freya_cls.png
+328:
+  id: 328
+  model_class: org.lgna.story.resources.biped.IceSkaterResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/iceskater/iceskater_cls.png
+329:
+  id: 329
+  model_class: org.lgna.story.resources.biped.LokiResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/loki/loki_cls.png
+330:
+  id: 330
+  model_class: org.lgna.story.resources.biped.OdinResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/odin/odin_cls.png
+331:
+  id: 331
+  model_class: org.lgna.story.resources.biped.RakshasaResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/rakshasa/rakshasa_cls.png
+332:
+  id: 332
+  model_class: org.lgna.story.resources.biped.SnowManResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/snowman/snowman_cls.png
+333:
+  id: 333
+  model_class: org.lgna.story.resources.biped.SnowWomanResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/snowwoman/snowwoman_cls.png
+334:
+  id: 334
+  model_class: org.lgna.story.resources.biped.ThorResource
+  parent_id: 44
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/biped/thor/thor_cls.png
+335:
+  id: 335
+  model_class: org.lgna.story.resources.quadruped.GopherResource
+  parent_id: 280
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/quadruped/gopher/gopher_cls.png
+336:
+  id: 336
+  model_class: org.lgna.story.resources.aircraft.BiplaneResource
+  parent_id: 253
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/aircraft/biplane/biplane_cls.png
+337:
+  id: 337
+  model_class: org.lgna.story.resources.aircraft.SpaceShipResource
+  parent_id: 253
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/aircraft/spaceship/spaceship_cls.png
+338:
+  id: 338
+  model_class: org.lgna.story.resources.prop.BoxResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/box/box_cls.png
+339:
+  id: 339
+  model_class: org.lgna.story.resources.prop.BridgeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/bridge/bridge_cls.png
+340:
+  id: 340
+  model_class: org.lgna.story.resources.prop.BushResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/bush/bush_cls.png
+341:
+  id: 341
+  model_class: org.lgna.story.resources.prop.CloudResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/cloud/cloud_cls.png
+342:
+  id: 342
+  model_class: org.lgna.story.resources.prop.CoinPileResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/coinpile/coinpile_cls.png
+343:
+  id: 343
+  model_class: org.lgna.story.resources.prop.CoinStackResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/coinstack/coinstack_cls.png
+344:
+  id: 344
+  model_class: org.lgna.story.resources.prop.ConiferTreeResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/conifertree/conifertree_cls.png
+345:
+  id: 345
+  model_class: org.lgna.story.resources.prop.DiamondResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/diamond/diamond_cls.png
+346:
+  id: 346
+  model_class: org.lgna.story.resources.prop.DocksResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/docks/docks_cls.png
+347:
+  id: 347
+  model_class: org.lgna.story.resources.prop.ElephantStableResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/elephantstable/elephantstable_cls.png
+348:
+  id: 348
+  model_class: org.lgna.story.resources.prop.EmeraldResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/emerald/emerald_cls.png
+349:
+  id: 349
+  model_class: org.lgna.story.resources.prop.IceBlockResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/iceblock/iceblock_cls.png
+350:
+  id: 350
+  model_class: org.lgna.story.resources.prop.IceBlockHalfResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/iceblockhalf/iceblockhalf_cls.png
+351:
+  id: 351
+  model_class: org.lgna.story.resources.prop.IslandResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/island/island_cls.png
+352:
+  id: 352
+  model_class: org.lgna.story.resources.prop.LightningResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/lightning/lightning_cls.png
+353:
+  id: 353
+  model_class: org.lgna.story.resources.prop.LogWallResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/logwall/logwall_cls.png
+354:
+  id: 354
+  model_class: org.lgna.story.resources.prop.MarsOutpostBunkerResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/marsoutpostbunker/marsoutpostbunker_cls.png
+355:
+  id: 355
+  model_class: org.lgna.story.resources.prop.MarsOutpostCompoundResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/marsoutpostcompound/marsoutpostcompound_cls.png
+356:
+  id: 356
+  model_class: org.lgna.story.resources.prop.MarsOutpostComputerResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/marsoutpostcomputer/marsoutpostcomputer_cls.png
+357:
+  id: 357
+  model_class: org.lgna.story.resources.prop.MarsOutpostFloorResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/marsoutpostfloor/marsoutpostfloor_cls.png
+358:
+  id: 358
+  model_class: org.lgna.story.resources.prop.MarsOutpostSatelliteResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/marsoutpostsatellite/marsoutpostsatellite_cls.png
+359:
+  id: 359
+  model_class: org.lgna.story.resources.prop.MarsOutpostStageResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/marsoutpoststage/marsoutpoststage_cls.png
+360:
+  id: 360
+  model_class: org.lgna.story.resources.prop.MarsOutpostStairsResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/marsoutpoststairs/marsoutpoststairs_cls.png
+361:
+  id: 361
+  model_class: org.lgna.story.resources.prop.MarsOutpostWallResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/marsoutpostwall/marsoutpostwall_cls.png
+362:
+  id: 362
+  model_class: org.lgna.story.resources.prop.MjolnirResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/mjolnir/mjolnir_cls.png
+363:
+  id: 363
+  model_class: org.lgna.story.resources.prop.NordicHouseResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/nordichouse/nordichouse_cls.png
+364:
+  id: 364
+  model_class: org.lgna.story.resources.prop.NordicOutpostResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/nordicoutpost/nordicoutpost_cls.png
+365:
+  id: 365
+  model_class: org.lgna.story.resources.prop.RubyResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/ruby/ruby_cls.png
+366:
+  id: 366
+  model_class: org.lgna.story.resources.prop.SandcastleResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/sandcastle/sandcastle_cls.png
+367:
+  id: 367
+  model_class: org.lgna.story.resources.prop.SandDunesResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/sanddunes/sanddunes_cls.png
+368:
+  id: 368
+  model_class: org.lgna.story.resources.prop.ScubaHelmetResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/scubahelmet/scubahelmet_cls.png
+369:
+  id: 369
+  model_class: org.lgna.story.resources.prop.SeashellResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/seashell/seashell_cls.png
+370:
+  id: 370
+  model_class: org.lgna.story.resources.prop.SnailHouseResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/snailhouse/snailhouse_cls.png
+371:
+  id: 371
+  model_class: org.lgna.story.resources.prop.SpaceStationResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/spacestation/spacestation_cls.png
+372:
+  id: 372
+  model_class: org.lgna.story.resources.prop.SpiralShellResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/spiralshell/spiralshell_cls.png
+373:
+  id: 373
+  model_class: org.lgna.story.resources.prop.StarfishResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/starfish/starfish_cls.png
+374:
+  id: 374
+  model_class: org.lgna.story.resources.prop.TrackResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/track/track_cls.png
+375:
+  id: 375
+  model_class: org.lgna.story.resources.prop.TrackFinishResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/trackfinish/trackfinish_cls.png
+376:
+  id: 376
+  model_class: org.lgna.story.resources.prop.TrackHurdleResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/trackhurdle/trackhurdle_cls.png
+377:
+  id: 377
+  model_class: org.lgna.story.resources.prop.TrashPileResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/nebulousModelResources/org/lgna/story/resources/prop/trashpile/trashpile_cls.png
+378:
+  id: 378
+  model_class: org.lgna.story.resources.prop.WackAMoleResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/wackamole/wackamole_cls.png
+379:
+  id: 379
+  model_class: org.lgna.story.resources.prop.WackAMoleHammerResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/wackamolehammer/wackamolehammer_cls.png
+380:
+  id: 380
+  model_class: org.lgna.story.resources.prop.WateringHoleResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/wateringhole/wateringhole_cls.png
+381:
+  id: 381
+  model_class: org.lgna.story.resources.prop.WaterTankResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/watertank/watertank_cls.png
+382:
+  id: 382
+  model_class: org.lgna.story.resources.prop.WaterTankPillarResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/watertankpillar/watertankpillar_cls.png
+383:
+  id: 383
+  model_class: org.lgna.story.resources.prop.WaterTankShrineResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/watertankshrine/watertankshrine_cls.png
+384:
+  id: 384
+  model_class: org.lgna.story.resources.prop.WaterTankTowerResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/watertanktower/watertanktower_cls.png
+385:
+  id: 385
+  model_class: org.lgna.story.resources.prop.WaterTankWallResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/watertankwall/watertankwall_cls.png
+386:
+  id: 386
+  model_class: org.lgna.story.resources.prop.WaterTankWellResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/watertankwell/watertankwell_cls.png
+387:
+  id: 387
+  model_class: org.lgna.story.resources.prop.WychElmResource
+  parent_id: 77
+  gallery_thumb_path: application/gallery/assets/alice/aliceModelResources/org/lgna/story/resources/prop/wychelm/wychelm_cls.png

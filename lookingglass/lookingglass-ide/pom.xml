@@ -1,0 +1,154 @@
+<!--
+    Copyright (c) 2008, 2015, Washington University in St. Louis.
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+
+    1. Redistributions of source code must retain the above copyright notice,
+       this list of conditions and the following disclaimer.
+
+    2. Redistributions in binary form must reproduce the above copyright notice,
+       this list of conditions and the following disclaimer in the documentation
+       and/or other materials provided with the distribution.
+
+    3. Products derived from the software may not be called "Looking Glass", nor
+       may "Looking Glass" appear in their name, without prior written permission
+       of Washington University in St. Louis.
+
+    4. All advertising materials mentioning features or use of this software must
+       display the following acknowledgement: "This product includes software
+       developed by Washington University in St. Louis"
+
+    5. The gallery of art assets and animations provided with this software is
+       contributed by Electronic Arts Inc. and may be used for personal,
+       non-commercial, and academic use only. Redistributions of any program
+       source code that utilizes The Sims 2 Assets must also retain the copyright
+       notice, list of conditions and the disclaimer contained in
+       The Alice 3.0 Art Gallery License.
+
+    DISCLAIMER:
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.  ANY AND ALL
+    EXPRESS, STATUTORY OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY,  FITNESS FOR A PARTICULAR PURPOSE,
+    TITLE, AND NON-INFRINGEMENT ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHORS,
+    COPYRIGHT OWNERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+    INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES
+    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+    LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+    ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING FROM OR OTHERWISE RELATING TO
+    THE USE OF OR OTHER DEALINGS WITH THE SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+ -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>edu.wustl.lookingglass</groupId>
+		<artifactId>core</artifactId>
+		<version>2015.10.05</version>
+		<relativePath>../../core</relativePath>
+	</parent>
+
+	<artifactId>lookingglass-ide</artifactId>
+	<packaging>jar</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>edu.wustl.lookingglass</groupId>
+			<artifactId>ide</artifactId>
+			<version>2015.10.05</version>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<!-- TODO: build one of these launchers as a bat file for windows. -->
+		<profile>
+			<id>linux-dev</id>
+			<activation>
+				<os>
+					<family>unix</family>
+				</os>
+			</activation>
+			<properties>
+				<ant.properties>${project.basedir}../../../distribution/build.properties</ant.properties>
+				<sh.template>${project.basedir}../../../distribution/src/installer/resources/linux/lookingglass.sh.in</sh.template>
+				<resources.directory>../../../core/resources/target/distribution</resources.directory>
+				<launch.file>${project.build.directory}/lookingglass.sh</launch.file>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>dev-launch-script</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<target>
+										<property file="${ant.properties}" />
+										<property name="sh.template.path" location="${sh.template}" />
+										<loadfile property="sh.contents" srcFile="${sh.template.path}" />
+										<echo file="${launch.file}" message="${sh.contents}" />
+
+										<replaceregexp file="${launch.file}" match="^base_dir=(.+)$"
+											replace="base_dir=\1/${resources.directory}" byline="true" />
+										<replaceregexp file="${launch.file}" match="^lookingglass_main=.*$"
+											replace="lookingglass_main=${application.main.class}" byline="true" />
+										<property name="maven.compile.classpath" refid="maven.compile.classpath" />
+										<replaceregexp file="${launch.file}" match="^lookingglass_cp=.*$"
+											replace="lookingglass_cp=${maven.compile.classpath}" byline="true" />
+										<replaceregexp file="${launch.file}" match="^lookingglass_mem=.*$"
+											replace="lookingglass_mem=${application.jvm.memory}" byline="true" />
+
+										<chmod perm="a+x" file="${launch.file}" />
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+
+				<pluginManagement>
+					<plugins>
+						<!-- Tell Eclipse to generate the resources in this pom -->
+						<plugin>
+							<groupId>org.eclipse.m2e</groupId>
+							<artifactId>lifecycle-mapping</artifactId>
+							<version>1.0.0</version>
+							<configuration>
+								<lifecycleMappingMetadata>
+									<pluginExecutions>
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>org.apache.maven.plugins</groupId>
+												<artifactId>maven-antrun-plugin</artifactId>
+												<versionRange>[1.3,)</versionRange>
+												<goals>
+													<goal>run</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<execute>
+													<runOnIncremental>false</runOnIncremental>
+													<runOnConfiguration>false</runOnConfiguration>
+												</execute>
+											</action>
+										</pluginExecution>
+									</pluginExecutions>
+								</lifecycleMappingMetadata>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+	</profiles>
+
+</project>

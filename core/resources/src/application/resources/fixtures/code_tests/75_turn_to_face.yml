@@ -1,0 +1,14 @@
+75_turn_to_face:
+  crawler_param2: 1
+  crawler_param3: -1
+  type_cd: <%= CodeTest.skill %>
+  snippet: return MethodsAPI.getMethod(expressionStatement).getName() == "turnToFace"
+  id: 75
+  title: turn_to_face
+  description: a character turns to face another object
+  crawler_cd: <%= CodeTest.expression_statement %>
+  user_id: 1
+  crawler_param1: 1
+  crawl_cd: <%= CodeTest.expressionstatement %>
+  published_cd: <%= CodeTest.ispublished %>
+  return_cd: <%= CodeTest.expressionstatement %>

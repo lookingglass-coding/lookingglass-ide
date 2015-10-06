@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<BorderPane fx:id="contentPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <bottom>
+      <HBox fx:id="buttonBox" alignment="BOTTOM_LEFT" spacing="6.0" BorderPane.alignment="CENTER">
+         <children>
+            <Pagination fx:id="pages" maxPageIndicatorCount="4" maxWidth="1.7976931348623157E308" pageCount="4" style="-fx-arrows-visible: false; -fx-page-information-visible: false;" styleClass="bullet" HBox.hgrow="NEVER" />
+            <Region fx:id="hgrow" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+            <Button fx:id="back" mnemonicParsing="false" text="%PopOverNavigationPane.back" />
+            <Button fx:id="next" mnemonicParsing="false" text="%PopOverNavigationPane.next" />
+         </children>
+      </HBox>
+   </bottom>
+</BorderPane>

@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?p2f version='1.0.0'?>
+<p2f version='1.0.0'>
+  <ius size='14'>
+    <iu id='org.eclipse.fx.ide.feature.feature.group' name='e(fx)clipse - IDE' version='2.0.0.201506111511'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/releases/mars'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.fx.ide.basic.feature.feature.group' name='e(fx)clipse - IDE - Basic' version='2.0.0.201506111511'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/releases/mars'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.fx.ide.converter.feature.feature.group' name='e(fx)clipse - IDE - Converter' version='2.0.0.201506111511'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/releases/mars'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.fx.ide.css.feature.feature.group' name='e(fx)clipse - IDE - CSS' version='2.0.0.201506111511'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/releases/mars'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.fx.ide.fxgraph.feature.feature.group' name='e(fx)clipse - IDE - FXGraph' version='2.0.0.201506111511'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/releases/mars'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.fx.ide.fxml.feature.feature.group' name='e(fx)clipse - IDE - FXML' version='2.0.0.201506111511'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/releases/mars'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.fx.ide.pde.feature.feature.group' name='e(fx)clipse - IDE - PDE' version='2.0.0.201506111511'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/releases/mars'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.fx.ide.rrobot.feature.feature.group' name='e(fx)clipse - IDE - RRobot' version='2.0.0.201506111511'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/releases/mars'/>
+      </repositories>
+    </iu>
+    <iu id='epp.package.java' name='Eclipse IDE for Java Developers' version='4.5.0.20150621-1200'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/releases/mars'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.releng.tools.feature.group' name='Eclipse Releng Tools' version='3.6.0.v20150527-0145'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/eclipse/updates/4.5'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.jgit.java7.feature.group' name='Java implementation of Git - optional Java 7 libraries' version='3.4.2.201412180340-r'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/releases/luna'/>
+      </repositories>
+    </iu>
+    <iu id='org.sonatype.m2e.buildhelper.feature.feature.group' name='m2e connector for build-helper-maven-plugin' version='0.15.0.201212120353'>
+      <repositories size='1'>
+        <repository location='http://download.jboss.org/jbosstools/updates/m2e-extensions/m2e-buildhelper/'/>
+      </repositories>
+    </iu>
+    <iu id='org.jboss.tools.m2e.jdt.feature.feature.group' name='M2E connector for the Eclipse JDT Compiler' version='1.0.1.201209200903'>
+      <repositories size='1'>
+        <repository location='http://download.jboss.org/jbosstools/updates/m2e-extensions/m2e-jdt-compiler/'/>
+      </repositories>
+    </iu>
+    <iu id='net.sf.redmine_mylyn.feature.feature.group' name='Mylyn Connector: Redmine' version='0.3.7.201203072118'>
+      <repositories size='1'>
+        <repository location='http://danmunn.github.com/redmine_mylyn_connector/update/'/>
+      </repositories>
+    </iu>
+  </ius>
+</p2f>

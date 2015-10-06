@@ -1,0 +1,16 @@
+3000_do_together:
+  crawler_param2: -1
+  crawler_param3: -1
+  type_cd: <%= CodeTest.skill %>
+  snippet: |-
+    #doTogether valid if it has more than one statment
+    return doTogether.body.getValue().statements.size() > 1
+  id: 3000
+  title: do_together
+  description: 'make two actions happen at the same time '
+  crawler_cd: <%= CodeTest.construct %>
+  user_id: 1
+  crawler_param1: -1
+  crawl_cd: <%= CodeTest.dotogether %>
+  published_cd: <%= CodeTest.ispublished %>
+  return_cd: <%= CodeTest.dotogether %>

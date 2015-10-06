@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<HBox fx:id="scaleBox" alignment="CENTER" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" stylesheets="@SevenItemLikertPane.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<children>
+<ToggleButton fx:id="level1" focusTraversable="false" layoutX="143.0" layoutY="280.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefWidth="112.0" textAlignment="CENTER" wrapText="true">
+         <styleClass>
+            <String fx:value="left-pill" />
+            <String fx:value="scale" />
+            <String fx:value="level1" />
+         </styleClass>
+      </ToggleButton>
+<ToggleButton fx:id="level2" focusTraversable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefWidth="112.0" textAlignment="CENTER" wrapText="true">
+         <styleClass>
+            <String fx:value="center-pill" />
+            <String fx:value="scale" />
+            <String fx:value="level2" />
+         </styleClass>
+      </ToggleButton>
+<ToggleButton fx:id="level3" focusTraversable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefWidth="112.0" textAlignment="CENTER" wrapText="true">
+         <styleClass>
+            <String fx:value="center-pill" />
+            <String fx:value="scale" />
+            <String fx:value="level3" />
+         </styleClass>
+      </ToggleButton>
+<ToggleButton fx:id="level4" focusTraversable="false" layoutX="245.0" layoutY="18.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefWidth="112.0" textAlignment="CENTER" wrapText="true">
+         <styleClass>
+            <String fx:value="center-pill" />
+            <String fx:value="scale" />
+            <String fx:value="level4" />
+         </styleClass>
+      </ToggleButton>
+<ToggleButton fx:id="level5" focusTraversable="false" layoutX="245.0" layoutY="18.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefWidth="112.0" textAlignment="CENTER" wrapText="true">
+         <styleClass>
+            <String fx:value="center-pill" />
+            <String fx:value="scale" />
+            <String fx:value="level5" />
+         </styleClass>
+      </ToggleButton>
+<ToggleButton fx:id="level6" focusTraversable="false" layoutX="245.0" layoutY="18.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefWidth="112.0" textAlignment="CENTER" wrapText="true">
+         <styleClass>
+            <String fx:value="center-pill" />
+            <String fx:value="scale" />
+            <String fx:value="level6" />
+         </styleClass>
+      </ToggleButton>
+<ToggleButton fx:id="level7" focusTraversable="false" layoutX="245.0" layoutY="18.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefWidth="112.0" textAlignment="CENTER" wrapText="true">
+         <styleClass>
+            <String fx:value="right-pill" />
+            <String fx:value="scale" />
+            <String fx:value="level7" />
+         </styleClass>
+      </ToggleButton>
+</children>
+</HBox>

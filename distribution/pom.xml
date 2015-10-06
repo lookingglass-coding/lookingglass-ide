@@ -1,0 +1,201 @@
+<!--
+    Copyright (c) 2008, 2015, Washington University in St. Louis.
+    All rights reserved.
+   
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+   
+    1. Redistributions of source code must retain the above copyright notice,
+       this list of conditions and the following disclaimer.
+   
+    2. Redistributions in binary form must reproduce the above copyright notice,
+       this list of conditions and the following disclaimer in the documentation
+       and/or other materials provided with the distribution.
+   
+    3. Products derived from the software may not be called "Looking Glass", nor
+       may "Looking Glass" appear in their name, without prior written permission
+       of Washington University in St. Louis.
+   
+    4. All advertising materials mentioning features or use of this software must
+       display the following acknowledgement: "This product includes software
+       developed by Washington University in St. Louis"
+   
+    5. The gallery of art assets and animations provided with this software is
+       contributed by Electronic Arts Inc. and may be used for personal,
+       non-commercial, and academic use only. Redistributions of any program
+       source code that utilizes The Sims 2 Assets must also retain the copyright
+       notice, list of conditions and the disclaimer contained in
+       The Alice 3.0 Art Gallery License.
+   
+    DISCLAIMER:
+   
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.  ANY AND ALL
+    EXPRESS, STATUTORY OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY,  FITNESS FOR A PARTICULAR PURPOSE,
+    TITLE, AND NON-INFRINGEMENT ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHORS,
+    COPYRIGHT OWNERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+    INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES
+    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+    LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+    ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING FROM OR OTHERWISE RELATING TO
+    THE USE OF OR OTHER DEALINGS WITH THE SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+ -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>edu.wustl.lookingglass</groupId>
+		<artifactId>parent</artifactId>
+		<version>2015.10.05</version>
+		<relativePath>../</relativePath>
+	</parent>
+
+	<artifactId>distribution</artifactId>
+	<packaging>pom</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>edu.wustl.lookingglass</groupId>
+			<artifactId>lookingglass-ide</artifactId>
+			<version>2015.10.05</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.wustl.lookingglass</groupId>
+			<artifactId>lookingglass-tools</artifactId>
+			<version>2015.10.05</version>
+		</dependency>
+	</dependencies>
+
+	<properties>
+		<project.distribution.directory>${project.build.directory}/distribution</project.distribution.directory>
+		<project.distribution.lib.directory>${project.distribution.directory}/lib</project.distribution.lib.directory>
+		<project.distribution.classpath.file>${project.build.directory}/application.classpath</project.distribution.classpath.file>
+
+		<project.distribution.package.directory>${project.build.directory}/${distribution.package}</project.distribution.package.directory>
+		<project.distribution.staging.directory>${project.distribution.package.directory}/staging</project.distribution.staging.directory>
+		<project.distribution.build.directory>${project.distribution.package.directory}/build</project.distribution.build.directory>
+
+		<project.distribution.resources.directory>${project.basedir}/../core/resources/target/distribution</project.distribution.resources.directory>
+		<project.distribution.installer.resources.directory>${project.basedir}/src/installer/resources</project.distribution.installer.resources.directory>
+		<project.distribution.application.directory>${project.distribution.resources.directory}/application</project.distribution.application.directory>
+		<project.distribution.platform.directory>${project.distribution.resources.directory}/platform</project.distribution.platform.directory>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>distribution-lib</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.distribution.lib.directory}</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>distribution-classpath</id>
+						<phase>package</phase>
+						<goals>
+							<goal>build-classpath</goal>
+						</goals>
+						<configuration>
+							<includeScope>runtime</includeScope>
+							<pathSeparator>:</pathSeparator>
+							<prefix>lib</prefix>
+							<outputFile>${project.distribution.classpath.file}</outputFile>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>ant-package</id>
+			<activation>
+				<property>
+					<name>distribution.package</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>ant-winrun4j</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>unpack</goal>
+								</goals>
+								<configuration>
+									<artifactItems>
+										<artifactItem>
+											<groupId>org.boris</groupId>
+											<artifactId>winrun4j</artifactId>
+											<version>0.4.5</version>
+											<type>zip</type>
+											<outputDirectory>${project.build.directory}</outputDirectory>
+										</artifactItem>
+									</artifactItems>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>ant-package</id>
+								<phase>package</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<target>
+										<ant antfile="${project.basedir}/build.xml" target="${distribution.package}"
+											inheritRefs="true" />
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>org.apache.ant</groupId>
+								<artifactId>ant</artifactId>
+								<version>1.9.2</version>
+							</dependency>
+							<dependency>
+								<groupId>it.haefelinger</groupId>
+								<artifactId>flaka</artifactId>
+								<version>1.02.02</version>
+							</dependency>
+							<dependency>
+								<groupId>com.googlecode</groupId>
+								<artifactId>ant-deb-task</artifactId>
+								<version>r153</version>
+							</dependency>
+							<dependency>
+								<groupId>com.infintekind</groupId>
+								<artifactId>appbundler</artifactId>
+								<version>1.0ea</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+</project>
+

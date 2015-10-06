@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="38.0" spacing="4.0" style="-fx-base: #3e3e3e; -fx-background-color: -fx-background;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button fx:id="play" focusTraversable="false" mnemonicParsing="false" styleClass="hover-button" text="%play" />
+      <ToggleButton fx:id="fastForward" focusTraversable="false" mnemonicParsing="false" styleClass="hover-button" text="%fastForward" />
+      <HBox maxWidth="1.7976931348623157E308" HBox.hgrow="SOMETIMES" />
+      <ImageView fx:id="feedback" pickOnBounds="true" preserveRatio="true" visible="false" />
+      <HBox maxWidth="1.7976931348623157E308" HBox.hgrow="SOMETIMES" />
+      <Button fx:id="fullScreen" focusTraversable="false" mnemonicParsing="false" styleClass="hover-button" />
+   </children>
+   <padding>
+      <Insets left="4.0" right="4.0" />
+   </padding>
+</HBox>

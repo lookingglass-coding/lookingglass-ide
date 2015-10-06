@@ -1,0 +1,38 @@
+* {
+	status-unknown: #c9cdcc;
+	status-correct: #67c376;
+	status-incorrect: #f35e5a;
+}
+
+
+.puzzle-status-indicator {
+	-fx-padding: 0; 
+}
+
+.puzzle-status-indicator > .control {
+	-fx-spacing: 4;
+}
+
+.puzzle-status-indicator > .control > .statement-status {
+	-fx-status: unknown;
+	-fx-status-executing-low-color: derive( -fx-status-color, 10% );
+	-fx-status-executing-high-color: derive( -fx-status-color, -30% );
+
+	-fx-background-radius: 2;
+	-fx-background-insets: 1;
+	-fx-border-color: derive( -fx-status-color, -25% );
+	-fx-border-width: 1.6;
+	-fx-border-radius: 2;
+}
+
+.puzzle-status-indicator > .control > .statement-status:unknown {
+	-fx-status-color: status-unknown;
+}
+
+.puzzle-status-indicator > .control > .statement-status:correct {
+	-fx-status-color: status-correct;
+}
+
+.puzzle-status-indicator > .control > .statement-status:incorrect {
+	-fx-status-color: status-incorrect;
+}

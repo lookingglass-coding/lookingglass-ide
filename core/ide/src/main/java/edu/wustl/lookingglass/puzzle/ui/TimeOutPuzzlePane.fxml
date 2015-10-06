@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.embed.swing.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="puzzle-overlay" stylesheets="@CompletionPuzzle.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox alignment="TOP_CENTER" minWidth="0.0" spacing="8.0" VBox.vgrow="SOMETIMES">
+         <children>
+            <ImageView fx:id="face" pickOnBounds="true" preserveRatio="true" styleClass="puzzle-face">
+               <HBox.margin>
+                  <Insets top="28.0" />
+               </HBox.margin>
+            </ImageView>
+            <VBox fx:id="bubbleBox" maxHeight="1.7976931348623157E308" />
+         </children>
+         <VBox.margin>
+            <Insets bottom="20.0" />
+         </VBox.margin>
+      </HBox>
+      <Label fx:id="message" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" styleClass="overlay-text-message" text="%TimeOutPuzzlePane.message" VBox.vgrow="SOMETIMES">
+         <VBox.margin>
+            <Insets bottom="12.0" />
+         </VBox.margin>
+      </Label>
+      <Label fx:id="advice" styleClass="overlay-text-advice" text="%TimeOutPuzzlePane.advice">
+         <VBox.margin>
+            <Insets bottom="20.0" />
+         </VBox.margin>
+      </Label>
+      <TilePane alignment="CENTER" hgap="8.0" prefColumns="2" prefRows="1">
+         <children>
+            <Button fx:id="cancel" focusTraversable="false" maxWidth="1.7976931348623157E308" styleClass="overlay-button" text="%TimeOutPuzzlePane.cancel" />
+            <Button fx:id="done" focusTraversable="false" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="overlay-button-default" text="%TimeOutPuzzlePane.done" />
+         </children>
+      </TilePane>
+   </children>
+</VBox>

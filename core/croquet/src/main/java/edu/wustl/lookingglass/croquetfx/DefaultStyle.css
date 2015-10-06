@@ -1,0 +1,104 @@
+.root {
+	/* define global colors here */
+	lg-background: #e6e9fb;
+}
+
+
+/* Rollover Style Buttons */
+.hover-button {
+	-fx-background-color: transparent;
+}
+.hover-button:hover {
+	/* taken from modena.css .button */
+	-fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
+}
+
+
+/* Overlay Container */
+
+.overlay-container {
+	-fx-padding: 10 10 10 10;
+	-fx-background-color: whitesmoke;
+	-fx-background-radius: 4;
+	-fx-alignment: top-center;
+}
+
+.overlay-container .label {
+	-fx-text-alignment: center;
+	-fx-font-size: 14;
+	-fx-wrap-text: true;
+}
+
+.overlay-container .label.title {
+	-fx-text-alignment: center;
+	-fx-font-size: 16;
+	-fx-font-weight: bold;
+	-fx-wrap-text: true;
+}
+
+
+/* TODO: we need to finish tweaking this scrollbar style so it matches the swing style... but it's a start */
+
+.scroll-bar:horizontal,
+.scroll-bar:vertical{
+    -fx-background-color: transparent;
+}
+
+/* The main scrollbar **track** CSS class  */
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track {
+	-fx-background-color:transparent;
+	-fx-border-color:transparent;
+	-fx-background-radius: 0em;
+	-fx-border-radius:2em;
+}
+
+/* The increment and decrement button CSS class of scrollbar */
+.scroll-bar:horizontal .increment-button,
+.scroll-bar:horizontal .decrement-button {
+    -fx-background-color:transparent;
+	-fx-background-radius: 0em;
+	-fx-padding:0 0 12 0;
+}
+
+/* The increment and decrement button CSS class of scrollbar */
+.scroll-bar:vertical .increment-button,
+.scroll-bar:vertical .decrement-button {
+    -fx-background-color:transparent;
+	-fx-background-radius: 0em;
+	-fx-padding:0 12 0 0;
+}
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+	-fx-shape: " ";	
+	-fx-padding:0;
+}
+
+/* The main scrollbar **thumb** CSS class which we drag every time (movable) */
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color:derive(black,90%);
+	-fx-background-insets: 2, 0, 0;
+	-fx-background-radius: 2em;
+}
+
+/* The main scrollbar **track** CSS class on event of "hover" and "pressed" */
+.scroll-bar:horizontal:hover .track,
+.scroll-bar:horizontal:pressed .track,
+.scroll-bar:vertical:hover .track,
+.scroll-bar:vertical:pressed .track {
+	-fx-opacity: 1;
+	-fx-border-color:derive(gray,80%);
+	-fx-background-radius: 0em;
+}
+
+/* The main scrollbar **thumb** CSS class on event of "hover" and "pressed" */
+.scroll-bar .thumb:hover,
+.scroll-bar .thumb:pressed {
+    -fx-background-color: derive(black,50%);
+}
+.increment-button:hover,.decrement-button:hover {
+    -fx-background-color:derive(gray,100%);
+	-fx-border-color:derive(gray,80%);	
+	-fx-padding:10px;
+}

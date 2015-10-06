@@ -1,0 +1,1 @@
+lookingglass/lookingglass-ide/target/lookingglass.sh

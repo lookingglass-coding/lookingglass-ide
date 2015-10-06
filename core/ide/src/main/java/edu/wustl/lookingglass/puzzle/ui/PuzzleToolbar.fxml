@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.embed.swing.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<TilePane fx:id="toolbar" alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" prefColumns="4" prefRows="1" styleClass="puzzle-toolbar" stylesheets="@CompletionPuzzle.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button fx:id="undo" alignment="BASELINE_LEFT" focusTraversable="false" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="puzzle-toolbar-button" text="%PuzzleToolbar.undo" />
+      <Button fx:id="redo" alignment="BASELINE_LEFT" focusTraversable="false" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="puzzle-toolbar-button" text="%PuzzleToolbar.redo" />
+      <Button fx:id="reset" alignment="BASELINE_LEFT" focusTraversable="false" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="puzzle-toolbar-button" text="%PuzzleToolbar.reset" />
+      <Button fx:id="done" alignment="BASELINE_LEFT" focusTraversable="false" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="puzzle-toolbar-quit-button" text="%PuzzleToolbar.done" />
+   </children>
+</TilePane>

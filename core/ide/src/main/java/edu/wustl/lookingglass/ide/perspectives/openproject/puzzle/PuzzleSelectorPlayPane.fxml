@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.net.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.embed.swing.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" styleClass="puzzle-overlay-with-close" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox alignment="TOP_RIGHT">
+         <children>
+            <Button fx:id="close" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" styleClass="puzzle-overlay-close" />
+         </children>
+      </HBox>
+      <Label fx:id="title" alignment="CENTER" graphicTextGap="12.0" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="640.0" styleClass="overlay-text-message" text="%PuzzleSelectorPlayPane.title" wrapText="true">
+         <VBox.margin>
+            <Insets bottom="20.0" right="26.0" top="2.0" />
+         </VBox.margin>
+      </Label>
+      <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="640.0" style="-fx-background-color: black;">
+         <VBox.margin>
+            <Insets right="26.0" />
+         </VBox.margin>
+         <children>
+            <ImageView fx:id="scenePreview" pickOnBounds="true" preserveRatio="true" />
+            <SwingNode fx:id="scene" />
+         </children>
+      </StackPane>
+      <HBox>
+         <children>
+            <HBox alignment="CENTER_LEFT" fillHeight="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+            <Button fx:id="next" contentDisplay="RIGHT" mnemonicParsing="false" styleClass="overlay-button-default" text="%PuzzleSelectorPlayPane.next" />
+         </children>
+         <VBox.margin>
+            <Insets right="26.0" top="20.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+   <stylesheets>
+      <URL value="@PuzzleSelectorPane.css" />
+      <URL value="@../../../../puzzle/ui/CompletionPuzzle.css" />
+   </stylesheets>
+</VBox>

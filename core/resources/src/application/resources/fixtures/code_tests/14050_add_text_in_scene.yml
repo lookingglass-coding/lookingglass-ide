@@ -1,0 +1,14 @@
+14050_add_text_in_scene:
+  crawler_param2: 0
+  crawler_param3: -1
+  type_cd: <%= CodeTest.skill %>
+  snippet: "text_list = list()\nmin_len = 1\nfor es in esList:\n\tif InternalAPI.getEncasingUserMethod(es).getName() == \"performGeneratedSetUp\":\n\t\tif not MethodsAPI.getCaller(es) == None:\n\t\t\tsuperX1 = MethodsAPI.getCaller(es).getType().getSuperType().getName()\n\t\t\tif superX1 == \"STextModel\":\n\t\t\t\tif MethodsAPI.getCaller(es).__str__() == \"FieldAccess[]\":\n\t\t\t\t\ttextName = MethodsAPI.getCaller(es).field.getValue().getName()\n\t\t\t\t\tif textName not in text_list:\n\t\t\t\t\t\ttext_list.append(textName)\nif len(text_list) < min_len:\n\tprint \"Failed: not enough text present! Ah!\"\nelse:\n\tprint \"Passed. Text is in the scene:\"\n\tfor c in text_list:\n\t\tprint \"  \",c\nreturn list()"
+  id: 14050
+  title: add_text_in_scene
+  description: 'add text to your world '
+  crawler_cd: <%= CodeTest.spread_expression_statement %>
+  user_id: 1
+  crawler_param1: 1
+  crawl_cd: <%= CodeTest.expressionstatement %>
+  published_cd: <%= CodeTest.ispublished %>
+  return_cd: <%= CodeTest.nodeholder %>

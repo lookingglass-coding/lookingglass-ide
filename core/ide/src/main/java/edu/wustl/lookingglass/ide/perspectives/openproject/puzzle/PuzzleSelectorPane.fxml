@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.embed.swing.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+
+<ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" focusTraversable="false" styleClass="puzzle-pane-scroll" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <VBox fx:id="topBox" spacing="12.0" styleClass="puzzle-pane">
+         <children>
+            <HBox alignment="CENTER_LEFT">
+               <children>
+                  <ImageView fx:id="face" pickOnBounds="true" preserveRatio="true" styleClass="puzzle-face">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </ImageView>
+                  <HBox fx:id="bubbleBox">
+                     <HBox.margin>
+                        <Insets bottom="45.0" left="12.0" />
+                     </HBox.margin>
+                  </HBox>
+                  <VBox alignment="CENTER_LEFT" spacing="16.0">
+                     <children>
+                        <Label fx:id="title" alignment="BOTTOM_LEFT" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="100.0" styleClass="puzzle-title" text="%PuzzleSelectorPane.title" textAlignment="JUSTIFY" wrapText="true" />
+                        <Label fx:id="about" alignment="BOTTOM_LEFT" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="100.0" styleClass="puzzle-about" text="%PuzzleSelectorPane.about" textAlignment="JUSTIFY" wrapText="true">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Label>
+                     </children>
+                     <HBox.margin>
+                        <Insets left="40.0" />
+                     </HBox.margin>
+                  </VBox>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="2.0" left="8.0" right="8.0" top="2.0" />
+               </VBox.margin>
+            </HBox>
+            <TitledPane fx:id="puzzlePane" animated="false" collapsible="false" styleClass="puzzle-section-header" text="%PuzzleSelectorPane.puzzleTitle">
+               <content>
+                  <VBox fx:id="puzzleBox" styleClass="puzzle-section-content">
+                     <children>
+                        <TilePane fx:id="puzzleGrid" prefColumns="0" prefRows="0" styleClass="puzzle-grid" />
+                     </children>
+                  </VBox>
+               </content>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </TitledPane>
+            <TitledPane fx:id="completedPane" animated="false" collapsible="false" styleClass="puzzle-section-header" text="%PuzzleSelectorPane.completedTitle">
+               <content>
+                  <VBox fx:id="completedBox" styleClass="puzzle-section-content">
+                     <children>
+                        <TilePane fx:id="completedGrid" prefColumns="0" prefRows="0" styleClass="puzzle-grid" />
+                     </children>
+                  </VBox>
+               </content>
+            </TitledPane>
+         </children>
+         <padding>
+            <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+         </padding>
+      </VBox>
+   </content>
+   <stylesheets>
+      <URL value="@../../../../puzzle/ui/CompletionPuzzle.css" />
+      <URL value="@PuzzleSelectorPane.css" />
+   </stylesheets>
+</ScrollPane>

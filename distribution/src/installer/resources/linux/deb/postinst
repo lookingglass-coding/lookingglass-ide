@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = "configure" ] && [ -x /usr/bin/update-menus ]; then update-menus ; fi
+
+if [ "$1" = "configure" ] && [ -x /usr/bin/update-mime-database ]; then update-mime-database /usr/share/mime; fi
+
+if [ "$1" = "configure" ] && which update-desktop-database >/dev/null 2>&1 ; then
+        update-desktop-database -q
+fi

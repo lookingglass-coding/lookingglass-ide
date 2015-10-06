@@ -1,0 +1,70 @@
+* {
+	background-color: #d3d7f0;
+	border-color: #61605e;
+	component-color: #97a0d9;
+}
+
+.puzzle-pane-scroll {
+	-fx-base: component-color;
+
+	-fx-border-color: border-color;
+	-fx-padding: 0;
+	-fx-border-width: 1;
+}
+
+.puzzle-pane {
+	-fx-background-color: background-color;
+	-fx-base: component-color;
+}
+
+.puzzle-title {
+	-fx-font-size: 18px;
+	-fx-font-weight: bold;
+}
+
+.puzzle-about {
+	-fx-font-size: 16px;
+}
+
+.puzzle-section-header {
+	-fx-font-size: 18px;
+	-fx-font-weight: bold;
+	-fx-label-padding: 4px;
+	-fx-graphic-text-gap: 12px;
+}
+
+.puzzle-section-content {
+	-fx-font-size: 13px;
+	-fx-font-weight: normal;
+	-fx-spacing: 16px;
+	-fx-padding: 16px;
+}
+
+.puzzle-grid {
+	-fx-pref-rows: 0;
+	-fx-pref-columns: 0;
+	-fx-pref-tile-width: -1;
+	-fx-pref-tile-height: -1;
+	-fx-hgap: 18px;
+	-fx-vgap: 18px;
+	-fx-tile-alignment: center;
+}
+
+.puzzle-letterbox {
+	-fx-background-color: #413d43;
+}
+
+.puzzle-thumbnail {
+	-fx-background-color: white;
+	-fx-padding: 8px;
+	-fx-spacing: 8px;
+}
+
+.puzzle-play-overlay {
+	-fx-background-color: #7d758285;
+}
+
+/* Since we are always expanded, do not show the rollover. */
+.titled-pane > .title:hover {
+    -fx-color: -fx-base;
+}

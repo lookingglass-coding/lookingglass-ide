@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.embed.swing.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="puzzle-overlay" stylesheets="@CompletionPuzzle.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox alignment="BOTTOM_LEFT" maxWidth="1.7976931348623157E308">
+         <children>
+            <HBox alignment="BOTTOM_LEFT" maxWidth="640.0">
+               <children>
+                  <ImageView fx:id="face" pickOnBounds="true" preserveRatio="true" styleClass="puzzle-face" />
+                  <VBox VBox.vgrow="SOMETIMES">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <children>
+                        <HBox fx:id="bubbleBox">
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <Label fx:id="title" alignment="BOTTOM_LEFT" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="100.0" styleClass="puzzle-intro-title" text="%PuzzleIntroPane.title" textAlignment="JUSTIFY" wrapText="true">
+                           <VBox.margin>
+                              <Insets left="40.0" top="2.0" />
+                           </VBox.margin>
+                        </Label>
+                        <Label fx:id="directions" alignment="BOTTOM_LEFT" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="100.0" styleClass="puzzle-intro-directions" text="%PuzzleIntroPane.directions" textAlignment="JUSTIFY" wrapText="true">
+                           <VBox.margin>
+                              <Insets left="40.0" top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                     </children>
+                  </VBox>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="30.0" />
+               </VBox.margin>
+            </HBox>
+            <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="640.0" style="-fx-background-color: black;" VBox.vgrow="NEVER">
+               <children>
+                  <SwingNode fx:id="scene" />
+               </children>
+            </StackPane>
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </VBox>
+      <HBox alignment="BOTTOM_RIGHT" maxWidth="1.7976931348623157E308">
+         <children>
+            <Button fx:id="next" contentDisplay="RIGHT" styleClass="puzzle-next-button" text="%PuzzleIntroPane.next" />
+         </children>
+         <VBox.margin>
+            <Insets top="24.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+</VBox>

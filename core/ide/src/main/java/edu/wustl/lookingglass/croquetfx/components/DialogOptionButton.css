@@ -1,0 +1,64 @@
+.dialog-option-button {
+	-fx-padding: 10 10 10 10;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+.dialog-option-button:hover {
+    -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, linear-gradient(to bottom, ghostwhite, derive(ghostwhite, -5%));
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius: 3px, 3px, 2px, 1px;
+}
+.dialog-option-button:focused:hover:armed, 
+.dialog-option-button:armed  {
+	-fx-background-color: -fx-focus-color, -fx-inner-border, -fx-body-color, -fx-faint-focus-color, linear-gradient(to bottom, derive(ghostwhite, -10%), derive(ghostwhite, -15%));
+    -fx-background-insets: -0.2, 1, 2, -1.4, 2.6;
+    -fx-background-radius: 3, 2, 1, 4, 1;
+}
+
+.dialog-option-button:focused {
+    -fx-background-color: -fx-focus-color, -fx-inner-border, -fx-body-color, -fx-faint-focus-color, linear-gradient(to bottom, ghostwhite, derive(ghostwhite, -5%));
+    -fx-background-insets: -0.2, 1, 2, -1.4, 2.6;
+    -fx-background-radius: 3, 2, 1, 4, 1;
+}
+
+.dialog-option-button:focused:hover {
+	-fx-background-color: -fx-focus-color, -fx-inner-border, -fx-body-color, -fx-faint-focus-color, linear-gradient(to bottom, white, ghostwhite);
+    -fx-background-insets: -0.2, 1, 2, -1.4, 2.6;
+    -fx-background-radius: 3, 2, 1, 4, 1;
+}
+
+.dialog-option-button .title {
+    -fx-font-size: 1.25em;
+    -fx-padding: 0 0 5 0;
+}
+
+.dialog-option-button:default {
+    -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, linear-gradient(to bottom, white, derive(-fx-default-button, 80%));
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius: 3px, 3px, 2px, 1px;
+}
+
+.dialog-option-button:default:hover {
+    -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, linear-gradient(to bottom, white, derive(-fx-default-button, 60%));
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius: 3px, 3px, 2px, 1px;
+}
+
+.dialog-option-button:default:focused:hover:armed,
+.dialog-option-button:default:armed {
+   	-fx-background-color: -fx-focus-color, -fx-inner-border, -fx-body-color, -fx-faint-focus-color, linear-gradient(to bottom, ghostwhite, derive(-fx-default-button, 30%));
+    -fx-background-insets: -0.2, 1, 2, -1.4, 2.6;
+    -fx-background-radius: 3, 2, 1, 4, 1;
+}
+
+.dialog-option-button:default:focused {
+    -fx-background-color: -fx-focus-color, -fx-inner-border, -fx-body-color, -fx-faint-focus-color, linear-gradient(to bottom, white, derive(-fx-default-button, 80%));
+    -fx-background-insets: -0.2, 1, 2, -1.4, 2.6;
+    -fx-background-radius: 3, 2, 1, 4, 1;
+}
+
+.dialog-option-button:default:focused:hover {
+    -fx-background-color: -fx-focus-color, -fx-inner-border, -fx-body-color, -fx-faint-focus-color, linear-gradient(to bottom, white, derive(-fx-default-button, 60%));
+    -fx-background-insets: -0.2, 1, 2, -1.4, 2.6;
+    -fx-background-radius: 3, 2, 1, 4, 1;
+}

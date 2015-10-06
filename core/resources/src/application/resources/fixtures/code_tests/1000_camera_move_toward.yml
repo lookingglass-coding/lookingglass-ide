@@ -1,0 +1,14 @@
+1000_camera_move_toward:
+  crawler_param2: 1
+  crawler_param3: -1
+  type_cd: <%= CodeTest.skill %>
+  snippet: "if MethodsAPI.getCallerUniqueName(expressionStatement) == \"camera\":\n\treturn MethodsAPI.getMethod(expressionStatement).getName() == \"moveToward\""
+  id: 1000
+  title: camera_move_toward
+  description: 'camera moves toward a specific object '
+  crawler_cd: <%= CodeTest.expression_statement %>
+  user_id: 1
+  crawler_param1: 1
+  crawl_cd: <%= CodeTest.expressionstatement %>
+  published_cd: <%= CodeTest.ispublished %>
+  return_cd: <%= CodeTest.expressionstatement %>

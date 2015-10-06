@@ -1,0 +1,14 @@
+14000_add_character:
+  crawler_param2: 0
+  crawler_param3: -1
+  type_cd: <%= CodeTest.skill %>
+  snippet: "char_types = set([\"Flyer\", \"Quadruped\", \"Biped\", \"Swimmer\"])\ncharacter_list = list()\nmin_len = 1\nfor es in esList:\n\tif InternalAPI.getEncasingUserMethod(es).getName() == \"performGeneratedSetUp\":\n\t\tif not MethodsAPI.getCaller(es) == None:\n\t\t\tsuperX1 = MethodsAPI.getCaller(es).getType().getSuperType().getName()\n\t\t\t#need supersuper for things like childPerson/adultPerson\n\t\t\tsuperX2 = MethodsAPI.getCaller(es).getType().getSuperType().getSuperType().getName()\n\t\t\tif superX1 in char_types or superX2 in char_types:\n\t\t\t\tif MethodsAPI.getCaller(es).__str__() == \"FieldAccess[]\":\n\t\t\t\t\tcharName = MethodsAPI.getCaller(es).field.getValue().getName()\n\t\t\t\t\tif charName not in character_list:\n\t\t\t\t\t\tcharacter_list.append(charName)\nif len(character_list) < min_len:\n\tprint \"Failed: not enough characters present\"\nelse:\n\tprint \"Passed. Characters in scene:\"\n\tfor c in character_list:\n\t\tprint \"  \",c\nreturn list()"
+  id: 14000
+  title: add_character
+  description: 'add characters to your world '
+  crawler_cd: <%= CodeTest.spread_expression_statement %>
+  user_id: 1
+  crawler_param1: 1
+  crawl_cd: <%= CodeTest.expressionstatement %>
+  published_cd: <%= CodeTest.ispublished %>
+  return_cd: <%= CodeTest.nodeholder %>

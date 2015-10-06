@@ -1,0 +1,21 @@
+Thumbs.db
+LOCAL.*
+REMOTE.*
+BASE.*
+*~*
+.metadata
+*.DS_Store
+.*.swp
+hs_*.log
+
+# m2eclipse
+/target
+
+# zanata
+.zanata-cache
+/edu.wustl.lookingglass
+
+# Ignore these projects from Alice so that people don't add these files to the Looking Glass repository by mistake.
+l10n-alice
+/alice
+

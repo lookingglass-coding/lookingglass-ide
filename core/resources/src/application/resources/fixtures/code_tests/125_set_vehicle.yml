@@ -1,0 +1,14 @@
+125_set_vehicle:
+  crawler_param2: 1
+  crawler_param3: -1
+  type_cd: <%= CodeTest.skill %>
+  snippet: return MethodsAPI.getMethod(expressionStatement).getName() == "setVehicle"
+  id: 125
+  title: set_vehicle
+  description: 'a character or prop''s movement is tied to another object '
+  crawler_cd: <%= CodeTest.expression_statement %>
+  user_id: 1
+  crawler_param1: 1
+  crawl_cd: <%= CodeTest.expressionstatement %>
+  published_cd: <%= CodeTest.ispublished %>
+  return_cd: <%= CodeTest.expressionstatement %>

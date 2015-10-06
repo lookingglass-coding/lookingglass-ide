@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2008, 2015, Washington University in St. Louis.
+    All rights reserved.
+   
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+   
+    1. Redistributions of source code must retain the above copyright notice,
+       this list of conditions and the following disclaimer.
+   
+    2. Redistributions in binary form must reproduce the above copyright notice,
+       this list of conditions and the following disclaimer in the documentation
+       and/or other materials provided with the distribution.
+   
+    3. Products derived from the software may not be called "Looking Glass", nor
+       may "Looking Glass" appear in their name, without prior written permission
+       of Washington University in St. Louis.
+   
+    4. All advertising materials mentioning features or use of this software must
+       display the following acknowledgement: "This product includes software
+       developed by Washington University in St. Louis"
+   
+    5. The gallery of art assets and animations provided with this software is
+       contributed by Electronic Arts Inc. and may be used for personal,
+       non-commercial, and academic use only. Redistributions of any program
+       source code that utilizes The Sims 2 Assets must also retain the copyright
+       notice, list of conditions and the disclaimer contained in
+       The Alice 3.0 Art Gallery License.
+   
+    DISCLAIMER:
+   
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.  ANY AND ALL
+    EXPRESS, STATUTORY OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY,  FITNESS FOR A PARTICULAR PURPOSE,
+    TITLE, AND NON-INFRINGEMENT ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHORS,
+    COPYRIGHT OWNERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+    INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR CONSEQUENTIAL DAMAGES
+    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+    LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+    ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING FROM OR OTHERWISE RELATING TO
+    THE USE OF OR OTHER DEALINGS WITH THE SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+ -->
+<project name="lookingglass" xmlns:flaka="antlib:it.haefelinger.flaka">
+
+	<target name="init">
+		<property file="build.properties" />
+
+		<condition property="platform-mac">
+			<os family="mac" />
+		</condition>
+		<condition property="platform-windows">
+			<os family="windows" />
+		</condition>
+		<condition property="platform-linux">
+			<os family="unix" />
+		</condition>
+	</target>
+
+	<target name="clean" depends="init">
+		<delete dir="${project.distribution.package.directory}" followsymlinks="false" removeNotFollowedSymlinks="true" includeemptydirs="true" />
+	</target>
+
+	<target name="build-init" depends="init, clean">
+		<property environment="env" />
+		<mkdir dir="${project.distribution.staging.directory}" />
+		<mkdir dir="${project.distribution.build.directory}" />
+
+		<!-- Create the short jre version number -->
+		<flaka:switch value="${jre.version}">
+			<re expr="^(\d+)\.(\d+)\.(\d+)_(\d+)$" var="m">
+			</re>
+			<otherwise>
+				<fail>jre.version in unknown format</fail>
+			</otherwise>
+		</flaka:switch>
+		<flaka:let>
+			jre.version.short := format( '%su%s', m[2], m[4] )
+		</flaka:let>
+
+		<!-- Parse the classpath, so the different build tools can use it. -->
+		<loadfile property="application.classpath" srcfile="${project.distribution.classpath.file}" />
+		<flaka:let>
+			raw_classpath = split('${application.classpath}', ':')
+			application_classpath = list()
+
+			; WinRun4J classpath generation
+			winrun4j_classpath = ''
+			classpath_count = 1
+		</flaka:let>
+
+		<!-- Create the classpath for our project -->
+		<flaka:for var="path" in="raw_classpath">
+			<flaka:let>
+				application_classpath = append(application_classpath, path)
+				winrun4j_classpath = format('%sclasspath.%s=%s%n', winrun4j_classpath, classpath_count, path)
+				classpath_count = classpath_count + 1
+			</flaka:let>
+		</flaka:for>
+
+		<!-- Create classpath properties -->
+		<flaka:let>
+			project.classpath.unix := format("\$base_dir/%s", join(':\$base_dir/', application_classpath))
+			project.classpath.appbundler := format("%s", join(', ', application_classpath))
+			project.classpath.winrun4j := winrun4j_classpath
+			project.classpath.community := format("$lookingglass_dir/%s", join(':$lookingglass_dir/', application_classpath))
+		</flaka:let>
+
+		<!-- Load License Files -->
+		<loadfile property="lookingglass.license" srcfile="${project.distribution.application.directory}/lookingglass-license.txt" />
+		<loadfile property="alice.license" srcfile="${project.distribution.application.directory}/EULA_Alice3.txt" />
+	</target>
+
+	<target name="release-dir" depends="build-init">
+		<!-- Library resources -->
+		<copy todir="${project.distribution.staging.directory}/lib">
+			<fileset dir="${project.distribution.lib.directory}" />
+		</copy>
+
+		<!-- Application resources -->
+		<copy todir="${project.distribution.staging.directory}/application">
+			<fileset dir="${project.distribution.application.directory}">
+				<exclude name="gallery/assets/sims/*" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="release-dir-windows" depends="release-dir">
+		<copy todir="${project.distribution.staging.directory}/application">
+			<fileset file="${project.distribution.installer.resources.directory}/windows/lookingglass-project.ico" />
+		</copy>
+	</target>
+
+	<macrodef name="build-exe">
+		<attribute name="platform" />
+		<attribute name="bitLabel" />
+		<attribute name="jvmType" />
+		<attribute name="programFiles.dir" />
+		<sequential>
+			<property name="win.jre.path" value="@{programFiles.dir}/Java/jre${jre.version}" />
+			<property name="win.jre.java" value="${win.jre.path}/bin/java.exe" />
+
+			<!-- Check the version of this jre -->
+			<exec executable="${win.jre.java}" resolveexecutable="true" outputproperty="win.jre.java.version">
+				<arg line="-version" />
+			</exec>
+			<flaka:unless test="matches(property['win.jre.java.version'], format('&quot;%s&quot;', property['jre.version']))">
+				<fail>Installed JRE does match build.properties version, "${jre.version}".</fail>
+			</flaka:unless>
+
+			<!-- Add the jre to the release bundle -->
+			<copy todir="${project.distribution.staging.directory}/platform/@{platform}/jre">
+				<fileset dir="@{programFiles.dir}/Java/jre${jre.version}" />
+			</copy>
+
+			<!-- Prepare for making an exe -->
+			<property name="winrun4j.rcedit" value="${project.build.directory}/winrun4j/bin/RCEDIT@{bitLabel}.exe" />
+			<property name="project.exe.file" value="${project.distribution.staging.directory}/${application.title}.exe" />
+			<property name="project.exe.ini.file" value="${project.distribution.build.directory}/${application.file}.ini" />
+
+			<copy file="${project.build.directory}/winrun4j/bin/WinRun4J@{bitLabel}.exe" tofile="${project.exe.file}" />
+
+			<!-- clear the exe -->
+			<exec executable="${winrun4j.rcedit}" resolveexecutable="true">
+				<arg line="/C" />
+				<arg path="${project.exe.file}" />
+			</exec>
+
+			<!-- Set the icon -->
+			<exec executable="${winrun4j.rcedit}" resolveexecutable="true">
+				<arg line="/I" />
+				<arg path="${project.exe.file}" />
+				<arg path="${project.distribution.installer.resources.directory}/windows/lookingglass.ico" />
+			</exec>
+
+			<!-- Set the splash screen -->
+			<exec executable="${winrun4j.rcedit}" resolveexecutable="true">
+				<arg line="/S" />
+				<arg path="${project.exe.file}" />
+				<arg path="${project.distribution.installer.resources.directory}/windows/splash.bmp" />
+			</exec>
+
+			<!-- Create the ini -->
+			<copy file="${project.distribution.installer.resources.directory}/windows/build.ini" tofile="${project.exe.ini.file}" />
+			<echo file="${project.exe.ini.file}" append="true">
+vm.location=platform/@{platform}/jre/bin/@{jvmType}/jvm.dll${line.separator}
+vm.heapsize.preferred=${application.jvm.memory}${line.separator}
+main.class=${application.main.class}${line.separator}
+${project.classpath.winrun4j}${line.separator}
+			</echo>
+
+			<!-- Set the ini -->
+			<exec executable="${winrun4j.rcedit}" resolveexecutable="true">
+				<arg line="/N" />
+				<arg path="${project.exe.file}" />
+				<arg path="${project.exe.ini.file}" />
+			</exec>
+		</sequential>
+	</macrodef>
+
+	<target name="release-dir-win32" depends="release-dir-windows" if="platform-windows">
+		<copy todir="${project.distribution.staging.directory}/platform">
+			<fileset dir="${project.distribution.platform.directory}">
+				<include name="win32/**/**" />
+			</fileset>
+		</copy>
+
+		<build-exe programFiles.dir="${env.ProgramFiles(x86)}" platform="win32" bitLabel="" jvmType="client" />
+	</target>
+
+	<target name="release-dir-win64" depends="release-dir-windows" if="platform-windows">
+		<copy todir="${project.distribution.staging.directory}/platform">
+			<fileset dir="${project.distribution.platform.directory}">
+				<include name="win64/**/**" />
+			</fileset>
+		</copy>
+
+		<build-exe programFiles.dir="${env.ProgramFiles}" platform="win64" bitLabel="64" jvmType="server" />
+	</target>
+
+	<target name="win32-zip" depends="release-dir-win32" if="platform-windows">
+		<zip destfile="${project.build.directory}/${application.file}-${application.version}-win32.zip" basedir="${project.distribution.staging.directory}" />
+	</target>
+
+	<target name="win64-zip" depends="release-dir-win64" if="platform-windows">
+		<zip destfile="${project.build.directory}/${application.file}-${application.version}-win64.zip" basedir="${project.distribution.staging.directory}" />
+	</target>
+
+	<macrodef name="build-installer">
+		<attribute name="arch" />
+		<attribute name="platform" />
+		<sequential>
+			<!-- Installer resources -->
+			<copy todir="${project.distribution.build.directory}">
+				<fileset dir="${project.distribution.installer.resources.directory}/windows" />
+			</copy>
+
+			<!-- Write the version number for inno setup -->
+			<echo file="${project.distribution.build.directory}/build.iss">#define AppVersion "${application.version}"
+#define AppName "${application.title}"
+#define AppFile "${application.file}"
+#define AppVendor "${application.vendor}"
+#define AppHomepage "${application.homepage}"
+#define AppPlatform "@{platform}"
+#define AppArch "@{arch}"</echo>
+
+			<!-- Create the license text -->
+			<echo file="${project.distribution.build.directory}/license.txt">${lookingglass.license}
+=================================================
+
+${lookingglass.art.license}
+=================================================
+
+${alice.license}</echo>
+
+			<!-- Build the installer -->
+			<exec dir="${project.distribution.package.directory}" executable="${env.ProgramFiles(x86)}//Inno Setup 5//Compil32.exe">
+				<arg line="/cc '${project.distribution.build.directory}/setup.iss'" />
+			</exec>
+		</sequential>
+	</macrodef>
+
+	<target name="win32-exe" depends="release-dir-win32" if="platform-windows">
+		<build-installer arch="" platform="win32" />
+	</target>
+
+	<target name="win64-exe" depends="release-dir-win64" if="platform-windows">
+		<build-installer arch="x64" platform="win64" />
+	</target>
+
+	<target name="release-dir-mac" depends="release-dir">
+		<copy todir="${project.distribution.staging.directory}/platform">
+			<fileset dir="${project.distribution.platform.directory}">
+				<include name="macosx/**/**" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="mac-dmg" depends="release-dir-mac" if="platform-mac">
+		<taskdef name="bundleapp" classname="com.oracle.appbundler.AppBundlerTask" classpathref="maven.plugin.classpath" />
+
+		<!-- Check the version of this jre -->
+		<exec executable="java" resolveexecutable="true" outputproperty="mac.jre.java.version">
+			<arg line="-version" />
+		</exec>
+		<flaka:unless test="matches(property['mac.jre.java.version'], format('&quot;%s&quot;', property['jre.version']))">
+			<fail>Installed JRE does match build.properties version, "${jre.version}".</fail>
+		</flaka:unless>
+
+		<exec executable="/usr/libexec/java_home" outputproperty="mac.java.home" />
+
+		<!-- Create Mac App -->
+		<bundleapp
+			outputdirectory="${project.distribution.build.directory}"
+			name="${application.title}"
+		    displayname="${application.title}"
+		    identifier="${application.mac.bundleid}"
+			icon="${project.distribution.installer.resources.directory}/mac/lookingglass.icns"
+		    shortversion="${application.version}"
+			version="${application.version}"
+			signature="${application.mac.signature}"
+		    applicationCategory="public.app-category.education"
+		    mainclassname="${application.main.class}"
+			executablename="${application.file}">
+
+			<runtime dir="${mac.java.home}"/>
+
+			<classpath dir="${project.distribution.staging.directory}" includes="${project.classpath.appbundler}"/>
+
+			<option value="-ea" />
+			<option value="-Xmx${application.jvm.memory}m" />
+			<option value="-XX:+UseG1GC" />
+			<option value="-Dfile.encoding=UTF-8" />
+			<option value="-Dorg.alice.ide.rootDirectory=$APP_ROOT/Contents/Resources" />
+			<option value="-splash:$APP_ROOT/Contents/Resources/application/splash.png" />
+
+			<bundledocument extensions="lgp" icon="lookingglass-project.icns" name="${application.title} Project" role="editor" />
+		</bundleapp>
+
+		<property name="mac.app" value="${project.distribution.build.directory}/${application.title}.app" />
+
+		<!-- Copy the Gallery resources, etc -->
+		<copy todir="${mac.app}/Contents/Resources">
+			<fileset dir="${project.distribution.staging.directory}" excludes="${project.classpath.appbundler}" />
+			<fileset file="${project.distribution.installer.resources.directory}/mac/lookingglass-project.icns" />
+		</copy>
+
+		<!-- Correct the permissions on the ffmpeg executable -->
+		<chmod perm="a+x" file="${mac.app}/Contents/Resources/platform/macosx/ffmpeg/ffmpeg" />
+
+		<!-- Create a .dmg file -->
+		<echo>[hdiutil] Creating dmg...</echo>
+		<exec executable="/usr/bin/hdiutil" os="Mac OS X">
+			<arg value="create" />
+			<arg value="-srcfolder" />
+			<arg value="${project.distribution.build.directory}" />
+			<arg value="-volname" />
+			<arg value="${application.title}" />
+			<arg value="-ov" />
+			<arg value="${project.build.directory}/${application.title} ${application.version}.dmg" />
+		</exec>
+	</target>
+
+	<target name="linux-sh" depends="">
+		<loadfile property="project.unix.sh" srcfile="${project.distribution.installer.resources.directory}/linux/lookingglass.sh.in" />
+		<flaka:let>
+			tmp = replace(property['project.unix.sh'], format('lookingglass_main=%s', property['application.main.class']), 'lookingglass_main=')
+			tmp = replace(tmp, format('lookingglass_cp=%s', property['project.classpath.unix']), 'lookingglass_cp=')
+			tmp = replace(tmp, format('lookingglass_mem=%s', property['application.jvm.memory']), 'lookingglass_mem=')
+			project.unix.sh ::= tmp
+		</flaka:let>
+
+		<echo file="${project.distribution.staging.directory}/${application.file}">${project.unix.sh}</echo>
+		<chmod perm="a+x" file="${project.distribution.staging.directory}/${application.file}" />
+	</target>
+
+	<target name="release-dir-linux" depends="release-dir, linux-sh">
+	</target>
+
+	<macrodef name="linux-jre">
+		<attribute name="arch" />
+		<sequential>
+			<!-- Look in the downloads folder for the jre if it's not specified -->
+			<property name="jre.tar" value="${env.HOME}/Downloads/jre-${jre.version.short}-linux-@{arch}.tar.gz" />
+			<fail message="JRE tar for @{arch} not found: ${jre.tar}">
+				<condition>
+					<not>
+						<available file="${jre.tar}" />
+					</not>
+				</condition>
+			</fail>
+
+			<!-- Add the jre to the release bundle -->
+			<!-- NOTE: this requires that you set jre.tar java property -->
+			<fail unless="jre.tar">The property, jre.tar, must be set to the path of the Linux JRE tar.</fail>
+			<mkdir dir="${project.distribution.staging.directory}/jre" />
+			<exec executable="tar" dir="${project.distribution.staging.directory}/jre">
+				<arg value="-xf" />
+				<arg value="${jre.tar}" />
+				<arg value="--strip-components" />
+				<arg value="1" />
+			</exec>
+
+			<!-- Check the version of this jre -->
+			<exec executable="${project.distribution.staging.directory}/jre/bin/java" resolveexecutable="true" outputproperty="linux.jre.java.version">
+				<arg line="-version" />
+			</exec>
+			<!-- TODO: this should also check the arch -->
+			<flaka:unless test="matches(property['linux.jre.java.version'], format('&quot;%s&quot;', property['jre.version']))">
+				<fail>jre.tar JRE does match build.properties version, "${jre.version}".</fail>
+			</flaka:unless>
+		</sequential>
+	</macrodef>
+
+	<target name="release-dir-linux-i586" depends="release-dir-linux">
+		<!-- Platform resources -->
+		<copy todir="${project.distribution.staging.directory}/platform">
+			<fileset dir="${project.distribution.platform.directory}">
+				<include name="linux-i586/**/**" />
+			</fileset>
+		</copy>
+
+		<linux-jre arch="i586" />
+	</target>
+
+	<target name="release-dir-linux-amd64" depends="release-dir-linux">
+		<!-- Platform resources -->
+		<copy todir="${project.distribution.staging.directory}/platform">
+			<fileset dir="${project.distribution.platform.directory}">
+				<include name="linux-amd64/**/**" />
+			</fileset>
+		</copy>
+
+		<linux-jre arch="x64" />
+	</target>
+
+	<macrodef name="build-tar">
+		<attribute name="arch" />
+		<sequential>
+			<move file="${project.distribution.staging.directory}" tofile="${project.distribution.package.directory}/${application.file}" />
+
+			<!-- Don't use Ant's tar because it doesn't support execute permissions -->
+			<exec executable="tar" dir="${project.distribution.package.directory}">
+				<arg value="-czf" />
+				<arg value="${project.build.directory}/${application.file}-${application.version}-@{arch}.tar.gz" />
+				<arg value="${application.file}" />
+			</exec>
+		</sequential>
+	</macrodef>
+
+	<target name="linux-i586-tar" depends="release-dir-linux-i586">
+		<build-tar arch="i586" />
+	</target>
+
+	<target name="linux-amd64-tar" depends="release-dir-linux-amd64">
+		<build-tar arch="x64" />
+	</target>
+
+	<macrodef name="build-deb">
+		<attribute name="arch" />
+		<sequential>
+			<taskdef resource="ant_deb_task.properties" classpathref="maven.plugin.classpath" />
+
+			<deb todir="${project.build.directory}" 
+				package="${application.file}" 
+				section="misc" 
+				depends="ffmpeg (>= 0.10), vlc (>= 2.1.0), zip (>= 3.0)"
+				recommends= "openjdk-8-jre"
+				homepage="${application.homepage}" 
+				postinst="${project.distribution.installer.resources.directory}/linux/deb/postinst" 
+				prerm="${project.distribution.installer.resources.directory}/linux/deb/prerm" 
+				architecture="@{arch}">
+
+				<version upstream="${application.version}" debian="1" />
+				<maintainer name="${application.vendor}" email="${application.email}" />
+				<description synopsis="${application.synopsis}">${application.description}</description>
+
+				<tarfileset dir="${project.distribution.staging.directory}" prefix="usr/share/${application.file}" />
+				<tarfileset file="${project.distribution.staging.directory}/jre/bin/java" prefix="usr/share/${application.file}/jre/bin" filemode="755" />
+				<tarfileset file="${project.distribution.build.directory}/${application.file}" prefix="usr/bin" filemode="755" />
+				<tarfileset file="${project.distribution.installer.resources.directory}/linux/lookingglass.desktop" prefix="usr/share/applications" />
+				<tarfileset file="${project.distribution.installer.resources.directory}/linux/lookingglass.xml" prefix="usr/share/mime/packages" />
+				<tarfileset dir="${project.distribution.installer.resources.directory}/linux/icons" prefix="usr/share/icons" />
+			</deb>
+		</sequential>
+	</macrodef>
+
+	<target name="deb-build-dir" depends="release-dir-linux">
+		<!-- Create the debian launcher script for looking glass -->
+		<loadfile property="project.unix.sh.deb" srcfile="${project.distribution.staging.directory}/${application.file}" />
+		<flaka:let>
+			project.unix.sh.deb ::= replace(property['project.unix.sh.deb'], 'base_dir=\/usr\/share\/lookingglass', 'base_dir=.*')
+		</flaka:let>
+		<echo file="${project.distribution.build.directory}/${application.file}">${project.unix.sh.deb}</echo>
+		<chmod perm="a+x" file="${project.distribution.build.directory}/${application.file}" />
+	</target>
+
+	<target name="linux-i586-deb" depends="release-dir-linux-i586, deb-build-dir">
+		<build-deb arch="i386" />
+	</target>
+
+	<target name="linux-amd64-deb" depends="release-dir-linux-amd64, deb-build-dir">
+		<build-deb arch="amd64" />
+	</target>
+
+	<macrodef name="build-rpm">
+		<attribute name="arch" />
+		<sequential>
+			<!-- Make sure you have rpmbuild installed. Otherwise this will fail. -->
+			<rpm specfile="lookingglass.spec" command="-bb --define 'app_version ${application.version}' --define 'app_title ${application.title}' --define 'app_vendor ${application.vendor}' --define 'app_file ${application.file}' --define 'app_description ${application.description}' --define 'app_homepage ${application.homepage}' --target @{arch}" topdir="${project.distribution.build.directory}" failOnError="true" />
+			<copy file="${project.distribution.build.directory}/RPMS/@{arch}/${application.file}-${application.version}-1.@{arch}.rpm" todir="${project.build.directory}" />
+		</sequential>
+	</macrodef>
+
+	<target name="rpm-build-dir" depends="release-dir-linux">
+		<!-- Create the RPM build directories -->
+		<mkdir dir="${project.distribution.build.directory}/SPECS" />
+		<copy file="${project.distribution.installer.resources.directory}/linux/rpm/lookingglass.spec" todir="${project.distribution.build.directory}/SPECS" overwrite="true" />
+		<mkdir dir="${project.distribution.build.directory}/SOURCES" />
+		<tar destfile="${project.distribution.build.directory}/SOURCES/${application.file}-${application.version}.tar.gz" longfile="gnu" compression="gzip">
+			<tarfileset dir="${project.distribution.staging.directory}" prefix="${application.file}-${application.version}/${application.file}" />
+			<tarfileset dir="${project.distribution.installer.resources.directory}/linux" prefix="${application.file}-${application.version}/linux" />
+		</tar>
+	</target>
+
+	<target name="linux-i586-rpm" depends="release-dir-linux-i586, rpm-build-dir" if="platform-linux">
+		<build-rpm arch="i586" />
+	</target>
+
+	<target name="linux-amd64-rpm" depends="release-dir-linux-amd64, rpm-build-dir" if="platform-linux">
+		<build-rpm arch="x86_64" />
+	</target>
+
+	<target name="community-bundle" depends="release-dir-linux-amd64">
+		<echo file="${project.distribution.staging.directory}/${application.file}.classpath">lookingglass_dir=$(dirname "$(readlink -f "$BASH_SOURCE")")
+lookingglass_classpath="${project.classpath.community}"</echo>
+		<tar destfile="${project.build.directory}/community-${application.file}-${application.version}.tar.gz" longfile="gnu" compression="gzip" basedir="${project.distribution.staging.directory}" />
+	</target>
+
+</project>
+

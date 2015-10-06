@@ -1,0 +1,14 @@
+1100_camera_vehicle:
+  crawler_param2: 1
+  crawler_param3: -1
+  type_cd: <%= CodeTest.skill %>
+  snippet: "if MethodsAPI.getCallerUniqueName(expressionStatement) == \"camera\":\n\treturn MethodsAPI.getMethod(expressionStatement).getName() == \"setVehicle\""
+  id: 1100
+  title: camera_vehicle
+  description: camera's movement is tied to another character or object
+  crawler_cd: <%= CodeTest.expression_statement %>
+  user_id: 1
+  crawler_param1: 1
+  crawl_cd: <%= CodeTest.expressionstatement %>
+  published_cd: <%= CodeTest.ispublished %>
+  return_cd: <%= CodeTest.expressionstatement %>

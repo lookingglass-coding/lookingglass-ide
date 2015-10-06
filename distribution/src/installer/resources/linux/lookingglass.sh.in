@@ -1,0 +1,38 @@
+#!/bin/bash
+#
+# Looking Glass startup script.
+
+# Find the installation directory
+base_dir=$(dirname "$(readlink -f "$BASH_SOURCE")")
+
+# ---------------------------------------------------------------------
+# Locate a java. This script *should* prefer a sun/oracle java because openjdk
+# has race conditions with Looking Glass that cause severe instability.
+# Try (in order): in dir, LOOKINGLASS_JAVA_HOME, JAVA_HOME, "java" in PATH.
+# ---------------------------------------------------------------------
+if [ -f "$base_dir/jre/bin/java" ]; then
+    JAVA="$base_dir/jre/bin/java"
+elif [ -n "$LOOKINGLASS_JAVA_HOME" -a -x "$LOOKINGLASS_JAVA_HOME/bin/java" ]; then
+    JAVA="$LOOKINGLASS_JAVA_HOME/bin/java"
+elif [ -n "$JAVA_HOME" -a -x "$JAVA_HOME/bin/java" ]; then
+    JAVA="$JAVA_HOME/bin/java"
+else
+    system_java=`which java 2>/dev/null`
+    if [ -z "$system_java" ]; then
+        echo "Failed to locate the java virtual machine."
+        exit 1
+    else
+        JAVA="$system_java"
+    fi
+fi
+
+lookingglass_main=
+lookingglass_cp=
+lookingglass_mem=
+
+# Check to see if there is an environment variable to adjust Looking Glass' JVM memory.
+LOOKINGGLASS_JVM_MEM=${LOOKINGGLASS_JVM_MEM:-${lookingglass_mem}}
+
+# Run Looking Glass
+${LOOKINGGLASS_ENV_VARS} exec $JAVA -ea -Xmx${LOOKINGGLASS_JVM_MEM}m -XX:+UseG1GC -splash:"$base_dir/application/splash.png" -Dfile.encoding=UTF-8 ${LOOKINGGLASS_PROPERTIES} -Dorg.alice.ide.rootDirectory="$base_dir" -classpath "$lookingglass_cp" "$lookingglass_main" "$@"
+

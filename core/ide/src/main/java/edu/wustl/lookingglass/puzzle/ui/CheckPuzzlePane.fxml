@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.net.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.embed.swing.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="checkPane" alignment="CENTER" styleClass="puzzle-overlay-with-close" stylesheets="@CompletionPuzzle.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox alignment="TOP_RIGHT">
+         <children>
+            <Button fx:id="close" focusTraversable="false" mnemonicParsing="false" styleClass="puzzle-overlay-close">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin></Button>
+         </children>
+      </HBox>
+      <Label fx:id="title" styleClass="overlay-text-message" text="%CheckPuzzlePane.title">
+         <VBox.margin>
+            <Insets bottom="20.0" top="-6.0" />
+         </VBox.margin>
+      </Label>
+      <StackPane fx:id="playStack" alignment="BOTTOM_CENTER">
+         <children>
+            <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="640.0" StackPane.alignment="CENTER">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <children>
+                  <SwingNode fx:id="scene" />
+               </children>
+            </HBox>
+            <ImageView fx:id="overlay" pickOnBounds="true" preserveRatio="true" visible="false">
+               <StackPane.margin>
+                  <Insets bottom="8.0" />
+               </StackPane.margin>
+            </ImageView>
+         </children>
+         <VBox.margin>
+            <Insets right="26.0" />
+         </VBox.margin>
+      </StackPane>
+      <HBox fx:id="indicatorPane" alignment="CENTER_LEFT" fillHeight="false" maxWidth="640.0" minHeight="-Infinity" minWidth="0.0" prefHeight="32.0">
+         <VBox.margin>
+            <Insets bottom="24.0" right="26.0" top="24.0" />
+         </VBox.margin>
+      </HBox>
+      <HBox alignment="CENTER" maxWidth="1.7976931348623157E308" prefWidth="640.0" spacing="8.0">
+         <children>
+            <TilePane alignment="CENTER" hgap="8.0" prefColumns="2" prefRows="1">
+               <children>
+                  <Button fx:id="playCorrect" alignment="BASELINE_LEFT" focusTraversable="false" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="puzzle-play-correct-button" text="%CheckPuzzlePane.playCorrect" />
+                  <Button fx:id="playMine" alignment="BASELINE_LEFT" focusTraversable="false" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="puzzle-play-mine-button" text="%CheckPuzzlePane.playMine" />
+               </children>
+            </TilePane>
+            <HBox alignment="CENTER_LEFT" fillHeight="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+            <ToggleButton fx:id="fastForward" focusTraversable="false" minWidth="-Infinity" mnemonicParsing="false" styleClass="puzzle-fast-forward-button" text="%CheckPuzzlePane.fastForward" />
+            <HBox fx:id="nextBox" alignment="CENTER" HBox.hgrow="ALWAYS">
+               <children>
+                  <HBox alignment="CENTER_LEFT" fillHeight="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="next" contentDisplay="RIGHT" mnemonicParsing="false" styleClass="puzzle-next-button" text="%CheckPuzzlePane.next" />
+               </children>
+            </HBox>
+         </children>
+         <VBox.margin>
+            <Insets right="26.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+</VBox>

@@ -1,0 +1,18 @@
+7025_set_duration:
+  crawler_param2: 1
+  crawler_param3: -1
+  type_cd: <%= CodeTest.skill %>
+  snippet: |-
+    #hacked because API insufficiently handles types other than DoubleLiteral
+
+    #return MethodsAPI.getCallerGetPartMethod(expressionStatement)
+    return MethodsAPI.getAllParametersAsMap(expressionStatement).get("duration")
+  id: 7025
+  title: set_duration
+  description: 'specify the amount of time an action will take '
+  crawler_cd: <%= CodeTest.expression_statement %>
+  user_id: 1
+  crawler_param1: 1
+  crawl_cd: <%= CodeTest.expressionstatement %>
+  published_cd: <%= CodeTest.ispublished %>
+  return_cd: <%= CodeTest.expressionstatement %>

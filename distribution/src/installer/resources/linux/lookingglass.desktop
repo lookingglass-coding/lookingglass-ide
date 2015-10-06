@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Looking Glass
+Comment=Create your own 3D animated stories
+Exec=lookingglass %u
+Icon=lookingglass
+Terminal=false
+Type=Application
+Categories=Education;ComputerScience;Science
+StartupNotify=true
+StartupWMClass=Looking Glass
+MimeType=application/x-lookingglass-project;

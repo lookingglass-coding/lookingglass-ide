@@ -1,0 +1,35 @@
+.mental-effort-scale {
+  -scale-color: #a8a8a8;
+  -fx-padding: 5px;
+}
+.mental-effort-scale:selected {
+  -fx-base: -fx-default-button;
+}
+
+.level1 {
+  -fx-base: derive(-scale-color, 100%);
+}
+.level2 {
+  -fx-base: derive(-scale-color, 88%);
+}
+.level3 {
+  -fx-base: derive(-scale-color, 75%);
+}
+.level4 {
+  -fx-base: derive(-scale-color, 63%);
+}
+.level5 {
+  -fx-base: derive(-scale-color, 50%);
+}
+.level6 {
+  -fx-base: derive(-scale-color, 38%);
+}
+.level7 {
+  -fx-base: derive(-scale-color, 25%);
+}
+.level8 {
+  -fx-base: derive(-scale-color, 13%);
+}
+.level9 {
+  -fx-base: derive(-scale-color, 0%);
+}
