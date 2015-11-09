@@ -56,7 +56,7 @@
 
 	<!-- Note: when merging/upon conflict, do NOT accept Alice version number. -->
 	<!-- This version should ALWAYS be the current Looking Glass version. -->
-	<version>2015.10.05</version>
+	<version>2015.11.06</version>
 
 	<name>Looking Glass</name>
 	<url>https://lookingglass.wustl.edu/</url>
@@ -74,7 +74,7 @@
 
 		<java.version>1.8</java.version>
 
-		<jogl.version>2.3.1</jogl.version>
+		<jogl.version>2.3.2</jogl.version>
 
 		<alice.model.version>2014.08.20</alice.model.version>
 		<sound.gallery.version>2013.08.08</sound.gallery.version>

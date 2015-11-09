@@ -47,7 +47,7 @@ package edu.wustl.lookingglass.community.api;
 /**
  * @author Kyle J. Harms
  */
-public class LocalhostConnection extends org.scribe.builder.api.DefaultApi10a implements CommunityApiConnection {
+public class LocalhostConnection extends org.scribe.builder.api.DefaultApi10a implements CommunityConnection {
 
 	public LocalhostConnection() {
 		super();
@@ -76,11 +76,6 @@ public class LocalhostConnection extends org.scribe.builder.api.DefaultApi10a im
 	@Override
 	public String getOauthSecret() {
 		return "HZN5wTu43SooxHdsZVBh8IG6s09P3QhE5qu7fZEL";
-	}
-
-	@Override
-	public boolean useSecureAuthentication() {
-		return false;
 	}
 
 	@Override

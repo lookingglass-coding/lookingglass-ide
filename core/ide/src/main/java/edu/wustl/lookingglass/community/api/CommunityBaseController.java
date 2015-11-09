@@ -52,6 +52,7 @@ import java.security.cert.CertificateException;
 import org.scribe.model.Response;
 import org.scribe.model.Verb;
 
+import edu.cmu.cs.dennisc.java.util.logging.Logger;
 import edu.wustl.lookingglass.common.VersionNumber;
 import edu.wustl.lookingglass.community.CommunityStatus.AccessStatus;
 import edu.wustl.lookingglass.community.CommunityStatus.ConnectionStatus;
@@ -78,7 +79,7 @@ import edu.wustl.lookingglass.ide.LookingGlassIDE;
  */
 public abstract class CommunityBaseController {
 
-	private final CommunityApiConnection connection;
+	private final CommunityConnection connection;
 
 	// OAuth
 	private org.scribe.oauth.OAuthService service;
@@ -212,11 +213,7 @@ public abstract class CommunityBaseController {
 	}
 
 	/*package-private*/String getSecureBaseUrl() {
-		if( this.connection.useSecureAuthentication() ) {
-			return "https://" + this.connection.getHost();
-		} else {
-			return getBaseUrl();
-		}
+		return this.connection.getSecureProtocol() + "://" + this.connection.getHost();
 	}
 
 	/*package-private*/String getSecureBaseUrl( String location ) {
@@ -653,7 +650,7 @@ public abstract class CommunityBaseController {
 				throw new CertificateException( "No trusted certificates for verification" );
 			}
 		} else {
-			edu.cmu.cs.dennisc.java.util.logging.Logger.warning( "bypassed jar certificate validation" );
+			Logger.warning( "bypassed jar certificate validation" );
 		}
 	}
 

@@ -49,7 +49,7 @@
 	<parent>
 		<groupId>edu.wustl.lookingglass</groupId>
 		<artifactId>core</artifactId>
-		<version>2015.10.05</version>
+		<version>2015.11.06</version>
 		<relativePath>../</relativePath>
 	</parent>
 
@@ -171,67 +171,8 @@
 	</build>
 
 	<profiles>
-		<profile>
-			<id>resources-linux</id>
-			<activation>
-				<os>
-					<family>unix</family>
-				</os>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-dependency-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>distribution-platform-linux</id>
-								<phase>generate-resources</phase>
-								<goals>
-									<goal>unpack</goal>
-								</goals>
-								<configuration>
-									<artifactItems>
-										<!-- linux-amd64 -->
-										<artifactItem>
-											<groupId>org.jogamp.jogl</groupId>
-											<artifactId>jogl-all</artifactId>
-											<version>${jogl.version}</version>
-											<classifier>natives-linux-amd64</classifier>
-											<outputDirectory>${project.resources.platform.directory}/${platform.linux-amd64.label}/${platform.jogl.label}</outputDirectory>
-										</artifactItem>
-										<artifactItem>
-											<groupId>org.jogamp.gluegen</groupId>
-											<artifactId>gluegen-rt</artifactId>
-											<version>${jogl.version}</version>
-											<classifier>natives-linux-amd64</classifier>
-											<outputDirectory>${project.resources.platform.directory}/${platform.linux-amd64.label}/${platform.jogl.label}</outputDirectory>
-										</artifactItem>
-
-										<!-- linux-i586 -->
-										<artifactItem>
-											<groupId>org.jogamp.jogl</groupId>
-											<artifactId>jogl-all</artifactId>
-											<version>${jogl.version}</version>
-											<classifier>natives-linux-i586</classifier>
-											<outputDirectory>${project.resources.platform.directory}/${platform.linux-i586.label}/${platform.jogl.label}</outputDirectory>
-										</artifactItem>
-										<artifactItem>
-											<groupId>org.jogamp.gluegen</groupId>
-											<artifactId>gluegen-rt</artifactId>
-											<version>${jogl.version}</version>
-											<classifier>natives-linux-i586</classifier>
-											<outputDirectory>${project.resources.platform.directory}/${platform.linux-i586.label}/${platform.jogl.label}</outputDirectory>
-										</artifactItem>
-									</artifactItems>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-
+		<!-- We don't ship extra resources with linux builds. -->
+	
 		<profile>
 			<id>resources-mac</id>
 			<activation>
@@ -254,20 +195,6 @@
 								<configuration>
 									<artifactItems>
 										<!-- mac -->
-										<artifactItem>
-											<groupId>org.jogamp.jogl</groupId>
-											<artifactId>jogl-all</artifactId>
-											<version>${jogl.version}</version>
-											<classifier>natives-macosx-universal</classifier>
-											<outputDirectory>${project.resources.platform.directory}/${platform.macosx.label}/${platform.jogl.label}</outputDirectory>
-										</artifactItem>
-										<artifactItem>
-											<groupId>org.jogamp.gluegen</groupId>
-											<artifactId>gluegen-rt</artifactId>
-											<version>${jogl.version}</version>
-											<classifier>natives-macosx-universal</classifier>
-											<outputDirectory>${project.resources.platform.directory}/${platform.macosx.label}/${platform.jogl.label}</outputDirectory>
-										</artifactItem>
 										<artifactItem>
 											<groupId>org.videolan</groupId>
 											<artifactId>libvlc-macosx</artifactId>
@@ -321,20 +248,6 @@
 									<artifactItems>
 										<!-- win32 -->
 										<artifactItem>
-											<groupId>org.jogamp.jogl</groupId>
-											<artifactId>jogl-all</artifactId>
-											<version>${jogl.version}</version>
-											<classifier>natives-windows-i586</classifier>
-											<outputDirectory>${project.resources.platform.directory}/${platform.win32.label}/${platform.jogl.label}</outputDirectory>
-										</artifactItem>
-										<artifactItem>
-											<groupId>org.jogamp.gluegen</groupId>
-											<artifactId>gluegen-rt</artifactId>
-											<version>${jogl.version}</version>
-											<classifier>natives-windows-i586</classifier>
-											<outputDirectory>${project.resources.platform.directory}/${platform.win32.label}/${platform.jogl.label}</outputDirectory>
-										</artifactItem>
-										<artifactItem>
 											<groupId>org.videolan</groupId>
 											<artifactId>libvlc-win32</artifactId>
 											<version>2.1.5</version>
@@ -357,20 +270,6 @@
 										</artifactItem>
 
 										<!-- win64 -->
-										<artifactItem>
-											<groupId>org.jogamp.jogl</groupId>
-											<artifactId>jogl-all</artifactId>
-											<version>${jogl.version}</version>
-											<classifier>natives-windows-amd64</classifier>
-											<outputDirectory>${project.resources.platform.directory}/${platform.win64.label}/${platform.jogl.label}</outputDirectory>
-										</artifactItem>
-										<artifactItem>
-											<groupId>org.jogamp.gluegen</groupId>
-											<artifactId>gluegen-rt</artifactId>
-											<version>${jogl.version}</version>
-											<classifier>natives-windows-amd64</classifier>
-											<outputDirectory>${project.resources.platform.directory}/${platform.win64.label}/${platform.jogl.label}</outputDirectory>
-										</artifactItem>
 										<artifactItem>
 											<groupId>org.videolan</groupId>
 											<artifactId>libvlc-win64</artifactId>

@@ -58,7 +58,6 @@ import edu.wustl.lookingglass.community.api.packets.FilePacket;
 import edu.wustl.lookingglass.community.api.packets.JsonPacket;
 import edu.wustl.lookingglass.community.api.packets.ModulePacket;
 import edu.wustl.lookingglass.community.api.packets.ModuleResultPacket;
-import edu.wustl.lookingglass.community.api.packets.NotificationPacket;
 import edu.wustl.lookingglass.community.api.packets.SnippetPacket;
 import edu.wustl.lookingglass.community.api.packets.TemplatePacket;
 import edu.wustl.lookingglass.community.api.packets.UserPacket;
@@ -192,8 +191,6 @@ public final class CommunityController extends CommunityBaseController {
 	 * Community Access
 	 */
 
-	private NotificationPacket[] currentUserNotifications = null;
-
 	public UserPacket loginUser( String username, String password ) throws CommunityApiException {
 		this.userAccess( username, password );
 		return this.getUserPacket();
@@ -209,14 +206,6 @@ public final class CommunityController extends CommunityBaseController {
 
 	public UserPacket getCurrentUser() {
 		return this.getUserPacket();
-	}
-
-	public int getUserNotificationCount() {
-		if( currentUserNotifications != null ) {
-			return currentUserNotifications.length;
-		} else {
-			return 0;
-		}
 	}
 
 	/*
@@ -881,23 +870,6 @@ public final class CommunityController extends CommunityBaseController {
 
 		byte[] payload = this.getFilePacket( activityPacket.getThumbnailPath() ).getPayload();
 		return javax.imageio.ImageIO.read( new java.io.ByteArrayInputStream( payload ) );
-	}
-
-	/*
-	 * Notifications
-	 */
-
-	public NotificationPacket[] getNotifications() throws CommunityApiException {
-		loginRequired();
-		currentUserNotifications = sendRequest( Verb.GET, getAbsoluteApiUrl( "/notifications.json" ), NotificationPacket[].class );
-		return currentUserNotifications;
-	}
-
-	public void deleteNotification( Integer id ) throws CommunityApiException {
-		loginRequired();
-		assert id != null;
-
-		sendRequest( Verb.DELETE, getAbsoluteApiUrl( "/notifications/" + id + ".json" ) );
 	}
 
 	/*

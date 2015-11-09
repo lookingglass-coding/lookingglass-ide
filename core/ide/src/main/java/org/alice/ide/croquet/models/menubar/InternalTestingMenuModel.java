@@ -42,7 +42,6 @@
  *******************************************************************************/
 package org.alice.ide.croquet.models.menubar;
 
-
 /**
  * @author Dennis Cosgrove
  */
@@ -122,9 +121,8 @@ public class InternalTestingMenuModel extends org.lgna.croquet.PredeterminedMenu
 				// <lg>
 				SEPARATOR,
 				new edu.wustl.lookingglass.remix.EventNodeTreeDialog().getLaunchDialogOperation().getMenuItemPrepModel(),
-				new edu.wustl.lookingglass.remix.LoadLocalRemixOperation().getMenuItemPrepModel(),
-				//new edu.wustl.lookingglass.utilities.LockDecodeOperation().getMenuItemPrepModel(),
-				new edu.wustl.lookingglass.community.ProjectPropertiesManagerDialog().getLaunchDialogOperation().getMenuItemPrepModel()
+				new edu.wustl.lookingglass.remix.LoadLocalRemixOperation().getMenuItemPrepModel()
+		//new edu.wustl.lookingglass.utilities.LockDecodeOperation().getMenuItemPrepModel(),
 		// new edu.wustl.lookingglass.remix.ast.TestASTCopyOperation().getMenuItemPrepModel()
 		// </lg>
 		);

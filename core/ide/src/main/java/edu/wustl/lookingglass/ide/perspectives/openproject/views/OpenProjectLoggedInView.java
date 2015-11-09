@@ -56,18 +56,18 @@ import edu.wustl.lookingglass.ide.perspectives.openproject.OpenProjectLoggedInCa
  * @author Michael Pogran
  */
 public class OpenProjectLoggedInView extends MigPanel {
-	private final Label notificationsLabel;
+
 	private final Label messageLabel;
 	private final Label avatar;
 
 	public OpenProjectLoggedInView( OpenProjectLoggedInCard composite ) {
 		super( composite, "ins 0 10 0 10, fill", "[100!][][]" );
+
 		avatar = new Label();
 		avatar.setBackgroundColor( java.awt.Color.WHITE );
 		avatar.setBorder( javax.swing.BorderFactory.createLineBorder( new java.awt.Color( 208, 208, 208 ), 2 ) );
 		avatar.setHorizontalAlignment( org.lgna.croquet.views.HorizontalAlignment.CENTER );
 		avatar.setVerticalAlignment( org.lgna.croquet.views.VerticalAlignment.CENTER );
-
 		this.addComponent( avatar, "cell 0 0, spany 4, aligny t, h 90!, w 90!" );
 
 		messageLabel = new Label( "", 1.5f, edu.cmu.cs.dennisc.java.awt.font.TextWeight.BOLD );
@@ -78,22 +78,11 @@ public class OpenProjectLoggedInView extends MigPanel {
 
 		ExternalHyperlink accountLink = composite.getUserPageOperation().createExternalHyperlink();
 		this.addComponent( accountLink );
-
-		this.addComponent( accountLink, "cell 1 1" );
-
-		notificationsLabel = new Label( "", 1.25f, edu.cmu.cs.dennisc.java.awt.font.TextWeight.BOLD );
-		ExternalHyperlink notificationLink = composite.getNotificationLinkOperation().createExternalHyperlink();
-
-		this.addComponent( notificationsLabel, "cell 1 2, gaptop 10, span 2" );
-		this.addComponent( notificationLink, "cell 1 3, aligny top, pushy" );
+		this.addComponent( accountLink, "cell 1 1, aligny top, pushy" );
 	}
 
 	public Label getAvatarLabel() {
 		return this.avatar;
-	}
-
-	public Label getNotificationsLabel() {
-		return this.notificationsLabel;
 	}
 
 	public Label getMessageLabel() {

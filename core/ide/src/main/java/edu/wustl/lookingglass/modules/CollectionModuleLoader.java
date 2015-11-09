@@ -46,6 +46,7 @@ package edu.wustl.lookingglass.modules;
 
 import java.io.IOException;
 
+import edu.cmu.cs.dennisc.java.util.logging.Logger;
 import edu.wustl.lookingglass.community.api.packets.ModulePacket;
 
 /**
@@ -115,11 +116,11 @@ public class CollectionModuleLoader {
 				moduleInstance = mainClass.newInstance();
 				initializeMethod.invoke( moduleInstance, this.moduleId );
 			} else {
-				edu.cmu.cs.dennisc.java.util.logging.Logger.errln( "FAILED TO LOAD MODULE " + this.moduleId + ": No \"Main-Class\" entry found in manifest." );
+				Logger.severe( "FAILED TO LOAD MODULE " + this.moduleId + ": No \"Main-Class\" entry found in manifest." );
 			}
 			classLoader.close();
 		} catch( Throwable t ) {
-			t.printStackTrace();
+			Logger.throwable( t, this );
 		}
 	}
 

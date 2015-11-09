@@ -400,17 +400,17 @@ public class SetUpMethodGenerator {
 							if( !filterInvalidJoints || ( ( filterInvalidJoints ) && ( org.alice.stageide.ast.JointMethodUtilities.isValidJointGetter( jointGetter ) ) ) ) {
 								try {
 									org.lgna.project.ast.Expression getJointExpression = new org.lgna.project.ast.MethodInvocation( new org.lgna.project.ast.FieldAccess( new org.lgna.project.ast.ThisExpression(), field ), jointGetter );
-									Object[] values;
-									try {
-										values = ComponentThread.invokeOnComponentThreadAndWait( () -> {
+									Object[] values = ComponentThread.invokeOnComponentThreadAndWait( () -> {
+										try {
 											return sceneInstance.getVM().ENTRY_POINT_evaluate(
 													sceneInstance,
 													new org.lgna.project.ast.Expression[] { getJointExpression } );
-										} );
-									} catch( Throwable t ) {
-										edu.cmu.cs.dennisc.java.util.logging.Logger.errln( "set up method generator failed:", jointGetter );
-										values = new Object[ 0 ];
-									}
+										} catch( Throwable t ) {
+											edu.cmu.cs.dennisc.java.util.logging.Logger.errln( "set up method generator failed:", jointGetter );
+											return new Object[ 0 ];
+										}
+									} );
+
 									for( Object o : values ) {
 										if( o instanceof org.lgna.story.SJoint ) {
 											org.lgna.story.SJoint jointEntity = (org.lgna.story.SJoint)o;
@@ -451,8 +451,7 @@ public class SetUpMethodGenerator {
 		return edu.cmu.cs.dennisc.java.lang.ArrayUtilities.createArray( statements, org.lgna.project.ast.Statement.class );
 	}
 
-	public static void fillInAutomaticSetUpMethod( org.lgna.project.ast.StatementListProperty bodyStatementsProperty, boolean isThis, org.lgna.project.ast.AbstractField field, Object instance, org.lgna.project.virtualmachine.UserInstance sceneInstance,
-			boolean getFullState ) {
+	public static void fillInAutomaticSetUpMethod( org.lgna.project.ast.StatementListProperty bodyStatementsProperty, boolean isThis, org.lgna.project.ast.AbstractField field, Object instance, org.lgna.project.virtualmachine.UserInstance sceneInstance, boolean getFullState ) {
 		if( instance != null ) {
 			if( instance instanceof org.lgna.story.SThing ) {
 				org.lgna.story.SThing entity = (org.lgna.story.SThing)instance;

@@ -65,7 +65,7 @@ import edu.wustl.lookingglass.ide.perspectives.openproject.views.OpenProjectLogg
  * @author Michael Pogran
  */
 public class OpenProjectLoggedInCard extends org.lgna.croquet.SimpleComposite<OpenProjectLoggedInView> {
-	private final BrowserOperation userPageOperation = new BrowserOperation( java.util.UUID.fromString( "914d7943-2340-4b14-bb16-3139ab84afa5" ) ) {
+	private final BrowserOperation userPageOperation = new BrowserOperation( java.util.UUID.fromString( "914d7943-2340-4b14-bb16-3139ab84afa5" )) {
 		@Override
 		public java.net.URL getUrl() {
 			UserPacket user = edu.wustl.lookingglass.ide.LookingGlassIDE.getCommunityController().getCurrentUser();
@@ -78,26 +78,8 @@ public class OpenProjectLoggedInCard extends org.lgna.croquet.SimpleComposite<Op
 		}
 
 		@Override
-		protected String getSubKeyForLocalization() {
+		protected String getSubKeyForLocalization( ) {
 			return "userPageOperation";
-		}
-	};
-
-	private final BrowserOperation notificationLinkOperation = new BrowserOperation( java.util.UUID.fromString( "8ec0800e-e22f-41f3-b151-f8f8fbdfd3cd" ) ) {
-		@Override
-		public java.net.URL getUrl() {
-			UserPacket user = edu.wustl.lookingglass.ide.LookingGlassIDE.getCommunityController().getCurrentUser();
-			return edu.wustl.lookingglass.ide.LookingGlassIDE.getCommunityController().getAbsoluteUrl( user.getUserNotificationsPath() );
-		}
-
-		@Override
-		protected java.lang.Class<? extends org.lgna.croquet.Element> getClassUsedForLocalization() {
-			return OpenProjectLoggedInCard.this.getClassUsedForLocalization();
-		}
-
-		@Override
-		protected String getSubKeyForLocalization() {
-			return "notificationLinkOperation";
 		}
 	};
 
@@ -118,8 +100,6 @@ public class OpenProjectLoggedInCard extends org.lgna.croquet.SimpleComposite<Op
 	};
 
 	private final org.lgna.croquet.PlainStringValue welcomeText = this.createStringValue( "welcomeText" );
-	private final org.lgna.croquet.PlainStringValue notificationText = this.createStringValue( "notificationText" );
-	private final NotificationsWorker notificationsWorker = new NotificationsWorker();
 	private final ThumbnailContentWorker thumbnailWorker = new ThumbnailContentWorker() {
 
 		@Override
@@ -147,11 +127,9 @@ public class OpenProjectLoggedInCard extends org.lgna.croquet.SimpleComposite<Op
 		String userText = welcomeText.getOriginalLocalizedText();
 		final String welcomeText = userText.replaceAll( "</userLogin/>", userLogin );
 
-		javax.swing.SwingUtilities.invokeLater( ( ) -> {
+		javax.swing.SwingUtilities.invokeLater( () -> {
 			getView().getMessageLabel().setText( welcomeText );
 		} );
-
-		this.updateNotificationsCount();
 	}
 
 	@Override
@@ -178,14 +156,6 @@ public class OpenProjectLoggedInCard extends org.lgna.croquet.SimpleComposite<Op
 		return this.userPageOperation;
 	}
 
-	public BrowserOperation getNotificationLinkOperation() {
-		return this.notificationLinkOperation;
-	}
-
-	public void updateNotificationsCount() {
-		this.notificationsWorker.execute();
-	}
-
 	public void updateAvatar() {
 		this.thumbnailWorker.execute( new ImageGetter() );
 	}
@@ -202,7 +172,7 @@ public class OpenProjectLoggedInCard extends org.lgna.croquet.SimpleComposite<Op
 
 		@Override
 		public void completed( Image content ) {
-			edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnSwingThread( ( ) -> {
+			edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnSwingThread( () -> {
 				Label avatar = getView().getAvatarLabel();
 				int max = content.getHeight( null ) > content.getWidth( null ) ? content.getWidth( null ) : content.getHeight( null );
 				BufferedImage clippedAvatarImage = ( (BufferedImage)content ).getSubimage( 0, 0, max, max );
@@ -213,26 +183,5 @@ public class OpenProjectLoggedInCard extends org.lgna.croquet.SimpleComposite<Op
 		@Override
 		public void failed( Throwable t ) {
 		}
-	}
-
-	private class NotificationsWorker extends javax.swing.SwingWorker<Void, Void> {
-
-		@Override
-		protected Void doInBackground() throws Exception {
-			edu.wustl.lookingglass.ide.LookingGlassIDE.getCommunityController().getNotifications();
-			return null;
-		}
-
-		@Override
-		protected void done() {
-			int count = edu.wustl.lookingglass.ide.LookingGlassIDE.getCommunityController().getUserNotificationCount();
-			String countString = Integer.toString( count );
-			String notifications = notificationText.getOriginalLocalizedText();
-			final String text = notifications.replaceAll( "</count/>", countString );
-			edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnSwingThread( ( ) -> {
-				getView().getNotificationsLabel().setText( text );
-			} );
-		}
-
 	}
 }

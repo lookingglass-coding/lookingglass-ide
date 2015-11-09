@@ -52,7 +52,7 @@
 	<parent>
 		<groupId>edu.wustl.lookingglass</groupId>
 		<artifactId>core</artifactId>
-		<version>2015.10.05</version>
+		<version>2015.11.06</version>
 		<relativePath>../../core/</relativePath>
 	</parent>
 
@@ -63,7 +63,7 @@
 		<dependency>
 			<groupId>edu.wustl.lookingglass</groupId>
 			<artifactId>util</artifactId>
-			<version>2015.10.05</version>
+			<version>2015.11.06</version>
 		</dependency>
 	</dependencies>
 </project>

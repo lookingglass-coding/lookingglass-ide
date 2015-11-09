@@ -42,40 +42,26 @@
  * THE USE OF OR OTHER DEALINGS WITH THE SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-package edu.wustl.lookingglass.community.api.packets;
-
-import com.google.gson.annotations.Expose;
+package edu.wustl.lookingglass.community.api;
 
 /**
- * @author Mike Pogran
+ * @author Kyle J. Harms
  */
-public class NotificationPacket extends JsonPacket {
+public interface CommunityConnection {
 
-	@Expose private InnerNotification notification;
+	public final String OAUTH_ACCESS_TOKEN_PATH = "/oauth/access_token";
+	public final String OAUTH_REQUEST_TOKEN_PATH = "/oauth/request_token";
+	public final String OAUTH_AUTHORIZATION_PATH = "/oauth/authorize?oauth_token=%s";
 
-	/* package-private */static class InnerNotification {
-		@Expose( serialize = false ) Integer id;
+	public String getHost();
 
-		@Expose( serialize = false ) Integer user_id;
+	public String getProtocol();
 
-		@Expose( serialize = false ) Integer activity_id;
-	}
+	public String getSecureProtocol();
 
-	@Override
-	public boolean isValid() {
-		return this.notification != null;
-	}
+	public String getOauthKey();
 
-	public Integer getId() {
-		return this.notification.id;
-	}
+	public String getOauthSecret();
 
-	public Integer getUserId() {
-		return this.notification.user_id;
-	}
-
-	public Integer getActionId() {
-		return this.notification.activity_id;
-	}
-
+	public boolean verifyCertificates();
 }

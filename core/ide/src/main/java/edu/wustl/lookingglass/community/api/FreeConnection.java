@@ -47,7 +47,7 @@ package edu.wustl.lookingglass.community.api;
 /**
  * @author Kyle J. Harms
  */
-public class FreeConnection extends org.scribe.builder.api.DefaultApi10a implements CommunityApiConnection {
+public class FreeConnection extends org.scribe.builder.api.DefaultApi10a implements CommunityConnection {
 
 	public FreeConnection() {
 		super();
@@ -76,11 +76,6 @@ public class FreeConnection extends org.scribe.builder.api.DefaultApi10a impleme
 	@Override
 	public String getOauthSecret() {
 		return "0WmuklJAdwE8YUFv4gvRC5ogOZSky7KwTcwWWd2g";
-	}
-
-	@Override
-	public boolean useSecureAuthentication() {
-		return true;
 	}
 
 	@Override

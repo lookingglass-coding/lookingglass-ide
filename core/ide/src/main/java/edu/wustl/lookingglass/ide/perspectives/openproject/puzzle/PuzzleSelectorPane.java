@@ -53,6 +53,7 @@ import org.lgna.croquet.OverlayPane;
 import org.lgna.croquet.icon.IconSize;
 import org.lgna.croquet.views.AbstractWindow;
 
+import edu.cmu.cs.dennisc.java.util.logging.Logger;
 import edu.wustl.lookingglass.croquetfx.FxComponent;
 import edu.wustl.lookingglass.croquetfx.ThreadHelper;
 import edu.wustl.lookingglass.ide.LookingGlassIDE;
@@ -166,8 +167,13 @@ public class PuzzleSelectorPane extends FxComponent {
 	public void closePlayPane() {
 		javax.swing.SwingUtilities.invokeLater( () -> {
 			if( this.playOverlay != null ) {
-				this.playOverlay.hide();
-				this.playOverlay = null;
+				try {
+					this.playOverlay.hide();
+				} catch( Throwable t ) {
+					Logger.throwable( t, this );
+				} finally {
+					this.playOverlay = null;
+				}
 			}
 		} );
 	}

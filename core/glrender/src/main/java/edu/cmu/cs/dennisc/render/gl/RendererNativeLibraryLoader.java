@@ -50,74 +50,14 @@ public class RendererNativeLibraryLoader {
 		throw new AssertionError();
 	}
 
-	private static boolean isInitializationAttempted;
-
 	public static synchronized void initializeIfNecessary() {
-		if( isInitializationAttempted ) {
-			//pass
-		} else {
-			try {
-				System.setProperty( "jogamp.gluegen.UseTempJarCache", System.getProperty( "jogamp.gluegen.UseTempJarCache", "false" ) ); // <lg/> Don't use this unless requested.
-
-				com.jogamp.common.jvm.JNILibLoaderBase.setLoadingAction( new com.jogamp.common.jvm.JNILibLoaderBase.LoaderAction() {
-					private final java.util.Set<String> loaded = edu.cmu.cs.dennisc.java.util.Sets.newHashSet();
-
-					private boolean loadLibrary( String libraryName, boolean isIgnoringError ) {
-						edu.cmu.cs.dennisc.java.lang.LoadLibraryReportStyle loadLibraryReportStyle = isIgnoringError ? edu.cmu.cs.dennisc.java.lang.LoadLibraryReportStyle.SILENT : edu.cmu.cs.dennisc.java.lang.LoadLibraryReportStyle.EXCEPTION;
-						//edu.cmu.cs.dennisc.java.util.logging.Logger.outln( libraryName, loadLibraryReportStyle );
-						try {
-							edu.cmu.cs.dennisc.java.lang.SystemUtilities.loadLibrary( "jogl", libraryName, loadLibraryReportStyle );
-						} catch( UnsatisfiedLinkError ule ) {
-							String message = ule.getMessage();
-							if( isIgnoringError || ( ( message != null ) && message.contains( "already loaded" ) ) ) {
-								return false;
-							} else {
-								System.err.println( libraryName );
-								throw ule;
-							}
-						}
-						return true;
-					}
-
-					private boolean loadLibrary( String libraryName, boolean isIgnoringError, boolean isPlatformAttemptedFirst ) {
-						boolean isSuccessful;
-						synchronized( this.loaded ) {
-							if( this.loaded.contains( libraryName ) ) {
-								isSuccessful = true;
-							} else {
-								isSuccessful = this.loadLibrary( libraryName, isIgnoringError );
-								if( isSuccessful ) {
-									this.loaded.add( libraryName );
-								}
-							}
-						}
-						return isSuccessful;
-					}
-
-					@Override
-					public boolean loadLibrary( String libname, boolean isIgnoringError, ClassLoader classLoader ) {
-						return this.loadLibrary( libname, isIgnoringError, true );
-					}
-
-					@Override
-					public void loadLibrary( String libname, String[] preloadLibraryNames, boolean isIgnoringError, ClassLoader classLoader ) {
-						if( preloadLibraryNames != null ) {
-							for( String preloadLibraryName : preloadLibraryNames ) {
-								this.loadLibrary( preloadLibraryName, isIgnoringError, false );
-							}
-						}
-						this.loadLibrary( libname, isIgnoringError, true );
-					}
-				} );
-
-				//edu.cmu.cs.dennisc.timing.Timer timer = new edu.cmu.cs.dennisc.timing.Timer( "initialize jogl" );
-				//timer.start();
-				com.jogamp.opengl.GLProfile.initSingleton();
-				//timer.stopAndPrintResults();
-			} finally {
-				isInitializationAttempted = true;
-			}
-		}
+		// <lg/> Looking Glass just uses the default handling from jogl for
+		// loading the native libraries.
+		// This changed was forced because of JOGL 2.3.2. 2.3.2 uses a different
+		// native directory structure than previous versions. So we've decided
+		// to insulate ourselves from future changes and just do things the
+		// way the JOGL developers intended.
+		com.jogamp.opengl.GLProfile.initSingleton();
 	}
 
 	public static void main( String[] args ) {
