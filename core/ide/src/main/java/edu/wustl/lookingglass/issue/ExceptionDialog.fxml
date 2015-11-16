@@ -6,11 +6,11 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox fx:id="rootContainer" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: ghostwhite;">
          <children>
-            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: whitesmoke;">
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: whitesmoke;" VBox.vgrow="ALWAYS">
                <children>
                   <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <children>
@@ -44,7 +44,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                   </HBox>
-                  <VBox fx:id="stackContainer" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" VBox.vgrow="NEVER">
+                  <VBox fx:id="stackContainer" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" VBox.vgrow="ALWAYS">
                      <children>
                         <Separator prefWidth="200.0" />
                         <Label text="%ExceptionDialog.stacktrace">
@@ -52,7 +52,7 @@
                               <Insets left="20.0" />
                            </VBox.margin>
                         </Label>
-                        <Pagination fx:id="stackPagination" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-page-information-visible: false;">
+                        <Pagination fx:id="stackPagination" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-page-information-visible: false;" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets left="20.0" right="20.0" />
                            </VBox.margin>
@@ -65,7 +65,7 @@
                </children>
             </VBox>
             <Separator fx:id="exceptionSeparator" prefWidth="200.0" />
-            <VBox fx:id="exceptionContainer" spacing="10.0" VBox.vgrow="ALWAYS">
+            <VBox fx:id="exceptionContainer" spacing="10.0">
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>

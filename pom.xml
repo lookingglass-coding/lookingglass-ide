@@ -56,7 +56,7 @@
 
 	<!-- Note: when merging/upon conflict, do NOT accept Alice version number. -->
 	<!-- This version should ALWAYS be the current Looking Glass version. -->
-	<version>2015.11.06</version>
+	<version>2015.11.06-SNAPSHOT</version>
 
 	<name>Looking Glass</name>
 	<url>https://lookingglass.wustl.edu/</url>

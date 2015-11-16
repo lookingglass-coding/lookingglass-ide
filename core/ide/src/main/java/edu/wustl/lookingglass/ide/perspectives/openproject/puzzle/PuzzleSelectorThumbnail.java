@@ -56,6 +56,7 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -66,6 +67,7 @@ public class PuzzleSelectorThumbnail extends FxComponent {
 
 	private PuzzleProject puzzleProject;
 
+	@FXML Pane disabledPane;
 	@FXML VBox thumbnail;
 
 	@FXML StackPane stackPane;
@@ -77,6 +79,7 @@ public class PuzzleSelectorThumbnail extends FxComponent {
 
 	@FXML Label title;
 
+	private boolean isEnabled = true;
 	private Runnable onClicked;
 
 	public enum PuzzleType {
@@ -112,20 +115,25 @@ public class PuzzleSelectorThumbnail extends FxComponent {
 		ThreadHelper.runOnFxThread( () -> {
 			this.puzzleProject = project;
 
+			this.isEnabled = this.puzzleProject.getProject().doAllTypeClassesExist();
+			this.disabledPane.setVisible( !this.isEnabled );
+
 			this.scene.setImage( this.puzzleProject.getImage() );
 			this.title.setText( this.puzzleProject.getTitle() );
 			this.loading.setVisible( false );
 
-			this.thumbnail.setOnMouseEntered( ( event ) -> {
-				this.getScene().setCursor( Cursor.HAND );
-				this.playOverlay.setVisible( true );
-			} );
-			this.thumbnail.setOnMouseExited( ( event ) -> {
-				this.getScene().setCursor( Cursor.DEFAULT );
-				this.playOverlay.setVisible( false );
-			} );
+			if( this.isEnabled ) {
+				this.thumbnail.setOnMouseEntered( ( event ) -> {
+					this.getScene().setCursor( Cursor.HAND );
+					this.playOverlay.setVisible( true );
+				} );
+				this.thumbnail.setOnMouseExited( ( event ) -> {
+					this.getScene().setCursor( Cursor.DEFAULT );
+					this.playOverlay.setVisible( false );
+				} );
 
-			this.registerMouseEvent( this.thumbnail, this.thumbnail.onMouseClickedProperty(), this::handleSelectedEvent );
+				this.registerMouseEvent( this.thumbnail, this.thumbnail.onMouseClickedProperty(), this::handleSelectedEvent );
+			}
 		} );
 	}
 

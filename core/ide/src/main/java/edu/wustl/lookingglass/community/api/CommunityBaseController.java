@@ -44,16 +44,20 @@
  *******************************************************************************/
 package edu.wustl.lookingglass.community.api;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.scribe.model.Response;
 import org.scribe.model.Verb;
 
 import edu.cmu.cs.dennisc.java.util.logging.Logger;
 import edu.wustl.lookingglass.common.VersionNumber;
+import edu.wustl.lookingglass.community.CommunityRepository;
 import edu.wustl.lookingglass.community.CommunityStatus.AccessStatus;
 import edu.wustl.lookingglass.community.CommunityStatus.ConnectionStatus;
 import edu.wustl.lookingglass.community.CommunityStatusObserver;
@@ -107,8 +111,11 @@ public abstract class CommunityBaseController {
 	private CapabilitiesPacket apiCapabilities = null;
 	private ApiCompatibility apiCompatibility = ApiCompatibility.UNKNOWN;
 
-	private UserPacket userPacket = null;
 	private String username = null;
+	private UserPacket userPacket = null;
+
+	private final File projectsRepoDir;
+	private final CommunityRepository projectRepository;
 
 	private String sessionCookie = null;
 	private final Object cookieLock = new Object();
@@ -119,7 +126,8 @@ public abstract class CommunityBaseController {
 
 	private java.util.concurrent.CopyOnWriteArrayList<CommunityStatusObserver> observers = new java.util.concurrent.CopyOnWriteArrayList<CommunityStatusObserver>();
 
-	protected CommunityBaseController() {
+	protected CommunityBaseController( File projectsRepoDir ) {
+		this.projectsRepoDir = projectsRepoDir;
 
 		this.verbose = Boolean.valueOf( System.getProperty( "edu.wustl.lookingglass.community.verbose", "false" ) );
 		this.autoConnect = Boolean.valueOf( System.getProperty( "edu.wustl.lookingglass.community.autoConnect", "false" ) );
@@ -194,6 +202,19 @@ public abstract class CommunityBaseController {
 				edu.cmu.cs.dennisc.java.util.logging.Logger.throwable( e, this );
 			}
 		}
+
+		CommunityRepository repo = null;
+		try {
+			repo = new CommunityRepository( this.projectsRepoDir, this.connection.getGitRemoteName() );
+		} catch( IOException | GitAPIException e ) {
+			Logger.throwable( e, this );
+			repo = null;
+
+			// this exception shouldn't really ever happen, but we want it reported back to us if it does.
+			throw new RuntimeException( e );
+		} finally {
+			this.projectRepository = repo;
+		}
 	}
 
 	protected boolean isAutoConnect() {
@@ -233,6 +254,14 @@ public abstract class CommunityBaseController {
 	public java.net.URL getAbsoluteUrl( String relativeUrl ) {
 		try {
 			return new java.net.URL( getBaseUrl( relativeUrl ) );
+		} catch( java.net.MalformedURLException e ) {
+			return null;
+		}
+	}
+
+	public java.net.URL getSecureAbsoluteUrl( String relativeUrl ) {
+		try {
+			return new java.net.URL( getSecureBaseUrl( relativeUrl ) );
 		} catch( java.net.MalformedURLException e ) {
 			return null;
 		}
@@ -353,7 +382,7 @@ public abstract class CommunityBaseController {
 	// TODO: We need a parameter that forces a refresh from the server if the request is cached.
 	private <T> T sendRequest( Verb action, String url, QueryParameter[] params, JsonPacket payload, Class<T> t ) throws CommunityApiException {
 		// This assert is absolutely necessary to not lock the croquet event thread. Do not remove.
-		assert!java.awt.EventQueue.isDispatchThread();
+		assert !java.awt.EventQueue.isDispatchThread();
 
 		if( t != null ) {
 			assert Packet.class.isAssignableFrom( t ) || ( t.isArray() && Packet.class.isAssignableFrom( t.getComponentType() ) );
@@ -656,7 +685,7 @@ public abstract class CommunityBaseController {
 
 	private void verifyApiCompatibility() throws CommunityApiException {
 		// This assert is absolutely necessary to not lock the croquet event thread. Do not remove.
-		assert!java.awt.EventQueue.isDispatchThread();
+		assert !java.awt.EventQueue.isDispatchThread();
 
 		switch( this.apiCompatibility ) {
 		case COMPATIBLE:
@@ -675,34 +704,30 @@ public abstract class CommunityBaseController {
 
 	private CapabilitiesPacket requestApiCapabilitiesPacket() throws CommunityApiException {
 		// This assert is absolutely necessary to not lock the croquet event thread. Do not remove.
-		assert!java.awt.EventQueue.isDispatchThread();
+		assert !java.awt.EventQueue.isDispatchThread();
 
 		return sendRequest( Verb.GET, getSecureAbsoluteApiUrl( "/capabilities.json" ), null, null, CapabilitiesPacket.class );
 	}
 
 	public void checkServerConnectionStatus() throws CommunityApiException {
 		// This assert is absolutely necessary to not lock the croquet event thread. Do not remove.
-		assert!java.awt.EventQueue.isDispatchThread();
+		assert !java.awt.EventQueue.isDispatchThread();
 
 		// The capabilities packet is the packet used to initiate a connection with the server
 		requestApiCapabilitiesPacket();
 	}
 
-	protected UserPacket getUserPacket() {
-		return this.userPacket;
-	}
-
 	/* Leave this method private. Do not change to protected or public. */
 	private UserPacket requestUserAccountPacket() throws CommunityApiException {
 		// This assert is absolutely necessary to not lock the croquet event thread. Do not remove.
-		assert!java.awt.EventQueue.isDispatchThread();
+		assert !java.awt.EventQueue.isDispatchThread();
 
 		return sendRequest( Verb.GET, getAbsoluteApiUrl( "/users/account.json" ), UserPacket.class );
 	}
 
 	protected synchronized void anonymousAccess() throws CommunityApiException {
 		// This assert is absolutely necessary to not lock the croquet event thread. Do not remove.
-		assert!java.awt.EventQueue.isDispatchThread();
+		assert !java.awt.EventQueue.isDispatchThread();
 
 		// Before we can login we need to check whether we know how to talk to the server.
 		requestApiCapabilitiesPacket();
@@ -713,12 +738,15 @@ public abstract class CommunityBaseController {
 		} finally {
 			this.userPacket = null;
 			this.username = null;
+			if( this.projectRepository != null ) {
+				this.projectRepository.resetAuthenication();
+			}
 		}
 	}
 
-	protected synchronized void userAccess( String username, String password ) throws CommunityApiException {
+	protected synchronized void userAccess( String username, char[] password ) throws CommunityApiException {
 		// This assert is absolutely necessary to not lock the croquet event thread. Do not remove.
-		assert!java.awt.EventQueue.isDispatchThread();
+		assert !java.awt.EventQueue.isDispatchThread();
 
 		// Before we can login we need to check whether we know how to talk to the server.
 		requestApiCapabilitiesPacket();
@@ -727,9 +755,10 @@ public abstract class CommunityBaseController {
 			org.scribe.model.Token requestToken = this.service.getRequestToken();
 
 			org.scribe.model.OAuthRequest request = this.createRequest( Verb.POST, getSecureBaseUrl( "/oauth/authorize_login" ) );
+			// We probably should have done this with basic http authentication instead...
 			request.addQuerystringParameter( "xoauth_request_token", requestToken.getToken() );
 			request.addQuerystringParameter( "xoauth_username", username );
-			request.addQuerystringParameter( "xoauth_password", password );
+			request.addQuerystringParameter( "xoauth_password", new String( password ) );
 			this.service.signRequest( this.EMPTY_TOKEN, request );
 			Response response = request.send();
 
@@ -738,22 +767,36 @@ public abstract class CommunityBaseController {
 			this.accessToken = this.service.getAccessToken( requestToken, verifier );
 			this.userPacket = this.requestUserAccountPacket();
 			this.username = username;
+
+			if( this.projectsRepoDir != null ) {
+				URL repoURL = getSecureAbsoluteUrl( this.userPacket.getUserProjectsGit() );
+				if( this.projectRepository != null ) {
+					this.projectRepository.setAuthenication( repoURL, username, password );
+				}
+			}
+
 			setAccessStatus( AccessStatus.USER_ACCESS );
 		} catch( org.scribe.exceptions.OAuthException e ) {
 			this.accessToken = this.EMPTY_TOKEN;
 			this.userPacket = null;
 			this.username = null;
+			if( this.projectRepository != null ) {
+				this.projectRepository.resetAuthenication();
+			}
 			throw new InvalidConnectionException( e );
 		}
 	}
 
 	protected synchronized void closeAccess() {
 		// This assert is absolutely necessary to not lock the croquet event thread. Do not remove.
-		assert!java.awt.EventQueue.isDispatchThread();
+		assert !java.awt.EventQueue.isDispatchThread();
 
 		this.accessToken = EMPTY_TOKEN;
 		this.userPacket = null;
 		this.username = null;
+		if( this.projectRepository != null ) {
+			this.projectRepository.resetAuthenication();
+		}
 		setAccessStatus( AccessStatus.NONE );
 	}
 
@@ -767,6 +810,14 @@ public abstract class CommunityBaseController {
 
 	public String getUsername() {
 		return this.username;
+	}
+
+	protected UserPacket getUserPacket() {
+		return this.userPacket;
+	}
+
+	public CommunityRepository getProjectsRepository() {
+		return this.projectRepository;
 	}
 
 	protected void anonymousRequired() throws UnauthorizedAccessException {

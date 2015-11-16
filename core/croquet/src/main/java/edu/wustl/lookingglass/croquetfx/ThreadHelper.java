@@ -45,9 +45,13 @@
 package edu.wustl.lookingglass.croquetfx;
 
 import java.awt.EventQueue;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import javafx.application.Platform;
 
@@ -56,7 +60,31 @@ import javafx.application.Platform;
  */
 public class ThreadHelper {
 
-	private static final ExecutorService workerPool = Executors.newCachedThreadPool();
+	private static final ExecutorService workerPool = new ThreadPoolExecutor( 0, Integer.MAX_VALUE,
+			60L, TimeUnit.SECONDS,
+			new SynchronousQueue<Runnable>()) {
+
+		@Override
+		protected void afterExecute( Runnable r, Throwable t ) {
+			// We must make sure that we don't swallow exceptions, we must propagate them back.
+			if( ( t == null ) && ( r instanceof Future<?> ) ) {
+				try {
+					Future<?> future = (Future<?>)r;
+					assert future.isDone();
+					future.get();
+				} catch( CancellationException ce ) {
+					t = ce;
+				} catch( ExecutionException ee ) {
+					t = ee.getCause();
+				} catch( InterruptedException ie ) {
+					Thread.currentThread().interrupt(); // ignore/reset
+				}
+			}
+			if( t != null ) {
+				Thread.getDefaultUncaughtExceptionHandler().uncaughtException( Thread.currentThread(), t );
+			}
+		};
+	};
 
 	/* Background Worker Thread */
 
@@ -144,5 +172,9 @@ public class ThreadHelper {
 
 	static public boolean isSwingThread() {
 		return EventQueue.isDispatchThread();
+	}
+
+	static public boolean isUIThread() {
+		return isFxThread() || isSwingThread();
 	}
 }

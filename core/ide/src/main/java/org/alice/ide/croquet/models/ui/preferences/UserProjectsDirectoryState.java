@@ -47,7 +47,7 @@ package org.alice.ide.croquet.models.ui.preferences;
  */
 public class UserProjectsDirectoryState extends DirectoryState {
 	// <lg/> Make this the worlds dir for LG users
-	private static String DEFAULT_VALUE = UserApplicationDirectoryState.KEY + URI_SEPARATOR + "Worlds";
+	public static String DEFAULT_VALUE = UserApplicationDirectoryState.KEY + URI_SEPARATOR + "Worlds";
 
 	private static class SingletonHolder {
 		private static UserProjectsDirectoryState instance = new UserProjectsDirectoryState();

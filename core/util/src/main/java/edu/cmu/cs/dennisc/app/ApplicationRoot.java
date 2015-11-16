@@ -134,15 +134,6 @@ public class ApplicationRoot {
 		return new java.io.File( getPlatformDirectory(), sb.toString() );
 	}
 
-	//	public static java.io.File getCommand( String subPath ) {
-	//		StringBuilder sb = new StringBuilder();
-	//		sb.append( subPath );
-	//		if( edu.cmu.cs.dennisc.java.lang.SystemUtilities.isWindows() ) {
-	//			sb.append( ".exe" );
-	//		}
-	//		return new java.io.File( this.getArchitectureSpecificDirectory(), sb.toString() );
-	//	}
-
 	// <lg> Looking Glass directories are different than Alice
 
 	static public java.io.File getApplicationDirectory() {
@@ -153,6 +144,56 @@ public class ApplicationRoot {
 		return ApplicationRoot.DEFAULT_APPLICATION_NAME.toLowerCase().replace( " ", "" );
 	}
 
+	// $XDG_DATA_HOME defines the base directory relative to which user specific data files should be stored.
+	// If $XDG_DATA_HOME is either not set or empty, a default equal to $HOME/.local/share should be used.
+	static public java.io.File getDataDirectory() {
+		java.io.File dataDir = null;
+
+		String dataPath = System.getProperty( "edu.wustl.lookingglass.data.dir" );
+		if( dataPath != null ) {
+			dataDir = new java.io.File( dataPath );
+		}
+
+		if( ( dataDir != null ) && dataDir.exists() && dataDir.isDirectory() ) {
+			// pass
+		} else {
+			dataDir = new java.io.File( getXDGDataHome(), ApplicationRoot.getApplicationNameSafePath() );
+			dataDir.mkdirs();
+		}
+
+		if( ( dataDir != null ) && dataDir.exists() && dataDir.isDirectory() ) {
+			return dataDir;
+		} else {
+			return getDefaultDirectory();
+		}
+	}
+
+	//$XDG_CONFIG_HOME defines the base directory relative to which user specific configuration files should be stored.
+	// If $XDG_CONFIG_HOME is either not set or empty, a default equal to $HOME/.config should be used.
+	static public java.io.File getConfigDirectory() {
+		java.io.File configDir = null;
+
+		String configPath = System.getProperty( "edu.wustl.lookingglass.config.dir" );
+		if( configPath != null ) {
+			configDir = new java.io.File( configPath );
+		}
+
+		if( ( configDir != null ) && configDir.exists() && configDir.isDirectory() ) {
+			// pass
+		} else {
+			configDir = new java.io.File( getXDGConfigHome(), ApplicationRoot.getApplicationNameSafePath() );
+			configDir.mkdirs();
+		}
+
+		if( ( configDir != null ) && configDir.exists() && configDir.isDirectory() ) {
+			return configDir;
+		} else {
+			return getDefaultDirectory();
+		}
+	}
+
+	// $XDG_CACHE_HOME defines the base directory relative to which user specific non-essential data files should be stored.
+	// If $XDG_CACHE_HOME is either not set or empty, a default equal to $HOME/.cache should be used.
 	static public java.io.File getCacheDirectory() {
 		java.io.File cacheDir = null;
 
@@ -182,6 +223,88 @@ public class ApplicationRoot {
 
 	static public java.io.File getDocumentsDirectory() {
 		return edu.cmu.cs.dennisc.java.io.FileUtilities.getDocumentsDirectory();
+	}
+
+	static protected java.io.File getXDGDataHome() {
+		// Follows the XDG Base Directory Specification: http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
+		java.io.File xdgDataHome = null;
+		String xdgDataHomePath = System.getenv( "XDG_DATA_HOME" );
+		if( xdgDataHomePath != null ) {
+			xdgDataHome = new java.io.File( xdgDataHomePath );
+			if( !edu.cmu.cs.dennisc.java.io.FileUtilities.exists( xdgDataHomePath ) ) {
+				xdgDataHome.mkdirs();
+			}
+		}
+
+		if( ( xdgDataHome != null ) && xdgDataHome.exists() && xdgDataHome.isDirectory() ) {
+			// pass
+		} else {
+			xdgDataHome = new java.io.File( getDefaultDirectory(), ".local/share" );
+			xdgDataHome.mkdirs();
+
+			// set the file to hidden on windows
+			if( edu.cmu.cs.dennisc.java.lang.SystemUtilities.isWindows() ) {
+				try {
+					java.nio.file.Files.setAttribute( java.nio.file.Paths.get( xdgDataHome.getAbsolutePath() ), "dos:hidden", true );
+				} catch( java.io.IOException e ) {
+				}
+			}
+		}
+
+		// Ok. Now we have just given up. We tried, we really really tried.
+		// This is not standard to XDG.
+		if( ( xdgDataHome != null ) && xdgDataHome.exists() && xdgDataHome.isDirectory() ) {
+			// pass
+		} else {
+			xdgDataHome = new java.io.File( System.getProperty( "java.io.tmpdir" ) );
+		}
+
+		if( ( xdgDataHome != null ) && xdgDataHome.exists() && xdgDataHome.isDirectory() ) {
+			return xdgDataHome;
+		} else {
+			return getDefaultDirectory();
+		}
+	}
+
+	static protected java.io.File getXDGConfigHome() {
+		// Follows the XDG Base Directory Specification: http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
+		java.io.File xdgConfigHome = null;
+		String xdgConfigHomePath = System.getenv( "XDG_CONFIG_HOME" );
+		if( xdgConfigHomePath != null ) {
+			xdgConfigHome = new java.io.File( xdgConfigHomePath );
+			if( !edu.cmu.cs.dennisc.java.io.FileUtilities.exists( xdgConfigHomePath ) ) {
+				xdgConfigHome.mkdirs();
+			}
+		}
+
+		if( ( xdgConfigHome != null ) && xdgConfigHome.exists() && xdgConfigHome.isDirectory() ) {
+			// pass
+		} else {
+			xdgConfigHome = new java.io.File( getDefaultDirectory(), ".config" );
+			xdgConfigHome.mkdirs();
+
+			// set the file to hidden on windows
+			if( edu.cmu.cs.dennisc.java.lang.SystemUtilities.isWindows() ) {
+				try {
+					java.nio.file.Files.setAttribute( java.nio.file.Paths.get( xdgConfigHome.getAbsolutePath() ), "dos:hidden", true );
+				} catch( java.io.IOException e ) {
+				}
+			}
+		}
+
+		// Ok. Now we have just given up. We tried, we really really tried.
+		// This is not standard to XDG.
+		if( ( xdgConfigHome != null ) && xdgConfigHome.exists() && xdgConfigHome.isDirectory() ) {
+			// pass
+		} else {
+			xdgConfigHome = new java.io.File( System.getProperty( "java.io.tmpdir" ) );
+		}
+
+		if( ( xdgConfigHome != null ) && xdgConfigHome.exists() && xdgConfigHome.isDirectory() ) {
+			return xdgConfigHome;
+		} else {
+			return getDefaultDirectory();
+		}
 	}
 
 	static protected java.io.File getXDGCacheHome() {

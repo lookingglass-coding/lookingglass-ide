@@ -52,20 +52,13 @@ public class UserPacket extends edu.wustl.lookingglass.community.api.packets.Jso
 
 	/* package-private */static class InnerUser {
 		@Expose( serialize = false ) Integer id;
-
 		@Expose( serialize = false ) String login;
-
 		@Expose( serialize = false ) String description;
-
 		@Expose( serialize = false ) String user_path;
-
 		@Expose( serialize = false ) String user_avatar_path;
-
+		@Expose( serialize = false ) String user_projects_git;
 		@Expose( serialize = false ) String user_worlds_path;
-
 		@Expose( serialize = false ) String user_templates_path;
-
-		@Expose( serialize = false ) String user_notifications_path;
 	}
 
 	@Override
@@ -93,15 +86,15 @@ public class UserPacket extends edu.wustl.lookingglass.community.api.packets.Jso
 		return this.user.user_avatar_path;
 	}
 
+	public String getUserProjectsGit() {
+		return this.user.user_projects_git;
+	}
+
 	public String getUserWorldsPath() {
 		return this.user.user_worlds_path;
 	}
 
 	public String getUserTemplatesPath() {
 		return this.user.user_templates_path;
-	}
-
-	public String getUserNotificationsPath() {
-		return this.user.user_notifications_path;
 	}
 }

@@ -82,9 +82,12 @@ public enum StudyConfiguration {
 	}
 
 	private final Properties studyProperties;
+
 	// Auto-login as a user during a study.
 	private final String communityUserName = null;
 	private final String communityPassword = null;
+
+	private final boolean syncProjects = true;
 
 	// Run LG in fullscreen mode to keep the kids on track during the study.
 	private final boolean fullScreenApplicationEnabled = false;
@@ -266,6 +269,10 @@ public enum StudyConfiguration {
 
 	public String getCommunityPassword() {
 		return this.communityPassword;
+	}
+
+	public boolean shouldSyncProjecs() {
+		return this.syncProjects;
 	}
 
 	public boolean isFullScreenApplicationEnabled() {

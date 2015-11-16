@@ -44,14 +44,13 @@
  *******************************************************************************/
 package edu.wustl.lookingglass.issue;
 
-import javafx.beans.value.ChangeListener;
-import javafx.fxml.FXML;
-import javafx.stage.WindowEvent;
-
 import org.lgna.croquet.icon.IconSize;
 
 import edu.wustl.lookingglass.croquetfx.FxComponent;
 import edu.wustl.lookingglass.ide.LookingGlassTheme;
+import javafx.beans.value.ChangeListener;
+import javafx.fxml.FXML;
+import javafx.stage.WindowEvent;
 
 /**
  * @author Michael Pogran
@@ -124,7 +123,7 @@ public class ExceptionDialog extends FxComponent {
 			String title = exceptionPane.getErrorTitle();
 			String message = exceptionPane.getErrorMessage();
 
-			edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( ( ) -> {
+			edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( () -> {
 
 				// If exceptionPane has custom title, then set it
 				if( title != null ) {
@@ -161,7 +160,7 @@ public class ExceptionDialog extends FxComponent {
 	public void show() {
 		assert this.stage == this.getStage();
 
-		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( ( ) -> {
+		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( () -> {
 			this.stackPagination.setPageFactory( this::createStackTracePage );
 			this.showStack( false );
 
@@ -179,7 +178,7 @@ public class ExceptionDialog extends FxComponent {
 	}
 
 	public void close() {
-		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( ( ) -> {
+		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( () -> {
 			this.stage.focusedProperty().removeListener( this.stageFocusListener );
 			this.stage.setAlwaysOnTop( false );
 			this.stage.close();
@@ -187,26 +186,26 @@ public class ExceptionDialog extends FxComponent {
 	}
 
 	public void setAndShowOverlay( javafx.scene.Node node ) {
-		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( ( ) -> {
+		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( () -> {
 			this.overlayContainer.setCenter( node );
 			this.overlayContainer.setVisible( true );
 		} );
 	}
 
 	public void hideOverlay() {
-		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( ( ) -> {
+		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( () -> {
 			this.overlayContainer.setVisible( false );
 		} );
 	}
 
 	public void hideSubmitButton() {
-		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( ( ) -> {
+		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( () -> {
 			this.submitButton.setVisible( false );
 		} );
 	}
 
 	public void hideExceptionContainer() {
-		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( ( ) -> {
+		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( () -> {
 			this.exceptionContainer.setVisible( false );
 		} );
 	}
@@ -214,7 +213,7 @@ public class ExceptionDialog extends FxComponent {
 	private void exceptionsChanged( javafx.collections.ListChangeListener.Change<? extends Throwable> listener ) {
 		Integer size = listener.getList().size();
 
-		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( ( ) -> {
+		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( () -> {
 			this.stackPagination.setPageCount( size );
 			this.stackCount.setText( size.toString() );
 

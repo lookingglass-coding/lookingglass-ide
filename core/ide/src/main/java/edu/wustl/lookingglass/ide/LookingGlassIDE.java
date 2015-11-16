@@ -50,19 +50,23 @@ import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.List;
 
+import org.alice.ide.croquet.models.ui.preferences.UserProjectsDirectoryState;
 import org.alice.ide.perspectives.ProjectPerspective;
 import org.alice.ide.uricontent.FileProjectLoader;
 import org.alice.nonfree.NebulousIde;
 import org.alice.nonfree.NebulousStoryApi;
 import org.lgna.croquet.preferences.PreferenceManager;
 
+import edu.cmu.cs.dennisc.java.lang.ClassUtilities;
 import edu.cmu.cs.dennisc.java.util.logging.Logger;
 import edu.wustl.lookingglass.common.VersionNumber;
+import edu.wustl.lookingglass.community.CommunityController;
 import edu.wustl.lookingglass.croquetfx.FxComponent;
 import edu.wustl.lookingglass.croquetfx.ThreadHelper;
 import edu.wustl.lookingglass.ide.perspectives.puzzle.CompletionPuzzlePerspective;
 import edu.wustl.lookingglass.ide.program.TimeScrubProgramImp;
 import edu.wustl.lookingglass.ide.views.OpaqueLayer;
+import edu.wustl.lookingglass.modules.CollectionModuleManager;
 import edu.wustl.lookingglass.project.TypeClassNotFoundException;
 import edu.wustl.lookingglass.puzzle.CompletionPuzzle;
 import edu.wustl.lookingglass.puzzle.PuzzleProjectProperties;
@@ -105,19 +109,19 @@ public class LookingGlassIDE extends org.alice.stageide.StageIDE {
 	// * Change the MINOR version number when you add new functionality that doesn't break the old.
 	// * Use the optional PATCH number if you don't add/delete/modify any feature you're just fixing a bug
 	//   in the implementation.
-	public static final VersionNumber COMMUNITY_API_VERSION = new VersionNumber( "8.0.0" );
+	public static final VersionNumber COMMUNITY_API_VERSION = new VersionNumber( "8.1.0" );
 
 	public static final int DEFAULT_WORLD_DIMENSION_WIDTH = 640;
 	public static final int DEFAULT_WORLD_DIMENSION_HEIGHT = 360;
 	private static final String APPLICATION_ID_KEY = "ApplicationUUID";
 
 	public static LookingGlassIDE getActiveInstance() {
-		return edu.cmu.cs.dennisc.java.lang.ClassUtilities.getInstance( org.lgna.croquet.Application.getActiveInstance(), LookingGlassIDE.class );
+		return ClassUtilities.getInstance( org.lgna.croquet.Application.getActiveInstance(), LookingGlassIDE.class );
 	}
 
 	// There is only one community controller
-	public static final edu.wustl.lookingglass.community.CommunityController COMMUNITY_CONTROLLER = new edu.wustl.lookingglass.community.CommunityController();
-	public static final edu.wustl.lookingglass.modules.CollectionModuleManager MODULE_MANAGER = new edu.wustl.lookingglass.modules.CollectionModuleManager();
+	public static final CommunityController COMMUNITY_CONTROLLER = new CommunityController( UserProjectsDirectoryState.getInstance().getDirectory() );
+	public static final CollectionModuleManager MODULE_MANAGER = new CollectionModuleManager();
 
 	private static final List<Image> APPLICATION_ICONS = new java.util.ArrayList<java.awt.Image>();
 
@@ -220,6 +224,9 @@ public class LookingGlassIDE extends org.alice.stageide.StageIDE {
 
 			// Load the collection modules
 			LookingGlassIDE.getCommunityController().getModulePackets();
+
+			// synchronize any changes to the project's repo
+			LookingGlassIDE.getCommunityController().syncProjectsRepository();
 		} );
 	}
 

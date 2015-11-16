@@ -5,28 +5,34 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox fx:id="thumbnail" alignment="CENTER" styleClass="puzzle-thumbnail" stylesheets="@PuzzleSelectorPane.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+
+<StackPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <StackPane fx:id="stackPane">
+      <VBox fx:id="thumbnail" alignment="CENTER" styleClass="puzzle-thumbnail" stylesheets="@PuzzleSelectorPane.css">
          <children>
-            <HBox fx:id="sceneBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="117.0" prefWidth="208.0" styleClass="puzzle-letterbox">
+            <StackPane fx:id="stackPane">
                <children>
-                  <ImageView fx:id="scene" fitHeight="117.0" pickOnBounds="true" preserveRatio="true" />
+                  <HBox fx:id="sceneBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="117.0" prefWidth="208.0" styleClass="puzzle-letterbox">
+                     <children>
+                        <ImageView fx:id="scene" fitHeight="117.0" pickOnBounds="true" preserveRatio="true" />
+                     </children>
+                  </HBox>
+                  <AnchorPane fx:id="emblemOverlay">
+                     <children>
+                        <ImageView fx:id="emblem" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="4.0" />
+                     </children>
+                  </AnchorPane>
+                  <HBox fx:id="playOverlay" alignment="CENTER" styleClass="puzzle-play-overlay" visible="false" StackPane.alignment="CENTER">
+                     <children>
+                        <ImageView fx:id="play" pickOnBounds="true" preserveRatio="true" />
+                     </children>
+                  </HBox>
+                  <ProgressIndicator fx:id="loading" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="32.0" prefWidth="32.0" />
                </children>
-            </HBox>
-            <AnchorPane fx:id="emblemOverlay">
-               <children>
-                  <ImageView fx:id="emblem" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="4.0" />
-               </children>
-            </AnchorPane>
-            <HBox fx:id="playOverlay" alignment="CENTER" styleClass="puzzle-play-overlay" visible="false" StackPane.alignment="CENTER">
-               <children>
-                  <ImageView fx:id="play" pickOnBounds="true" preserveRatio="true" />
-               </children>
-            </HBox>
-            <ProgressIndicator fx:id="loading" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="32.0" prefWidth="32.0" />
+            </StackPane>
+            <Label fx:id="title" alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="208.0" />
          </children>
-      </StackPane>
-      <Label fx:id="title" alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="208.0" />
+      </VBox>
+      <Pane fx:id="disabledPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #87878740;" visible="false" />
    </children>
-</VBox>
+</StackPane>

@@ -44,10 +44,12 @@
  *******************************************************************************/
 package edu.wustl.lookingglass.community;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import org.scribe.model.Verb;
 
+import edu.wustl.lookingglass.community.CommunityRepositorySyncStatus.SyncStatus;
 import edu.wustl.lookingglass.community.api.CommunityBaseController;
 import edu.wustl.lookingglass.community.api.QueryParameter;
 import edu.wustl.lookingglass.community.api.QueryParameterArray;
@@ -68,6 +70,7 @@ import edu.wustl.lookingglass.ide.croquet.preferences.CommunityPasswordState;
 import edu.wustl.lookingglass.ide.croquet.preferences.CommunityUsernameState;
 import edu.wustl.lookingglass.ide.croquet.preferences.PersistentCommunityCredentialsState;
 import edu.wustl.lookingglass.project.VersionExceedsCurrentException;
+import edu.wustl.lookingglass.study.StudyConfiguration;
 
 /**
  * @author Kyle J. Harms
@@ -76,19 +79,23 @@ public final class CommunityController extends CommunityBaseController {
 
 	private java.util.Set<CommunityControllerListener> listeners = edu.cmu.cs.dennisc.java.util.Sets.newHashSet();
 
-	public CommunityController() {
-		super();
+	public CommunityController( File projectsRepoDir ) {
+		super( projectsRepoDir );
 
 		// this is forcing the CommunityProjectPropertyManager to load the properties so that worlds are ok.
-		edu.wustl.lookingglass.community.CommunityProjectPropertyManager.initialize( this );
+		CommunityProjectPropertyManager.initialize( this );
+	}
+
+	public CommunityController() {
+		this( null );
 	}
 
 	public void initializeConnection() throws CommunityApiException {
 		try {
 			if( this.isAutoConnect() && PersistentCommunityCredentialsState.getInstance().getValue() && ( CommunityUsernameState.getInstance().getValue() != null ) && ( CommunityPasswordState.getInstance().getValue() != null ) ) {
-				this.loginUser( edu.wustl.lookingglass.ide.croquet.preferences.CommunityUsernameState.getInstance().getValue(), edu.wustl.lookingglass.ide.croquet.preferences.CommunityPasswordState.getInstance().getPassword() );
-			} else if( ( edu.wustl.lookingglass.study.StudyConfiguration.INSTANCE.getCommunityUserName() != null ) && ( edu.wustl.lookingglass.study.StudyConfiguration.INSTANCE.getCommunityPassword() != null ) ) {
-				this.loginUser( (String)edu.wustl.lookingglass.study.StudyConfiguration.INSTANCE.getCommunityUserName(), (String)edu.wustl.lookingglass.study.StudyConfiguration.INSTANCE.getCommunityPassword() );
+				this.loginUser( CommunityUsernameState.getInstance().getValue(), CommunityPasswordState.getInstance().getPassword().toCharArray() );
+			} else if( ( StudyConfiguration.INSTANCE.getCommunityUserName() != null ) && ( StudyConfiguration.INSTANCE.getCommunityPassword() != null ) ) {
+				this.loginUser( (String)StudyConfiguration.INSTANCE.getCommunityUserName(), edu.wustl.lookingglass.study.StudyConfiguration.INSTANCE.getCommunityPassword().toCharArray() );
 			} else {
 				this.loginAnonymous();
 			}
@@ -191,9 +198,14 @@ public final class CommunityController extends CommunityBaseController {
 	 * Community Access
 	 */
 
-	public UserPacket loginUser( String username, String password ) throws CommunityApiException {
+	public UserPacket loginUser( String username, char[] password ) throws CommunityApiException {
 		this.userAccess( username, password );
 		return this.getUserPacket();
+	}
+
+	@Deprecated
+	public UserPacket loginUser( String username, String password ) throws CommunityApiException {
+		return this.loginUser( username, password.toCharArray() );
 	}
 
 	public void loginAnonymous() throws CommunityApiException {
@@ -206,6 +218,29 @@ public final class CommunityController extends CommunityBaseController {
 
 	public UserPacket getCurrentUser() {
 		return this.getUserPacket();
+	}
+
+	public void syncProjectsRepository() {
+		if( !StudyConfiguration.INSTANCE.shouldSyncProjecs() ) {
+			return;
+		}
+
+		CommunityRepository repo = this.getProjectsRepository();
+
+		// TODO: remove this once we create UI and properly integrate projects sync into LG.
+		repo.setShouldWorkOffline( true );
+
+		if( repo != null ) {
+			repo.sync( ( status ) -> {
+				if( status.getStatus() == SyncStatus.UNKNOWN_FAILURE ) {
+					// These errors shouldn't have happened... it means we have a problem
+					// with our sync algorithm. We need the user to report this bug so
+					// we can try to fix it.
+					Throwable error = status.getError();
+					throw new RuntimeException( error );
+				}
+			} );
+		}
 	}
 
 	/*

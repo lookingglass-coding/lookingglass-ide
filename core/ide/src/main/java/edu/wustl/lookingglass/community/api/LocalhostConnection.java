@@ -98,4 +98,9 @@ public class LocalhostConnection extends org.scribe.builder.api.DefaultApi10a im
 	public boolean verifyCertificates() {
 		return false;
 	}
+
+	@Override
+	public String getGitRemoteName() {
+		return "localhost";
+	}
 }

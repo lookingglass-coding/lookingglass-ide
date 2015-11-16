@@ -47,18 +47,17 @@ package edu.wustl.lookingglass.puzzle.ui;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import org.lgna.croquet.icon.IconSize;
+
+import edu.wustl.lookingglass.croquetfx.FxComponent;
+import edu.wustl.lookingglass.ide.LookingGlassTheme;
+import edu.wustl.lookingglass.puzzle.CompletionPuzzle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
-
-import org.lgna.croquet.icon.IconSize;
-
-import edu.wustl.lookingglass.croquetfx.FxComponent;
-import edu.wustl.lookingglass.ide.LookingGlassTheme;
-import edu.wustl.lookingglass.puzzle.CompletionPuzzle;
 
 /**
  * @author Kyle J. Harms
@@ -132,6 +131,6 @@ public class CorrectPuzzlePane extends FxComponent {
 	}
 
 	private void handleDoneAction( javafx.event.ActionEvent event ) {
-		this.puzzle.getPuzzleComposite().getPuzzle().endPuzzle();
+		this.puzzle.endPuzzle();
 	}
 }

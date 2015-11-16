@@ -42,65 +42,57 @@
  * THE USE OF OR OTHER DEALINGS WITH THE SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-package edu.wustl.lookingglass.community.api;
+package edu.wustl.lookingglass.community;
+
+import org.eclipse.jgit.api.errors.TransportException;
 
 /**
  * @author Kyle J. Harms
  */
-public class FreeConnection extends org.scribe.builder.api.DefaultApi10a implements CommunityConnection {
+public class CommunityRepositorySyncStatus {
 
-	public FreeConnection() {
-		super();
+	enum SyncStatus {
+		SUCCESS,
+		SUCCESS_OFFLINE,
+		CONNECTION_FAILURE,
+		UNKNOWN_FAILURE
+	}
+
+	private final SyncStatus status;
+	private final Throwable error;
+
+	public CommunityRepositorySyncStatus( SyncStatus status ) {
+		this.status = status;
+		this.error = null;
+	}
+
+	public CommunityRepositorySyncStatus( Throwable error ) {
+		this.error = error;
+
+		if( this.error instanceof TransportException ) {
+			// this can be either connection refused or unauthorized.
+			this.status = SyncStatus.CONNECTION_FAILURE;
+		} else {
+			this.status = SyncStatus.UNKNOWN_FAILURE;
+		}
+	}
+
+	public SyncStatus getStatus() {
+		return this.status;
+	}
+
+	public Throwable getError() {
+		return this.error;
 	}
 
 	@Override
-	public String getProtocol() {
-		return "http";
-	}
-
-	@Override
-	public String getSecureProtocol() {
-		return "https";
-	}
-
-	@Override
-	public String getHost() {
-		return "lookingglass.wustl.edu";
-	}
-
-	@Override
-	public String getOauthKey() {
-		return "JcRSGQQYnkyyLsI0zxKqlAq14owasIK5oKhtZpmn";
-	}
-
-	@Override
-	public String getOauthSecret() {
-		return "0WmuklJAdwE8YUFv4gvRC5ogOZSky7KwTcwWWd2g";
-	}
-
-	@Override
-	public String getAccessTokenEndpoint() {
-		return getSecureProtocol() + "://" + getHost() + OAUTH_ACCESS_TOKEN_PATH;
-	}
-
-	@Override
-	public String getRequestTokenEndpoint() {
-		return getSecureProtocol() + "://" + getHost() + OAUTH_REQUEST_TOKEN_PATH;
-	}
-
-	// Note: Authorization URL is not used in LG due to our OAuth extension.
-	@Override
-	public String getAuthorizationUrl( org.scribe.model.Token requestToken ) {
-		return String.format( getSecureProtocol() + "://" + getHost() + OAUTH_AUTHORIZATION_PATH, requestToken.getToken() );
-	}
-
-	@Override
-	public boolean verifyCertificates() {
-		return true;
-	}
-
-	@Override
-	public String getGitRemoteName() {
-		return null;
+	public String toString() {
+		StringBuilder message = new StringBuilder();
+		message.append( this.status );
+		if( this.error != null ) {
+			message.append( ": " );
+			message.append( this.error );
+		}
+		return message.toString();
 	}
 }

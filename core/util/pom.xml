@@ -49,7 +49,7 @@
 	<parent>
 		<groupId>edu.wustl.lookingglass</groupId>
 		<artifactId>core</artifactId>
-		<version>2015.11.06</version>
+		<version>2015.11.06-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
 

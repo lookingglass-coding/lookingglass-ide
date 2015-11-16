@@ -188,7 +188,7 @@ public class CompletionPuzzle {
 
 	private final long DEFAULT_PUZZLE_TIME_LIMIT_MS = 1000 * 60 * 12; // 12 minutes; -1 is no time limit;
 	private final long puzzleTimeLimitMs = Long.valueOf( System.getProperty( "edu.wustl.edu.lookingglass.puzzle.timeLimit", Long.toString( DEFAULT_PUZZLE_TIME_LIMIT_MS ) ) );
-	private final Timer puzzleTimer = new Timer( "Puzzle Time Limit" );
+	private Timer puzzleTimer;
 
 	private Runnable runWhenDone = null;
 
@@ -483,7 +483,7 @@ public class CompletionPuzzle {
 		// For easy access later, also create a hash map of the puzzle statements
 		this.referenceStatementsCopyMap = new HashMap<UUID, Statement>();
 		for( Statement statement : this.referenceStatementsCopy ) {
-			assert( !this.referenceStatementsCopyMap.containsKey( statement.getId() ) );
+			assert ( !this.referenceStatementsCopyMap.containsKey( statement.getId() ) );
 			this.referenceStatementsCopyMap.put( statement.getId(), statement );
 		}
 		this.referenceStatementsCopyMap = Collections.unmodifiableMap( this.referenceStatementsCopyMap );
@@ -520,7 +520,7 @@ public class CompletionPuzzle {
 
 		// We need to check to see if the puzzleStatements are valid
 		for( Statement statement : this.puzzleStatements ) {
-			assert( !this.staticStatements.contains( statement ) );
+			assert ( !this.staticStatements.contains( statement ) );
 		}
 
 		// Create a fake do in order where the puzzle will happen.
@@ -734,6 +734,7 @@ public class CompletionPuzzle {
 			this.puzzlePerspective = new CompletionPuzzlePerspective( this );
 			org.alice.ide.IDE.getActiveInstance().getDocumentFrame().getPerspectiveState().setValueTransactionlessly( puzzlePerspective );
 			if( this.puzzleTimeLimitMs >= 0 ) {
+				this.puzzleTimer = new Timer( "Puzzle Time Limit" );
 				this.puzzleTimer.schedule( new TimerTask() {
 					@Override
 					public void run() {
@@ -747,7 +748,11 @@ public class CompletionPuzzle {
 	}
 
 	public void endPuzzle() {
-		this.puzzleTimer.cancel();
+		if( this.puzzleTimer != null ) {
+			this.puzzleTimer.cancel();
+			this.puzzleTimer = null;
+		}
+
 		this.puzzlePerspective = null;
 
 		SwingUtilities.invokeLater( () -> {

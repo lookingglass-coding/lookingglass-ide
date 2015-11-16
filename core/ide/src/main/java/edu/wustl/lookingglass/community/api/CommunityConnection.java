@@ -64,4 +64,6 @@ public interface CommunityConnection {
 	public String getOauthSecret();
 
 	public boolean verifyCertificates();
+
+	public String getGitRemoteName();
 }

@@ -448,6 +448,9 @@ public abstract class ProjectApplication extends org.lgna.croquet.PerspectiveApp
 
 		this.uriProjectLoader = new org.alice.ide.uricontent.FileProjectLoader( file );
 		this.updateHistoryIndexFileSync();
+
+		// Upon save we should sync our projects
+		LookingGlassIDE.getCommunityController().syncProjectsRepository();
 	}
 
 	//<lg>

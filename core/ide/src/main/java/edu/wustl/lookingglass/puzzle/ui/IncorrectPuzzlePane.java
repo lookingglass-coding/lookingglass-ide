@@ -82,6 +82,6 @@ public class IncorrectPuzzlePane extends FxComponent {
 	}
 
 	private void handleDoneAction( javafx.event.ActionEvent event ) {
-		this.puzzle.getPuzzleComposite().getPuzzle().endPuzzle();
+		this.puzzle.endPuzzle();
 	}
 }

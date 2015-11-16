@@ -42,65 +42,22 @@
  * THE USE OF OR OTHER DEALINGS WITH THE SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-package edu.wustl.lookingglass.community.api;
+package edu.wustl.lookingglass.community.exceptions;
 
 /**
  * @author Kyle J. Harms
  */
-public class FreeConnection extends org.scribe.builder.api.DefaultApi10a implements CommunityConnection {
+public class CommunityRepositoryException extends Exception {
 
-	public FreeConnection() {
-		super();
+	public CommunityRepositoryException( String message ) {
+		super( message );
 	}
 
-	@Override
-	public String getProtocol() {
-		return "http";
+	public CommunityRepositoryException( String message, Throwable t ) {
+		super( message, t );
 	}
 
-	@Override
-	public String getSecureProtocol() {
-		return "https";
-	}
-
-	@Override
-	public String getHost() {
-		return "lookingglass.wustl.edu";
-	}
-
-	@Override
-	public String getOauthKey() {
-		return "JcRSGQQYnkyyLsI0zxKqlAq14owasIK5oKhtZpmn";
-	}
-
-	@Override
-	public String getOauthSecret() {
-		return "0WmuklJAdwE8YUFv4gvRC5ogOZSky7KwTcwWWd2g";
-	}
-
-	@Override
-	public String getAccessTokenEndpoint() {
-		return getSecureProtocol() + "://" + getHost() + OAUTH_ACCESS_TOKEN_PATH;
-	}
-
-	@Override
-	public String getRequestTokenEndpoint() {
-		return getSecureProtocol() + "://" + getHost() + OAUTH_REQUEST_TOKEN_PATH;
-	}
-
-	// Note: Authorization URL is not used in LG due to our OAuth extension.
-	@Override
-	public String getAuthorizationUrl( org.scribe.model.Token requestToken ) {
-		return String.format( getSecureProtocol() + "://" + getHost() + OAUTH_AUTHORIZATION_PATH, requestToken.getToken() );
-	}
-
-	@Override
-	public boolean verifyCertificates() {
-		return true;
-	}
-
-	@Override
-	public String getGitRemoteName() {
-		return null;
+	public CommunityRepositoryException( Throwable t ) {
+		super( t );
 	}
 }
