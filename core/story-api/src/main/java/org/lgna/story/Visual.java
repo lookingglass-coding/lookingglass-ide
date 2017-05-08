@@ -47,9 +47,6 @@ package org.lgna.story;
  * @author Dennis Cosgrove
  */
 public interface Visual {
-	public Paint getPaint();
-
-	public void setPaint( Paint paint, SetPaint.Detail... details );
 
 	public Double getOpacity();
 

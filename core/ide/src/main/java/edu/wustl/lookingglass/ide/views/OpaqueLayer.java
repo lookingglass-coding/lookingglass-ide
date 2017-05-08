@@ -44,6 +44,7 @@
  *******************************************************************************/
 package edu.wustl.lookingglass.ide.views;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.LayoutManager;
 
@@ -58,16 +59,28 @@ import org.lgna.croquet.views.LayerStencil;
  */
 public class OpaqueLayer extends LayerStencil {
 
-	private static final int LAYER_ID = javax.swing.JLayeredPane.DRAG_LAYER - 1;
+	private static final int DEFAULT_LAYER_ID = javax.swing.JLayeredPane.DRAG_LAYER - 1;
+	private static final Color DEFAULT_COLOR = UIManager.getColor( "control" );
+
+	private final Color color;
 
 	public OpaqueLayer( AbstractWindow<?> window ) {
-		super( window, LAYER_ID );
+		this( DEFAULT_COLOR, window );
+	}
+
+	public OpaqueLayer( Color color, AbstractWindow<?> window ) {
+		this( color, window, DEFAULT_LAYER_ID );
+	}
+
+	public OpaqueLayer( Color color, AbstractWindow<?> window, int layerId ) {
+		super( window, layerId );
+		this.color = color;
 	}
 
 	@Override
 	protected void paintComponentPrologue( Graphics2D g2 ) {
 		Graphics2D graphics = (Graphics2D)g2.create();
-		graphics.setColor( UIManager.getColor( "control" ) );
+		graphics.setColor( this.color );
 		graphics.fill( graphics.getClip() );
 	}
 

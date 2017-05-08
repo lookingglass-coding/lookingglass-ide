@@ -53,6 +53,7 @@ import org.lgna.croquet.OverlayPane;
 import org.lgna.croquet.views.AbstractWindow;
 
 import edu.cmu.cs.dennisc.java.lang.SystemUtilities;
+import edu.cmu.cs.dennisc.java.util.logging.Logger;
 import edu.wustl.lookingglass.croquetfx.FxViewAdaptor;
 import edu.wustl.lookingglass.croquetfx.ThreadHelper;
 import edu.wustl.lookingglass.puzzle.CompletionPuzzle;
@@ -116,10 +117,10 @@ public class CompletionPuzzleComposite extends org.lgna.croquet.SimpleComposite<
 			return fxImage;
 		} );
 
-		this.resources = new PuzzleResourcesComposite( this.puzzle, this.fxScenePreview );
+		this.resources = new PuzzleResourcesComposite( this.puzzle, this, this.fxScenePreview );
 		this.registerSubComposite( this.resources );
 
-		this.editor = new PuzzleEditorComposite( this.puzzle );
+		this.editor = new PuzzleEditorComposite( this.puzzle, this );
 		this.registerSubComposite( this.editor );
 	}
 
@@ -148,11 +149,12 @@ public class CompletionPuzzleComposite extends org.lgna.croquet.SimpleComposite<
 	public void initializeInterface() {
 		javax.swing.SwingUtilities.invokeLater( () -> {
 			this.window = this.getRootComponent().getRoot();
+			assert this.window != null;
 
 			// Ugh. This is really awful... I'm trying to delay based on the delays
 			// that happens to create the directions pane
 			edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( () -> {
-				this.checkPane = new CheckPuzzlePane( this.puzzle );
+				this.checkPane = new CheckPuzzlePane( this.puzzle, this );
 
 				FxViewAdaptor fxViewAdaptor = this.checkPane.getFxViewAdaptor();
 				fxViewAdaptor.useFxRefreshHack( false );
@@ -239,15 +241,19 @@ public class CompletionPuzzleComposite extends org.lgna.croquet.SimpleComposite<
 
 	public void hideCheckPane() {
 		ThreadHelper.runOnSwingThread( () -> {
-			this.checkPane.reset();
-			this.checkOverlay.hide();
+			if( checkPane != null ) {
+				this.checkPane.reset();
+			}
+			if( checkOverlay != null ) {
+				this.checkOverlay.hide();
+			}
 			this.checkAndShowTimeOutPane();
 		} );
 	}
 
 	public void showCorrectPane() {
 		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( () -> {
-			final CorrectPuzzlePane correctPane = new CorrectPuzzlePane( this.puzzle );
+			final CorrectPuzzlePane correctPane = new CorrectPuzzlePane( this.puzzle, this );
 			final OverlayPane.Builder correctPaneBuilder = new OverlayPane.Builder( this.window, correctPane.getFxViewAdaptor() )
 					.borderMargin( 0 )
 					.overlayColor( LIGHT_OVERLAY_COLOR );
@@ -270,7 +276,7 @@ public class CompletionPuzzleComposite extends org.lgna.croquet.SimpleComposite<
 
 	public void showIncorrectPane() {
 		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( () -> {
-			final IncorrectPuzzlePane donePane = new IncorrectPuzzlePane( this.puzzle );
+			final IncorrectPuzzlePane donePane = new IncorrectPuzzlePane( this.puzzle, this );
 			final OverlayPane.Builder donePaneBuilder = new OverlayPane.Builder( this.window, donePane.getFxViewAdaptor() )
 					.borderMargin( 0 )
 					.overlayColor( LIGHT_OVERLAY_COLOR );
@@ -311,10 +317,10 @@ public class CompletionPuzzleComposite extends org.lgna.croquet.SimpleComposite<
 
 	protected void showTimeOutPane() {
 		this.shouldShowTimeOutOverlay = false;
-		assert!this.puzzle.isCorrect() : "puzzle is correct. time out invalid.";
+		assert !this.puzzle.isCorrect() : "puzzle is correct. time out invalid.";
 
 		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( () -> {
-			final TimeOutPuzzlePane timeOutPane = new TimeOutPuzzlePane( this.puzzle );
+			final TimeOutPuzzlePane timeOutPane = new TimeOutPuzzlePane( this.puzzle, this );
 			final OverlayPane.Builder timeOutPaneBuilder = new OverlayPane.Builder( this.window, timeOutPane.getFxViewAdaptor() )
 					.borderMargin( 0 )
 					.overlayColor( LIGHT_OVERLAY_COLOR )
@@ -358,13 +364,13 @@ public class CompletionPuzzleComposite extends org.lgna.croquet.SimpleComposite<
 
 	public void undo() {
 		ThreadHelper.runOnSwingThread( () -> {
-			this.puzzle.haltPuzzleEvaluationAndWork( () -> this.puzzle.getPuzzleComposite().getHistoryManager().performUndo() );
+			this.puzzle.haltPuzzleEvaluationAndWork( () -> this.getHistoryManager().performUndo() );
 		} );
 	}
 
 	public void redo() {
 		ThreadHelper.runOnSwingThread( () -> {
-			this.puzzle.haltPuzzleEvaluationAndWork( () -> this.puzzle.getPuzzleComposite().getHistoryManager().performRedo() );
+			this.puzzle.haltPuzzleEvaluationAndWork( () -> this.getHistoryManager().performRedo() );
 		} );
 	}
 
@@ -390,12 +396,17 @@ public class CompletionPuzzleComposite extends org.lgna.croquet.SimpleComposite<
 
 	@Override
 	public void handlePostDeactivation() {
-		this.hideTimeOutPane();
+		try {
+			this.hideTimeOutPane();
 
-		this.hideIntroPane();
-		this.hideCheckPane();
-		this.hideCorrectPane();
-		this.hideIncorrectPane();
+			this.hideIntroPane();
+			this.hideCheckPane();
+			this.hideCorrectPane();
+			this.hideIncorrectPane();
+		} catch( Throwable t ) {
+			// We should clean up just fine, but in case we don't it's really ok.
+			Logger.throwable( t, this );
+		}
 
 		super.handlePostDeactivation();
 	}

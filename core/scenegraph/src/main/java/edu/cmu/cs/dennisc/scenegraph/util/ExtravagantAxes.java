@@ -80,6 +80,10 @@ public class ExtravagantAxes extends Transformable {
 	}
 
 	public ExtravagantAxes( double unitLength, double forwardFactor, double diameterScale ) {
+		this.initialUnitLength = unitLength;
+		this.initialForwardFactor = forwardFactor;
+		this.initialDiameterScale = diameterScale;
+
 		SimpleAppearance sgRedAppearance = new SimpleAppearance();
 		SimpleAppearance sgGreenAppearance = new SimpleAppearance();
 		SimpleAppearance sgBlueAppearance = new SimpleAppearance();
@@ -94,11 +98,17 @@ public class ExtravagantAxes extends Transformable {
 		axisToSGAppearanceMap.put( Cylinder.BottomToTopAxis.POSITIVE_Y, sgGreenAppearance );
 		axisToSGAppearanceMap.put( Cylinder.BottomToTopAxis.POSITIVE_Z, sgBlueAppearance );
 		axisToSGAppearanceMap.put( Cylinder.BottomToTopAxis.NEGATIVE_Z, sgWhiteAppearance );
+		sgAppearances[ 0 ] = sgRedAppearance;
+		sgAppearances[ 1 ] = sgGreenAppearance;
+		sgAppearances[ 2 ] = sgBlueAppearance;
+		sgAppearances[ 3 ] = sgWhiteAppearance;
 
 		this.sgXAxis = createArrow( unitLength, 1.0, Cylinder.BottomToTopAxis.POSITIVE_X, diameterScale );
 		this.sgYAxis = createArrow( unitLength, 1.0, Cylinder.BottomToTopAxis.POSITIVE_Y, diameterScale );
 		this.sgZAxis = createArrow( unitLength, 1.0, Cylinder.BottomToTopAxis.POSITIVE_Z, diameterScale );
 		this.sgFAxis = createArrow( unitLength, forwardFactor, Cylinder.BottomToTopAxis.NEGATIVE_Z, diameterScale );
+
+		sgVisuals = edu.cmu.cs.dennisc.java.lang.ArrayUtilities.concatArrays( Visual.class, this.sgXAxis.getVisuals(), this.sgYAxis.getVisuals(), this.sgZAxis.getVisuals(), this.sgFAxis.getVisuals() );
 
 		this.sgXAxis.setParent( this );
 		this.sgYAxis.setParent( this );
@@ -132,37 +142,60 @@ public class ExtravagantAxes extends Transformable {
 		this.sgFAxis.resize( lengthCylinder, radiusCylinder, lengthCone, radiusCone );
 	}
 
-	public float getOpacity()
-	{
+	public void setScale( edu.cmu.cs.dennisc.math.Matrix3x3 scale ) {
+		this.scale.setValue( scale );
+		double scaleVal = scale.right.x;
+		resize( this.initialUnitLength * scaleVal, this.initialForwardFactor * scaleVal, this.initialDiameterScale * scaleVal );
+	}
+
+	public edu.cmu.cs.dennisc.math.Matrix3x3 getScale() {
+		return this.scale.getValue();
+	}
+
+	public edu.cmu.cs.dennisc.math.property.Matrix3x3Property getScaleProperty() {
+		return this.scale;
+	}
+
+	public SimpleAppearance[] getSgOpacityAppearances() {
+		return sgAppearances;
+	}
+
+	public Visual[] getSgVisuals() {
+		return this.sgVisuals;
+	}
+
+	public float getOpacity() {
 		return axisToSGAppearanceMap.values().iterator().next().opacity.getValue();
 	}
 
-	public void setOpacity( float opacity )
-	{
-		for( SimpleAppearance appearance : axisToSGAppearanceMap.values() )
-		{
+	public void setOpacity( float opacity ) {
+		for( SimpleAppearance appearance : axisToSGAppearanceMap.values() ) {
 			appearance.opacity.setValue( opacity );
 		}
 	}
 
-	public void setIsShowing( boolean isShowing )
-	{
-		for( Component child : this.getComponents() )
-		{
-			if( child instanceof Arrow )
-			{
+	public void setIsShowing( boolean isShowing ) {
+		for( Component child : this.getComponents() ) {
+			if( child instanceof Arrow ) {
 				Arrow a = (Arrow)child;
-				for( Visual v : a.getVisuals() )
-				{
+				for( Visual v : a.getVisuals() ) {
 					v.isShowing.setValue( isShowing );
 				}
 			}
 		}
 	}
 
+	private final edu.cmu.cs.dennisc.math.property.Matrix3x3Property scale = new edu.cmu.cs.dennisc.math.property.Matrix3x3Property( this, edu.cmu.cs.dennisc.math.Matrix3x3.createIdentity() );
+
 	private final java.util.Map<Cylinder.BottomToTopAxis, SimpleAppearance> axisToSGAppearanceMap = edu.cmu.cs.dennisc.java.util.Maps.newHashMap();
+	private final SimpleAppearance[] sgAppearances = new SimpleAppearance[ 4 ];
+	private final Visual[] sgVisuals;
 	private final Arrow sgXAxis;
 	private final Arrow sgYAxis;
 	private final Arrow sgZAxis;
 	private final Arrow sgFAxis;
+
+	private final double initialUnitLength;
+	private final double initialForwardFactor;
+	private final double initialDiameterScale;
 }

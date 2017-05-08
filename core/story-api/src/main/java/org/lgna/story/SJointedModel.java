@@ -68,6 +68,13 @@ public abstract class SJointedModel extends SModel {
 		return SJoint.getJointArray( this, jointArrayId );
 	}
 
+	@MethodTemplate( visibility = org.lgna.project.annotations.Visibility.COMPLETELY_HIDDEN )
+	public void strikePose( org.lgna.story.Pose<? extends SJointedModel> pose, StrikePose.Detail... details ) {
+		double duration = Duration.getValue( details );
+		edu.cmu.cs.dennisc.animation.Style style = AnimationStyle.getValue( details ).getInternal();
+		this.getImplementation().strikePose( pose, duration, style );
+	}
+
 	public void straightenOutJoints( StraightenOutJoints.Detail... details ) {
 		this.getImplementation().animateStraightenOutJoints( Duration.getValue( details ), AnimationStyle.getValue( details ).getInternal() );
 	}
@@ -75,21 +82,19 @@ public abstract class SJointedModel extends SModel {
 	@MethodTemplate( )
 	public void say( String text, Say.Detail... details ) {
 		org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( text, 0 );
-		this.getImplementation().say( text, Duration.getValue( details ),
-				TextFont.getValue( details, new Font( new java.awt.Font( null, java.awt.Font.PLAIN, 16 ) ) ).getAsAWTFont(),
-				TextColor.getValue( details, Color.BLACK ).getInternal(),
-				BubbleFillColor.getValue( details, Color.WHITE ).getInternal(),
-				BubbleOutlineColor.getValue( details, Color.BLACK ).getInternal() );
+		double textScale = TextScale.getValue( details );
+		int textSize = (int)( 16 * textScale );
+		int textStyle = TextStyle.getValue( details ).getInternal();
+		this.getImplementation().say( text, Duration.getValue( details ), TextFont.getValue( details, null, textStyle, textSize ).getAsAWTFont(), TextColor.getValue( details, Color.BLACK ).getInternal(), BubbleFillColor.getValue( details, Color.WHITE ).getInternal(), BubbleOutlineColor.getValue( details, Color.WHITE ).getInternal(), BubblePosition.getValue( details ).getInternal() );
 	}
 
 	@MethodTemplate( )
 	public void think( String text, Think.Detail... details ) {
 		org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( text, 0 );
-		this.getImplementation().think( text, Duration.getValue( details ),
-				TextFont.getValue( details, new Font( new java.awt.Font( null, java.awt.Font.PLAIN, 16 ) ) ).getAsAWTFont(),
-				TextColor.getValue( details, Color.BLACK ).getInternal(),
-				BubbleFillColor.getValue( details, Color.WHITE ).getInternal(),
-				BubbleOutlineColor.getValue( details, Color.BLACK ).getInternal() );
+		double textScale = TextScale.getValue( details );
+		int textSize = (int)( 16 * textScale );
+		int textStyle = TextStyle.getValue( details ).getInternal();
+		this.getImplementation().think( text, Duration.getValue( details ), TextFont.getValue( details, null, textStyle, textSize ).getAsAWTFont(), TextColor.getValue( details, Color.BLACK ).getInternal(), BubbleFillColor.getValue( details, Color.WHITE ).getInternal(), BubbleOutlineColor.getValue( details, Color.WHITE ).getInternal(), BubblePosition.getValue( details ).getInternal() );
 	}
 
 	@MethodTemplate( visibility = org.lgna.project.annotations.Visibility.TUCKED_AWAY )

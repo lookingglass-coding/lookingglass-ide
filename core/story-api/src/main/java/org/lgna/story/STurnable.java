@@ -60,39 +60,21 @@ public abstract class STurnable extends SThing {
 	}
 
 	@MethodTemplate( )
-	public void turn(
-			TurnDirection direction,
-			@ValueTemplate( detailsEnumCls = org.lgna.story.annotation.AngleDetails.class ) Number amount,
-			Turn.Detail... details ) {
+	public void turn( TurnDirection direction, @ValueTemplate( detailsEnumCls = org.lgna.story.annotation.AngleDetails.class ) Number amount, Turn.Detail... details ) {
 
 		org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( direction, 0 );
 		org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNumber( amount, 1 );
 
-		this.getImplementation().animateApplyRotationInRevolutions(
-				direction.getAxis(),
-				amount.doubleValue(),
-				AsSeenBy.getValue( details, this ).getImplementation(),
-				Duration.getValue( details ),
-				AnimationStyle.getValue( details ).getInternal()
-				);
+		this.getImplementation().animateApplyRotationInRevolutions( direction.getAxis(), amount.doubleValue(), AsSeenBy.getValue( details, this ).getImplementation(), Duration.getValue( details ), AnimationStyle.getValue( details ).getInternal() );
 	}
 
 	@MethodTemplate( )
-	public void roll(
-			RollDirection direction,
-			@ValueTemplate( detailsEnumCls = org.lgna.story.annotation.AngleDetails.class ) Number amount,
-			Roll.Detail... details ) {
+	public void roll( RollDirection direction, @ValueTemplate( detailsEnumCls = org.lgna.story.annotation.AngleDetails.class ) Number amount, Roll.Detail... details ) {
 
 		org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( direction, 0 );
 		org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNumber( amount, 1 );
 
-		this.getImplementation().animateApplyRotationInRevolutions(
-				direction.getAxis(),
-				amount.doubleValue(),
-				AsSeenBy.getValue( details, this ).getImplementation(),
-				Duration.getValue( details ),
-				AnimationStyle.getValue( details ).getInternal()
-				);
+		this.getImplementation().animateApplyRotationInRevolutions( direction.getAxis(), amount.doubleValue(), AsSeenBy.getValue( details, this ).getImplementation(), Duration.getValue( details ), AnimationStyle.getValue( details ).getInternal() );
 	}
 
 	@MethodTemplate( )
@@ -152,4 +134,76 @@ public abstract class STurnable extends SThing {
 		return this.getImplementation().getAxisAlignedMinimumBoundingBox( org.lgna.story.implementation.AsSeenBy.SCENE ).getCenterOfBottomFace().y;
 	}
 	//</lg>
+
+	@MethodTemplate( visibility = Visibility.PRIME_TIME )
+	public Double getDistanceAbove( SThing other, GetDistanceAbove.Detail... details ) {
+		org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( other, 0 );
+		return this.getImplementation().getDistanceAbove( org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( other, 0 ).getImplementation(), AsSeenBy.getImplementation( details, org.lgna.story.implementation.AsSeenBy.SCENE ) );
+	}
+
+	@MethodTemplate( visibility = Visibility.PRIME_TIME )
+	public Boolean isAbove( SThing other, IsAbove.Detail... details ) {
+		org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( other, 0 );
+		return this.getImplementation().getDistanceAbove( org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( other, 0 ).getImplementation(), AsSeenBy.getImplementation( details, org.lgna.story.implementation.AsSeenBy.SCENE ) ) > 0;
+	}
+
+	@MethodTemplate( visibility = Visibility.PRIME_TIME )
+	public Double getDistanceBelow( SThing other, GetDistanceBelow.Detail... details ) {
+		org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( other, 0 );
+		return this.getImplementation().getDistanceBelow( org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( other, 0 ).getImplementation(), AsSeenBy.getImplementation( details, org.lgna.story.implementation.AsSeenBy.SCENE ) );
+	}
+
+	@MethodTemplate( visibility = Visibility.PRIME_TIME )
+	public Boolean isBelow( SThing other, IsBelow.Detail... details ) {
+		org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( other, 0 );
+		return this.getImplementation().getDistanceBelow( org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( other, 0 ).getImplementation(), AsSeenBy.getImplementation( details, org.lgna.story.implementation.AsSeenBy.SCENE ) ) > 0;
+	}
+
+	@MethodTemplate( visibility = Visibility.PRIME_TIME )
+	public Double getDistanceToTheRightOf( SThing other, GetDistanceToTheRightOf.Detail... details ) {
+		org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( other, 0 );
+		return this.getImplementation().getDistanceToTheRightOf( org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( other, 0 ).getImplementation(), AsSeenBy.getValue( details, other ).getImplementation() );
+	}
+
+	@MethodTemplate( visibility = Visibility.PRIME_TIME )
+	public Boolean isToTheRightOf( SThing other, IsToTheRightOf.Detail... details ) {
+		org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( other, 0 );
+		return this.getImplementation().getDistanceToTheRightOf( org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( other, 0 ).getImplementation(), AsSeenBy.getValue( details, other ).getImplementation() ) > 0;
+	}
+
+	@MethodTemplate( visibility = Visibility.PRIME_TIME )
+	public Double getDistanceToTheLeftOf( SThing other, GetDistanceToTheLeftOf.Detail... details ) {
+		org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( other, 0 );
+		return this.getImplementation().getDistanceToTheLeftOf( org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( other, 0 ).getImplementation(), AsSeenBy.getValue( details, other ).getImplementation() );
+	}
+
+	@MethodTemplate( visibility = Visibility.PRIME_TIME )
+	public Boolean isToTheLeftOf( SThing other, IsToTheLeftOf.Detail... details ) {
+		org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( other, 0 );
+		return this.getImplementation().getDistanceToTheLeftOf( org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( other, 0 ).getImplementation(), AsSeenBy.getValue( details, other ).getImplementation() ) > 0;
+	}
+
+	@MethodTemplate( visibility = Visibility.PRIME_TIME )
+	public Double getDistanceInFrontOf( SThing other, GetDistanceInFrontOf.Detail... details ) {
+		org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( other, 0 );
+		return this.getImplementation().getDistanceInFrontOf( org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( other, 0 ).getImplementation(), AsSeenBy.getValue( details, other ).getImplementation() );
+	}
+
+	@MethodTemplate( visibility = Visibility.PRIME_TIME )
+	public Boolean isInFrontOf( SThing other, IsInFrontOf.Detail... details ) {
+		org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( other, 0 );
+		return this.getImplementation().getDistanceInFrontOf( org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( other, 0 ).getImplementation(), AsSeenBy.getValue( details, other ).getImplementation() ) > 0;
+	}
+
+	@MethodTemplate( visibility = Visibility.PRIME_TIME )
+	public Double getDistanceBehind( SThing other, GetDistanceBehind.Detail... details ) {
+		org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( other, 0 );
+		return this.getImplementation().getDistanceBehind( org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( other, 0 ).getImplementation(), AsSeenBy.getValue( details, other ).getImplementation() );
+	}
+
+	@MethodTemplate( visibility = Visibility.PRIME_TIME )
+	public Boolean isBehind( SThing other, IsBehind.Detail... details ) {
+		org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( other, 0 );
+		return this.getImplementation().getDistanceBehind( org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( other, 0 ).getImplementation(), AsSeenBy.getValue( details, other ).getImplementation() ) > 0;
+	}
 }

@@ -78,7 +78,7 @@ public class VLCPlayer extends javafx.scene.canvas.Canvas {
 
 		@Override
 		public uk.co.caprica.vlcj.player.direct.BufferFormat getBufferFormat( final int sourceWidth, final int sourceHeight ) {
-			edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( ( ) -> {
+			edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( () -> {
 				this.canvas.setWidth( sourceWidth );
 				this.canvas.setHeight( sourceHeight );
 				this.canvas.getParent().requestLayout();
@@ -136,19 +136,7 @@ public class VLCPlayer extends javafx.scene.canvas.Canvas {
 		this.renderTimeline = new Timeline();
 		this.renderTimeline.setCycleCount( Timeline.INDEFINITE );
 
-		this.mediaPlayerComponent.getMediaPlayer().addMediaPlayerEventListener( new uk.co.caprica.vlcj.player.MediaPlayerEventListener() {
-			@Override
-			public void mediaChanged( MediaPlayer mediaPlayer, uk.co.caprica.vlcj.binding.internal.libvlc_media_t media, String mrl ) {
-			}
-
-			@Override
-			public void opening( MediaPlayer mediaPlayer ) {
-			}
-
-			@Override
-			public void buffering( MediaPlayer mediaPlayer, float newCache ) {
-			}
-
+		this.mediaPlayerComponent.getMediaPlayer().addMediaPlayerEventListener( new VLCPlayerEventListener() {
 			@Override
 			public void playing( MediaPlayer mediaPlayer ) {
 				VLCPlayer.this.adjustFrameRate();
@@ -157,120 +145,20 @@ public class VLCPlayer extends javafx.scene.canvas.Canvas {
 
 			@Override
 			public void paused( MediaPlayer mediaPlayer ) {
-				edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( ( ) -> VLCPlayer.this.renderFrame() );
+				edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( () -> VLCPlayer.this.renderFrame() );
 				VLCPlayer.this.stopRendering();
 			}
 
 			@Override
 			public void stopped( MediaPlayer mediaPlayer ) {
-				edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( ( ) -> VLCPlayer.this.renderFrame() );
+				edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( () -> VLCPlayer.this.renderFrame() );
 				VLCPlayer.this.stopRendering();
-			}
-
-			@Override
-			public void forward( MediaPlayer mediaPlayer ) {
-			}
-
-			@Override
-			public void backward( MediaPlayer mediaPlayer ) {
 			}
 
 			@Override
 			public void finished( MediaPlayer mediaPlayer ) {
-				edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( ( ) -> VLCPlayer.this.renderFrame() );
+				edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( () -> VLCPlayer.this.renderFrame() );
 				VLCPlayer.this.stopRendering();
-			}
-
-			@Override
-			public void timeChanged( MediaPlayer mediaPlayer, long newTime ) {
-			}
-
-			@Override
-			public void positionChanged( MediaPlayer mediaPlayer, float newPosition ) {
-			}
-
-			@Override
-			public void seekableChanged( MediaPlayer mediaPlayer, int newSeekable ) {
-			}
-
-			@Override
-			public void pausableChanged( MediaPlayer mediaPlayer, int newPausable ) {
-			}
-
-			@Override
-			public void titleChanged( MediaPlayer mediaPlayer, int newTitle ) {
-			}
-
-			@Override
-			public void snapshotTaken( MediaPlayer mediaPlayer, String filename ) {
-			}
-
-			@Override
-			public void lengthChanged( MediaPlayer mediaPlayer, long newLength ) {
-			}
-
-			@Override
-			public void videoOutput( MediaPlayer mediaPlayer, int newCount ) {
-			}
-
-			@Override
-			public void scrambledChanged( MediaPlayer mediaPlayer, int newScrambled ) {
-			}
-
-			@Override
-			public void elementaryStreamAdded( MediaPlayer mediaPlayer, int type, int id ) {
-			}
-
-			@Override
-			public void elementaryStreamDeleted( MediaPlayer mediaPlayer, int type, int id ) {
-			}
-
-			@Override
-			public void elementaryStreamSelected( MediaPlayer mediaPlayer, int type, int id ) {
-			}
-
-			@Override
-			public void error( MediaPlayer mediaPlayer ) {
-			}
-
-			@Override
-			public void mediaMetaChanged( MediaPlayer mediaPlayer, int metaType ) {
-			}
-
-			@Override
-			public void mediaSubItemAdded( MediaPlayer mediaPlayer, uk.co.caprica.vlcj.binding.internal.libvlc_media_t subItem ) {
-			}
-
-			@Override
-			public void mediaDurationChanged( MediaPlayer mediaPlayer, long newDuration ) {
-			}
-
-			@Override
-			public void mediaParsedChanged( MediaPlayer mediaPlayer, int newStatus ) {
-			}
-
-			@Override
-			public void mediaFreed( MediaPlayer mediaPlayer ) {
-			}
-
-			@Override
-			public void mediaStateChanged( MediaPlayer mediaPlayer, int newState ) {
-			}
-
-			@Override
-			public void newMedia( MediaPlayer mediaPlayer ) {
-			}
-
-			@Override
-			public void subItemPlayed( MediaPlayer mediaPlayer, int subItemIndex ) {
-			}
-
-			@Override
-			public void subItemFinished( MediaPlayer mediaPlayer, int subItemIndex ) {
-			}
-
-			@Override
-			public void endOfSubItems( MediaPlayer mediaPlayer ) {
 			}
 		} );
 	}

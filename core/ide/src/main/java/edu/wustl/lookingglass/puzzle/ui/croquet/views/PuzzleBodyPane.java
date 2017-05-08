@@ -45,12 +45,14 @@
 package edu.wustl.lookingglass.puzzle.ui.croquet.views;
 
 import edu.wustl.lookingglass.puzzle.CompletionPuzzle;
+import edu.wustl.lookingglass.puzzle.ui.croquet.CompletionPuzzleComposite;
 
 public class PuzzleBodyPane extends org.alice.ide.common.BodyPane {
 
 	private final org.lgna.croquet.views.SwingComponentView<?> statementListComponent;
 
 	private CompletionPuzzle puzzle;
+	private CompletionPuzzleComposite puzzleComposite;
 
 	public PuzzleBodyPane( org.lgna.croquet.views.SwingComponentView<?> statementListComponent ) {
 		super( statementListComponent );
@@ -66,8 +68,9 @@ public class PuzzleBodyPane extends org.alice.ide.common.BodyPane {
 		//</lg>
 	}
 
-	/*package-private*/void initialize( org.alice.ide.x.AstI18nFactory factory, CompletionPuzzle puzzle ) {
+	/*package-private*/void initialize( org.alice.ide.x.AstI18nFactory factory, CompletionPuzzle puzzle, CompletionPuzzleComposite puzzleComposite ) {
 		this.puzzle = puzzle;
+		this.puzzleComposite = puzzleComposite;
 		org.lgna.project.ast.BlockStatement body = this.puzzle.getPuzzleMethod().body.getValue();
 
 		// Special pane for editing the puzzle.
@@ -77,7 +80,7 @@ public class PuzzleBodyPane extends org.alice.ide.common.BodyPane {
 			org.lgna.croquet.views.SwingComponentView<?> view;
 			if( statement == this.puzzle.getPuzzleDoInOrder() ) {
 				this.statementListComponent.setBorder( new PuzzleDoInOrderStatementListBorder() );
-				view = new PuzzleWorkspaceView( this.statementListComponent, this.puzzle );
+				view = new PuzzleWorkspaceView( this.statementListComponent, this.puzzle, this.puzzleComposite );
 				view.setBorder( javax.swing.BorderFactory.createEmptyBorder( 0, 8, 0, 8 ) );
 			} else {
 				view = factory.createStatementPane( statement );

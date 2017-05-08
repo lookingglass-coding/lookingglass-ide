@@ -46,6 +46,7 @@ package org.alice.ide;
 import java.io.IOException;
 import java.text.MessageFormat;
 
+import org.alice.ide.croquet.models.ui.preferences.UserProjectsDirectoryState;
 import org.lgna.project.ProgramTypeUtilities;
 import org.lgna.project.Version;
 
@@ -600,10 +601,12 @@ public abstract class ProjectApplication extends org.lgna.croquet.PerspectiveApp
 
 	//</lg>
 
-	public java.io.File getMyProjectsDirectory() {
+	private static final UserProjectsDirectoryState userProjectsDirectoryState = new UserProjectsDirectoryState();
+
+	public static java.io.File getMyProjectsDirectory() {
 		// <lg/> Use a different path for user studies
 		if( edu.wustl.lookingglass.study.StudyConfiguration.INSTANCE.getUserProjectsDirectory() == null ) {
-			return org.alice.ide.croquet.models.ui.preferences.UserProjectsDirectoryState.getInstance().getDirectoryEnsuringExistance();
+			return userProjectsDirectoryState.getDirectoryEnsuringExistance();
 		} else {
 			return edu.wustl.lookingglass.study.StudyConfiguration.INSTANCE.getUserProjectsDirectory();
 		}

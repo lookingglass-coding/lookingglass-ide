@@ -50,7 +50,8 @@ import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.List;
 
-import org.alice.ide.croquet.models.ui.preferences.UserProjectsDirectoryState;
+import org.alice.ide.ProjectApplication;
+import org.alice.ide.issue.DefaultExceptionHandler;
 import org.alice.ide.perspectives.ProjectPerspective;
 import org.alice.ide.uricontent.FileProjectLoader;
 import org.alice.nonfree.NebulousIde;
@@ -65,6 +66,7 @@ import edu.wustl.lookingglass.croquetfx.FxComponent;
 import edu.wustl.lookingglass.croquetfx.ThreadHelper;
 import edu.wustl.lookingglass.ide.perspectives.puzzle.CompletionPuzzlePerspective;
 import edu.wustl.lookingglass.ide.program.TimeScrubProgramImp;
+import edu.wustl.lookingglass.ide.utilities.WriteMethodToImageUtility;
 import edu.wustl.lookingglass.ide.views.OpaqueLayer;
 import edu.wustl.lookingglass.modules.CollectionModuleManager;
 import edu.wustl.lookingglass.project.TypeClassNotFoundException;
@@ -115,14 +117,6 @@ public class LookingGlassIDE extends org.alice.stageide.StageIDE {
 	public static final int DEFAULT_WORLD_DIMENSION_HEIGHT = 360;
 	private static final String APPLICATION_ID_KEY = "ApplicationUUID";
 
-	public static LookingGlassIDE getActiveInstance() {
-		return ClassUtilities.getInstance( org.lgna.croquet.Application.getActiveInstance(), LookingGlassIDE.class );
-	}
-
-	// There is only one community controller
-	public static final CommunityController COMMUNITY_CONTROLLER = new CommunityController( UserProjectsDirectoryState.getInstance().getDirectory() );
-	public static final CollectionModuleManager MODULE_MANAGER = new CollectionModuleManager();
-
 	private static final List<Image> APPLICATION_ICONS = new java.util.ArrayList<java.awt.Image>();
 
 	static {
@@ -134,10 +128,19 @@ public class LookingGlassIDE extends org.alice.stageide.StageIDE {
 		APPLICATION_ICONS.add( LookingGlassTheme.getImage( "logo-512x512", org.lgna.croquet.icon.IconSize.FIXED ) );
 	}
 
+	public static LookingGlassIDE getActiveInstance() {
+		return ClassUtilities.getInstance( org.lgna.croquet.Application.getActiveInstance(), LookingGlassIDE.class );
+	}
+
+	// There is only one community controller
+	private final CommunityController COMMUNITY_CONTROLLER = new CommunityController( ProjectApplication.getMyProjectsDirectory() );
+	private final CollectionModuleManager MODULE_MANAGER = new CollectionModuleManager();
+
 	private final java.util.UUID applicationId;
 
 	private final OpaqueLayer loadingLayer;
 
+	private boolean isBatchPrintingModeEnabled = false;
 	private boolean isPuzzleEditorEnabled = false;
 	private PuzzleProjectProperties puzzleProjectProperties = null;
 
@@ -231,27 +234,116 @@ public class LookingGlassIDE extends org.alice.stageide.StageIDE {
 	}
 
 	private void handleCommandLineArguments( String[] args ) {
+		final String VERSION_ARG = "version";
+
+		// Normal Mode
 		final String REMIX_ARG = "remix";
 		final String REMIX_SUBSTITIONS_ARG = "remix-substitions";
 		final String REMIX_METHOD_ARG = "remix-method";
 		final String REMIX_PUZZLE_ARG = "remix-puzzle";
 		final String PUZZLE_ARG = "puzzle";
+
+		// Puzzle Editor Mode
 		final String PUZZLE_EDITOR_ARG = "puzzle-editor";
 
+		// Batch Print Mode
+		final String PRINT_PROJECT_TO_IMAGE = "print-project-to-image";
+		final String PRINT_PROJECTS_DIR = "print-projects-dir";
+		final String PRINT_IMAGES_DIR = "print-images-dir";
+		final String PRINT_PROJECT_METHOD = "print-project-method";
+
 		joptsimple.OptionParser parser = new joptsimple.OptionParser();
+		parser.accepts( VERSION_ARG );
+
+		// Normal Mode
 		parser.accepts( REMIX_SUBSTITIONS_ARG ).withRequiredArg();
 		parser.accepts( REMIX_METHOD_ARG ).withRequiredArg();
 		parser.accepts( REMIX_ARG ).requiredIf( REMIX_SUBSTITIONS_ARG ).requiredIf( REMIX_METHOD_ARG ).withRequiredArg();
 		parser.accepts( REMIX_PUZZLE_ARG );
 		parser.accepts( PUZZLE_ARG );
+
+		// Puzzle Editor Mode
 		parser.accepts( PUZZLE_EDITOR_ARG );
+
+		// Batch Print Mode
+		parser.accepts( PRINT_PROJECT_TO_IMAGE ).withRequiredArg();
+		parser.accepts( PRINT_PROJECTS_DIR ).withRequiredArg();
+		parser.accepts( PRINT_IMAGES_DIR ).withRequiredArg();
+		parser.accepts( PRINT_PROJECT_METHOD ).withRequiredArg();
+
 		joptsimple.OptionSet options = parser.parse( args );
+
+		if( options.has( VERSION_ARG ) ) {
+			System.out.println( APPLICATION_VERSION );
+			System.exit( 0 );
+		}
 
 		// Because of singletons we can only ever open one file at a time. So for now we just take the last one.
 		String projectFilename = null;
 		for( Object arg : options.nonOptionArguments() ) {
 			// TODO: open all projects in new IDEs.
 			projectFilename = (String)arg;
+		}
+
+		// Print to Image
+		java.util.List<?> printImageFilenames = options.valuesOf( PRINT_PROJECT_TO_IMAGE );
+		if( printImageFilenames.size() > 0 ) {
+			this.isBatchPrintingModeEnabled = true;
+			DefaultExceptionHandler.showExceptionPane = false;
+
+			final String printToImage = (String)printImageFilenames.get( printImageFilenames.size() - 1 );
+			final String project = projectFilename;
+			javax.swing.SwingUtilities.invokeLater( () -> {
+				try {
+					this.getDocumentFrame().getFrame().getAwtComponent().setState( java.awt.Frame.NORMAL );
+					this.getDocumentFrame().getFrame().setSize( 0, 0 );
+
+					java.util.List<?> printMethods = options.valuesOf( PRINT_PROJECT_METHOD );
+					if( printMethods.size() > 0 ) {
+						WriteMethodToImageUtility.captureMethod( (String)printMethods.get( 0 ), new java.io.File( project ), new java.io.File( printToImage ) );
+					} else {
+						WriteMethodToImageUtility.captureMain( new java.io.File( project ), new java.io.File( printToImage ) );
+					}
+				} catch( Throwable t ) {
+				} finally {
+					System.exit( 0 );
+				}
+			} );
+		}
+
+		// Print to Image
+		java.util.List<?> projectsDirs = options.valuesOf( PRINT_PROJECTS_DIR );
+		java.util.List<?> printToImageDirs = options.valuesOf( PRINT_IMAGES_DIR );
+		if( ( projectsDirs.size() > 0 ) && ( printToImageDirs.size() > 0 ) ) {
+			this.isBatchPrintingModeEnabled = true;
+			DefaultExceptionHandler.showExceptionPane = false;
+
+			final java.io.File projectDir = new java.io.File( (String)projectsDirs.get( 0 ) );
+			final java.io.File printToImageDir = new java.io.File( (String)printToImageDirs.get( 0 ) );
+			printToImageDir.mkdir();
+			javax.swing.SwingUtilities.invokeLater( () -> {
+				try {
+					this.getDocumentFrame().getFrame().getAwtComponent().setState( java.awt.Frame.NORMAL );
+					this.getDocumentFrame().getFrame().setSize( 0, 0 );
+
+					java.io.File[] projectFiles = WriteMethodToImageUtility.getFiles( projectDir );
+					for( java.io.File project : projectFiles ) {
+						String fileName = project.getName();
+						fileName = fileName.substring( 0, fileName.lastIndexOf( "." ) + 1 ) + "png";
+
+						java.io.File imageFile = new java.io.File( printToImageDir, fileName );
+						java.util.List<?> printMethods = options.valuesOf( PRINT_PROJECT_METHOD );
+						if( printMethods.size() > 0 ) {
+							WriteMethodToImageUtility.captureMethod( (String)printMethods.get( 0 ), project, imageFile );
+						} else {
+							WriteMethodToImageUtility.captureMain( project, imageFile );
+						}
+					}
+				} catch( Throwable t ) {
+				} finally {
+					System.exit( 0 );
+				}
+			} );
 		}
 
 		// Load the remixes
@@ -386,7 +478,7 @@ public class LookingGlassIDE extends org.alice.stageide.StageIDE {
 
 	@Override
 	public void showUnableToOpenFileDialog( java.io.File file, java.lang.String message ) {
-		getExceptionHandler().uncaughtException( Thread.currentThread(), new UnableToOpenFileException( edu.cmu.cs.dennisc.java.io.FileUtilities.getCanonicalPathIfPossible( file ), message ) );
+		Thread.getDefaultUncaughtExceptionHandler().uncaughtException( Thread.currentThread(), new UnableToOpenFileException( edu.cmu.cs.dennisc.java.io.FileUtilities.getCanonicalPathIfPossible( file ), message ) );
 	}
 
 	@Override
@@ -395,15 +487,11 @@ public class LookingGlassIDE extends org.alice.stageide.StageIDE {
 	}
 
 	static public edu.wustl.lookingglass.community.CommunityController getCommunityController() {
-		return COMMUNITY_CONTROLLER;
+		return LookingGlassIDE.getActiveInstance().COMMUNITY_CONTROLLER;
 	}
 
 	static public edu.wustl.lookingglass.modules.CollectionModuleManager getModuleManager() {
-		return MODULE_MANAGER;
-	}
-
-	public edu.wustl.lookingglass.modules.CollectionModuleManager getCollectionModuleManager() {
-		return MODULE_MANAGER;
+		return LookingGlassIDE.getActiveInstance().MODULE_MANAGER;
 	}
 
 	public PuzzleProjectProperties getPuzzleProjectProperties() {
@@ -432,7 +520,7 @@ public class LookingGlassIDE extends org.alice.stageide.StageIDE {
 	}
 
 	public org.lgna.croquet.Operation getSetToPlayAndExplorePerspectiveOperation() {
-		return new SetPerspectiveOperation( edu.wustl.lookingglass.ide.perspectives.dinah.DinahPerspective.class) {
+		return new SetPerspectiveOperation( edu.wustl.lookingglass.ide.perspectives.dinah.DinahPerspective.class ) {
 			@Override
 			protected ProjectPerspective createInstance() {
 				return new edu.wustl.lookingglass.ide.perspectives.dinah.DinahPerspective( getDocumentFrame() );
@@ -441,7 +529,7 @@ public class LookingGlassIDE extends org.alice.stageide.StageIDE {
 	}
 
 	public org.lgna.croquet.Operation getSetToDinahRemixPerspectiveOperation() {
-		return new SetPerspectiveOperation( edu.wustl.lookingglass.ide.perspectives.dinah.DinahUseRemixPerspective.class) {
+		return new SetPerspectiveOperation( edu.wustl.lookingglass.ide.perspectives.dinah.DinahUseRemixPerspective.class ) {
 
 			@Override
 			protected ProjectPerspective createInstance() {
@@ -452,7 +540,7 @@ public class LookingGlassIDE extends org.alice.stageide.StageIDE {
 	}
 
 	public org.lgna.croquet.Operation getSetToLocalRemixPerspectiveOperation() {
-		return new SetPerspectiveOperation( edu.wustl.lookingglass.ide.perspectives.dinah.DinahRemixPerspective.class) {
+		return new SetPerspectiveOperation( edu.wustl.lookingglass.ide.perspectives.dinah.DinahRemixPerspective.class ) {
 
 			@Override
 			protected ProjectPerspective createInstance() {
@@ -502,6 +590,19 @@ public class LookingGlassIDE extends org.alice.stageide.StageIDE {
 		} else {
 			return null;
 		}
+	}
+
+	@Deprecated
+	public CompletionPuzzlePerspective getCompletionPuzzlePerspective() {
+		if( this.isInCompletionPuzzlePerspective() ) {
+			return (CompletionPuzzlePerspective)this.getDocumentFrame().getPerspectiveState().getValue();
+		} else {
+			return null;
+		}
+	}
+
+	public boolean isBatchPrintingModeEnabled() {
+		return this.isBatchPrintingModeEnabled;
 	}
 
 	public boolean isPuzzleEditorEnabled() {
@@ -651,6 +752,10 @@ public class LookingGlassIDE extends org.alice.stageide.StageIDE {
 
 	@Override
 	public void updateUndoRedoEnabled() {
+		if( this.isBatchPrintingModeEnabled ) {
+			return;
+		}
+
 		super.updateUndoRedoEnabled();
 
 		String toolTipText = "Please add actions to your world.";

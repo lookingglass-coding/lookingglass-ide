@@ -47,6 +47,8 @@ import java.awt.Graphics;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.SwingUtilities;
+
 import org.alice.ide.instancefactory.croquet.InstanceFactoryState;
 import org.alice.ide.sceneeditor.AbstractSceneEditor;
 import org.alice.interact.AbstractDragAdapter.CameraView;
@@ -407,9 +409,9 @@ public class StorytellingSceneEditor extends AbstractSceneEditor implements edu.
 		}
 	}
 
-	private void setSelectedMethodOnManipulator( MethodInvocation method ) {
+	private void setSelectedExpressionOnManipulator( org.lgna.project.ast.Expression expression ) {
 		if( this.globalDragAdapter != null ) {
-			SThing selectedEntity = this.getInstanceInJavaVMForExpression( method, SThing.class );
+			SThing selectedEntity = this.getInstanceInJavaVMForExpression( expression, SThing.class );
 			AbstractTransformableImp transImp = null;
 			if( selectedEntity != null ) {
 				EntityImp imp = EmployeesOnly.getImplementation( selectedEntity );
@@ -431,8 +433,9 @@ public class StorytellingSceneEditor extends AbstractSceneEditor implements edu.
 				StorytellingSceneEditor.this.setSelectedField( uf.getDeclaringType(), uf );
 			}
 		} else if( expression instanceof MethodInvocation ) {
-			StorytellingSceneEditor.this.setSelectedMethod( (MethodInvocation)expression );
-
+			StorytellingSceneEditor.this.setSelectedExpression( expression );
+		} else if( expression instanceof org.lgna.project.ast.ArrayAccess ) {
+			StorytellingSceneEditor.this.setSelectedExpression( expression );
 		} else if( expression instanceof ThisExpression ) {
 			UserField uf = StorytellingSceneEditor.this.getActiveSceneField();
 			if( uf != null ) {
@@ -444,11 +447,11 @@ public class StorytellingSceneEditor extends AbstractSceneEditor implements edu.
 		getPropertyPanel().setSelectedInstance( instanceFactory );
 	}
 
-	public void setSelectedMethod( MethodInvocation method ) {
+	public void setSelectedExpression( org.lgna.project.ast.Expression expression ) {
 		if( !this.selectionIsFromMain ) {
 			this.selectionIsFromMain = true;
 			if( this.globalDragAdapter != null ) {
-				setSelectedMethodOnManipulator( method );
+				setSelectedExpressionOnManipulator( expression );
 			}
 			this.selectionIsFromMain = false;
 		}
@@ -486,6 +489,21 @@ public class StorytellingSceneEditor extends AbstractSceneEditor implements edu.
 				setSelectedFieldOnManipulator( field );
 			}
 			this.selectionIsFromMain = false;
+		}
+
+		//TEST
+		Runnable refresher = new Runnable() {
+			@Override
+			public void run() {
+				StorytellingSceneEditor.this.revalidateAndRepaint();
+				SideComposite.getInstance().getObjectPropertiesTab().getView().revalidateAndRepaint();
+
+			}
+		};
+		try {
+			SwingUtilities.invokeLater( refresher );
+		} catch( Throwable e ) {
+			e.printStackTrace();
 		}
 	}
 
@@ -844,6 +862,11 @@ public class StorytellingSceneEditor extends AbstractSceneEditor implements edu.
 				org.lgna.story.implementation.JointedModelImp jointedModelImp = EmployeesOnly.getImplementation( jointedModel );
 				jointedModelImp.opacity.setValue( 0.25f );
 				jointedModelImp.showVisualization();
+			} else if( field.getValueType().isAssignableTo( org.lgna.story.SModel.class ) ) {
+				org.lgna.story.SModel model = this.getInstanceInJavaVMForField( field, org.lgna.story.SModel.class );
+				org.lgna.story.implementation.ModelImp modelImp = EmployeesOnly.getImplementation( model );
+				//				modelImp.opacity.setValue( 0.25f );
+				modelImp.showVisualization();
 			}
 		}
 	}
@@ -937,6 +960,12 @@ public class StorytellingSceneEditor extends AbstractSceneEditor implements edu.
 			}
 
 			//TODO: do we need to do anything to handle marker selection on scene change?
+			//Yes, we need to clear the selection on the markers so that no marker is selected on load and so no marker selection is carried over from the previous world
+			this.setSelectedCameraMarker( null );
+			this.setSelectedObjectMarker( null );
+			//			MoveActiveCameraToMarkerActionOperation.getInstance().setMarkerField( null );
+			//			MoveMarkerToActiveCameraActionOperation.getInstance().setMarkerField( null );
+
 			//			SideComposite.getInstance().getCameraMarkersTab().getMarkerListState().addAndInvokeValueListener( this.cameraMarkerFieldSelectionObserver );
 			//			SideComposite.getInstance().getObjectMarkersTab().getMarkerListState().addAndInvokeValueListener( this.objectMarkerFieldSelectionObserver );
 			//			ManagedCameraMarkerFieldState.getInstance( (NamedUserType)sceneAliceInstance.getType() ).addAndInvokeValueListener( this.cameraMarkerFieldSelectionObserver );
@@ -963,19 +992,15 @@ public class StorytellingSceneEditor extends AbstractSceneEditor implements edu.
 	}
 
 	@Override
-	public void enableRendering(
-			org.alice.ide.ReasonToDisableSomeAmountOfRendering reasonToDisableSomeAmountOfRendering ) {
-		if( ( reasonToDisableSomeAmountOfRendering == org.alice.ide.ReasonToDisableSomeAmountOfRendering.MODAL_DIALOG_WITH_RENDER_WINDOW_OF_ITS_OWN )
-				|| ( reasonToDisableSomeAmountOfRendering == org.alice.ide.ReasonToDisableSomeAmountOfRendering.CLICK_AND_CLACK ) ) {
+	public void enableRendering( org.alice.ide.ReasonToDisableSomeAmountOfRendering reasonToDisableSomeAmountOfRendering ) {
+		if( ( reasonToDisableSomeAmountOfRendering == org.alice.ide.ReasonToDisableSomeAmountOfRendering.MODAL_DIALOG_WITH_RENDER_WINDOW_OF_ITS_OWN ) || ( reasonToDisableSomeAmountOfRendering == org.alice.ide.ReasonToDisableSomeAmountOfRendering.CLICK_AND_CLACK ) ) {
 			this.onscreenRenderTarget.setRenderingEnabled( true );
 		}
 	}
 
 	@Override
-	public void disableRendering(
-			org.alice.ide.ReasonToDisableSomeAmountOfRendering reasonToDisableSomeAmountOfRendering ) {
-		if( ( reasonToDisableSomeAmountOfRendering == org.alice.ide.ReasonToDisableSomeAmountOfRendering.MODAL_DIALOG_WITH_RENDER_WINDOW_OF_ITS_OWN )
-				|| ( reasonToDisableSomeAmountOfRendering == org.alice.ide.ReasonToDisableSomeAmountOfRendering.CLICK_AND_CLACK ) ) {
+	public void disableRendering( org.alice.ide.ReasonToDisableSomeAmountOfRendering reasonToDisableSomeAmountOfRendering ) {
+		if( ( reasonToDisableSomeAmountOfRendering == org.alice.ide.ReasonToDisableSomeAmountOfRendering.MODAL_DIALOG_WITH_RENDER_WINDOW_OF_ITS_OWN ) || ( reasonToDisableSomeAmountOfRendering == org.alice.ide.ReasonToDisableSomeAmountOfRendering.CLICK_AND_CLACK ) ) {
 			this.onscreenRenderTarget.setRenderingEnabled( false );
 		}
 	}
@@ -1242,6 +1267,7 @@ public class StorytellingSceneEditor extends AbstractSceneEditor implements edu.
 		AffineMatrix4x4 cameraTransform = camera.getAbsoluteTransformation();
 		double dotProd = Vector3.calculateDotProduct( cameraTransform.orientation.up, Vector3.accessPositiveYAxis() );
 		if( ( dotProd == 1 ) || ( dotProd == -1 ) ) {
+			//TODO: Make this handle retina displays and the fact that surface size and screen size may be different
 			Dimension lookingGlassSize = renderTarget.getSurfaceSize();
 
 			Point3 cameraPosition = camera.getAbsoluteTransformation().translation;

@@ -44,6 +44,8 @@ package org.alice.ide.croquet.models.projecturi;
 
 import java.io.IOException;
 
+import org.lgna.croquet.ModalFrameComposite;
+
 /**
  * @author Dennis Cosgrove
  */
@@ -60,7 +62,7 @@ public abstract class AbstractSaveOperation extends UriActionOperation {
 
 	protected abstract void save( org.alice.ide.ProjectApplication application, java.io.File file ) throws java.io.IOException;
 
-	protected abstract String getInitialFilename();
+	protected abstract String getInitialFilename( org.alice.ide.ProjectApplication application, java.io.File filePrevious );
 
 	protected abstract void removeAfterFailure( org.alice.ide.ProjectApplication application, java.io.File file ) throws java.io.IOException;
 
@@ -73,7 +75,7 @@ public abstract class AbstractSaveOperation extends UriActionOperation {
 		do {
 			java.io.File fileNext;
 			if( isExceptionRaised || this.isPromptNecessary( filePrevious ) ) {
-				fileNext = application.getDocumentFrame().showSaveFileDialog( this.getDefaultDirectory( application ), this.getInitialFilename(), this.getExtension(), true );
+				fileNext = application.getDocumentFrame().showSaveFileDialog( this.getDefaultDirectory( application ), this.getInitialFilename( application, filePrevious ), this.getExtension(), true );
 			} else {
 				fileNext = filePrevious;
 			}
@@ -120,6 +122,7 @@ public abstract class AbstractSaveOperation extends UriActionOperation {
 
 					String title = "Unable To Save Project";
 					javax.swing.Icon icon = edu.wustl.lookingglass.ide.LookingGlassTheme.getIcon( "logo-128x128", org.lgna.croquet.icon.IconSize.FIXED );
+					ModalFrameComposite.hideNonModalFrames();
 					int selection = javax.swing.JOptionPane.showOptionDialog( owner, sb.toString(), title, javax.swing.JOptionPane.YES_NO_OPTION, javax.swing.JOptionPane.ERROR_MESSAGE, icon, options, RETRY_TEXT );
 					if( selection == 1 ) {
 						isExceptionRaised = false;

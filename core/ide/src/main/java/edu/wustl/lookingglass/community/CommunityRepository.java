@@ -46,13 +46,17 @@ package edu.wustl.lookingglass.community;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.lang.management.ManagementFactory;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.PathMatcher;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
@@ -116,6 +120,7 @@ public class CommunityRepository {
 
 	private final File repoDir;
 	private final File gitDir;
+	private final Path gitDirPath;
 	private final String baseRemoteName;
 
 	private String remoteName;
@@ -133,8 +138,11 @@ public class CommunityRepository {
 	private boolean workOffline = Boolean.valueOf( System.getProperty( "edu.wustl.lookingglass.projectSync.offline", "false" ) );
 
 	public CommunityRepository( File repoDir, String baseRemoteName ) throws IOException, GitAPIException {
+		assert ( repoDir != null );
+
 		this.repoDir = repoDir;
 		this.gitDir = new File( this.repoDir, ".git" );
+		this.gitDirPath = Paths.get( this.gitDir.toURI() );
 		this.baseRemoteName = baseRemoteName;
 
 		this.resetAuthenication();
@@ -290,6 +298,9 @@ public class CommunityRepository {
 	}
 
 	private void verify() throws IOException, GitAPIException, URISyntaxException {
+
+		// Make sure that a prior process doesn't have this git repo locked.
+		this.cleanGitLocks();
 
 		if( ( this.remoteName != null ) && ( this.remoteURL != null ) ) {
 			this.addRemote( this.remoteName, this.remoteURL );
@@ -615,9 +626,40 @@ public class CommunityRepository {
 		FileLock lock = this.syncLockChannel.lock(); // gets an exclusive lock
 		assert lock.isValid();
 		this.syncLockChannel.write( ByteBuffer.wrap( ManagementFactory.getRuntimeMXBean().getName().getBytes() ) );
+
+		// Sometimes zombie index.lock file might hang around.
+		// Let's try our very best to get rid of it. This is "safe"
+		// for us to do this, because no other programs should be
+		// touching this git repo, except us... and we use our
+		// java repo lock (in lockRepo)... so if we have our lock
+		// then it's probably safe to delete the zombie index.lock.
+		this.cleanGitLocks();
+	}
+
+	private void cleanGitLocks() throws IOException {
+		if( Files.exists( this.gitDirPath ) ) {
+			PathMatcher lockMatcher = FileSystems.getDefault().getPathMatcher( "glob:*.lock" );
+			Files.find( this.gitDirPath,
+					Integer.MAX_VALUE,
+					( filePath, fileAttr ) -> ( fileAttr.isRegularFile() && lockMatcher.matches( filePath.getFileName() ) ) )
+					.forEach( ( file ) -> {
+						Logger.warning( "cleaning up stale git lock: " + file.toString() );
+						try {
+							Files.delete( file );
+						} catch( IOException e ) {
+							throw new UncheckedIOException( e );
+						}
+					} );
+		}
 	}
 
 	private void unlockRepo() {
+		try {
+			this.cleanGitLocks();
+		} catch( Throwable t ) {
+			Logger.throwable( t, this );
+		}
+
 		try {
 			this.syncLockChannel.close();
 		} catch( IOException e ) {

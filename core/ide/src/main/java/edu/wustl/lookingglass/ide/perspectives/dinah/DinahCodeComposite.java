@@ -46,6 +46,7 @@ package edu.wustl.lookingglass.ide.perspectives.dinah;
 
 import org.alice.ide.IDE;
 import org.alice.stageide.perspectives.CodePerspective;
+import org.alice.stageide.perspectives.code.CodePerspectiveComposite;
 import org.lgna.croquet.SimpleComposite;
 import org.lgna.croquet.views.BorderPanel;
 import org.lgna.croquet.views.SplitPane;
@@ -119,7 +120,7 @@ public class DinahCodeComposite extends SimpleComposite<BorderPanel> implements 
 	@Override
 	public void handlePostDeactivation() {
 		CodePerspective codePerspective = IDE.getActiveInstance().getDocumentFrame().getCodePerspective();
-		SplitPane codeSplitPane = codePerspective.getMainComposite().getView();
+		SplitPane codeSplitPane = ( (CodePerspectiveComposite)codePerspective.getMainComposite() ).getView();
 
 		codeSplitPane.getAwtComponent().setRightComponent( org.alice.ide.IDE.getActiveInstance().getDocumentFrame().getDeclarationsEditorComposite().getView().getAwtComponent() );
 		if( this.stepsComposite != null ) {

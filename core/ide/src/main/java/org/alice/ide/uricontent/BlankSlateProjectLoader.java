@@ -77,7 +77,7 @@ public class BlankSlateProjectLoader extends UriProjectLoader {
 		if( template.isRoom() ) {
 			programType = NebulousIde.nonfree.createProgramType( this.template );
 		} else {
-			programType = org.alice.stageide.ast.BootstrapUtilties.createProgramType( template.getSurfaceAppearance(), template.getAtmospherColor(), template.getFogDensity(), template.getAboveLightColor(), template.getBelowLightColor() );
+			programType = org.alice.stageide.ast.BootstrapUtilties.createProgramType( template.getSurfaceAppearance(), template.getAtmospherColor(), template.getFogDensity(), template.getAboveLightColor(), template.getBelowLightColor(), template.getGroundOpacity() );
 		}
 		// <lg/> check to make sure the community meta data is correct.
 		org.lgna.project.Project project = new org.lgna.project.Project( programType );

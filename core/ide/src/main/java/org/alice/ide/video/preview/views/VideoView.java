@@ -260,7 +260,7 @@ public class VideoView extends org.lgna.croquet.views.BorderPanel {
 		public void lengthChanged( edu.cmu.cs.dennisc.video.VideoPlayer videoPlayer, long lengthInMsec ) {
 			java.util.GregorianCalendar calendar = new java.util.GregorianCalendar();
 			calendar.setTimeInMillis( lengthInMsec );
-			javax.swing.SwingUtilities.invokeLater( ( ) -> durationLabel.setText( FORMAT.format( calendar.getTime() ) ) );
+			javax.swing.SwingUtilities.invokeLater( () -> durationLabel.setText( FORMAT.format( calendar.getTime() ) ) );
 		}
 
 		@Override
@@ -457,15 +457,32 @@ public class VideoView extends org.lgna.croquet.views.BorderPanel {
 		if( edu.cmu.cs.dennisc.java.util.Objects.equals( this.uri, uri ) ) {
 			//pass
 		} else {
+			releaseVideoPlayer();
 			this.uri = uri;
 			if( this.videoPlayer != null ) {
+				boolean prepared = this.videoPlayer.isPrepared();
+				boolean playable = this.videoPlayer.isPlayable();
+
 				if( this.videoPlayer.isPlaying() ) {
 					this.videoPlayer.stop();
 				}
 				this.prepareMedia();
 			} else {
-				getVideoPlayer();
+				if( uri != null ) {
+					getVideoPlayer();
+				}
 			}
+		}
+	}
+
+	public void releaseVideoPlayer() {
+		if( this.videoPlayer != null ) {
+			this.getAwtComponent().remove( this.videoPlayer.getVideoSurface() );
+			this.videoPlayer.setPainter( null );
+			this.videoPlayer.removeMediaListener( this.mediaListener );
+			this.videoPlayer.prepareMedia( null );
+			this.videoPlayer.release();
+			this.videoPlayer = null;
 		}
 	}
 
@@ -473,7 +490,7 @@ public class VideoView extends org.lgna.croquet.views.BorderPanel {
 		if( this.videoPlayer != null ) {
 			//pass
 		} else {
-			this.videoPlayer = edu.cmu.cs.dennisc.video.VideoUtilities.createVideoPlayer( org.alice.ide.IDE.getActiveInstance().getExceptionHandler() );
+			this.videoPlayer = edu.cmu.cs.dennisc.video.VideoUtilities.createVideoPlayer( Thread.getDefaultUncaughtExceptionHandler() );
 			this.videoPlayer.setPainter( this.painter );
 			this.videoPlayer.addMediaListener( this.mediaListener );
 			if( this.uri != null ) {

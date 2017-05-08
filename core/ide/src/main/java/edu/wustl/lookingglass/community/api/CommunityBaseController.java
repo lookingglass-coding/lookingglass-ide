@@ -184,7 +184,7 @@ public abstract class CommunityBaseController {
 				com.integralblue.httpresponsecache.HttpResponseCache.install( httpCacheDir, httpCacheSize );
 
 				// Make sure to close the cache
-				Runtime.getRuntime().addShutdownHook( new Thread( "Community Cache") {
+				Runtime.getRuntime().addShutdownHook( new Thread( "Community Cache" ) {
 					@Override
 					public void run() {
 						try {
@@ -211,7 +211,7 @@ public abstract class CommunityBaseController {
 			repo = null;
 
 			// this exception shouldn't really ever happen, but we want it reported back to us if it does.
-			throw new RuntimeException( e );
+			Thread.getDefaultUncaughtExceptionHandler().uncaughtException( Thread.currentThread(), e );
 		} finally {
 			this.projectRepository = repo;
 		}
@@ -229,15 +229,15 @@ public abstract class CommunityBaseController {
 		return this.connection.getProtocol() + "://" + this.connection.getHost();
 	}
 
-	/*package-private*/String getBaseUrl( String location ) {
+			/*package-private*/String getBaseUrl( String location ) {
 		return getBaseUrl() + location;
 	}
 
-	/*package-private*/String getSecureBaseUrl() {
+			/*package-private*/String getSecureBaseUrl() {
 		return this.connection.getSecureProtocol() + "://" + this.connection.getHost();
 	}
 
-	/*package-private*/String getSecureBaseUrl( String location ) {
+			/*package-private*/String getSecureBaseUrl( String location ) {
 		return getSecureBaseUrl() + location;
 	}
 

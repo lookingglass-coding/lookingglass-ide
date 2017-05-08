@@ -48,6 +48,7 @@ import edu.wustl.lookingglass.croquetfx.FxViewAdaptor;
 import edu.wustl.lookingglass.croquetfx.ThreadHelper;
 import edu.wustl.lookingglass.puzzle.CompletionPuzzle;
 import edu.wustl.lookingglass.puzzle.ui.PuzzleResourcesPane;
+import edu.wustl.lookingglass.puzzle.ui.croquet.CompletionPuzzleComposite;
 import edu.wustl.lookingglass.puzzle.ui.croquet.PuzzleResourcesComposite;
 
 /**
@@ -57,13 +58,15 @@ public class PuzzleResourcesView extends org.lgna.croquet.views.MigPanel {
 
 	private final PuzzleResourcesComposite composite;
 	private final CompletionPuzzle puzzle;
+	private final CompletionPuzzleComposite puzzleComposite;
 
 	private PuzzleResourcesPane resourcesPane;
 
-	public PuzzleResourcesView( PuzzleResourcesComposite composite, CompletionPuzzle puzzle ) {
+	public PuzzleResourcesView( PuzzleResourcesComposite composite, CompletionPuzzle puzzle, CompletionPuzzleComposite puzzleComposite ) {
 		super( composite, "insets 0, gap 0 0, nocache", "[fill, grow, 200:400:]", "[pref:pref:pref][fill, grow]" );
 		this.composite = composite;
 		this.puzzle = puzzle;
+		this.puzzleComposite = puzzleComposite;
 
 		this.addComponent( this.composite.getBinComposite().getRootComponent(), "cell 0 1" );
 
@@ -71,7 +74,7 @@ public class PuzzleResourcesView extends org.lgna.croquet.views.MigPanel {
 		this.setBackgroundColor( this.composite.getBinComposite().getRootComponent().getBackgroundColor() );
 
 		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( () -> {
-			this.resourcesPane = new PuzzleResourcesPane( this.composite.getPuzzle(), this.composite.getScenePreview() );
+			this.resourcesPane = new PuzzleResourcesPane( this.puzzle, this.puzzleComposite, this.composite.getScenePreview() );
 			edu.wustl.lookingglass.croquetfx.FxViewAdaptor fxViewAdaptor = this.resourcesPane.getFxViewAdaptor();
 
 			javax.swing.SwingUtilities.invokeLater( () -> {
@@ -88,7 +91,7 @@ public class PuzzleResourcesView extends org.lgna.croquet.views.MigPanel {
 						// on the way croquet initializes components... this is the very last
 						// interface component to get initialized when loading the puzzles interface.
 						// Note: This may change in the future if things get moved around.
-						this.puzzle.getPuzzleComposite().initializeInterface();
+						this.puzzleComposite.initializeInterface();
 					} );
 				} );
 			} );

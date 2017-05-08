@@ -46,16 +46,11 @@ package org.lgna.story;
 /**
  * @author Dennis Cosgrove
  */
-public class SAxes extends SMovableTurnable implements MutableRider {
+public class SAxes extends SShape implements MutableRider, Visual, Resizable {
 	private final org.lgna.story.implementation.AxesImp implementation = new org.lgna.story.implementation.AxesImp( this );
 
 	@Override
-	/* package-private */org.lgna.story.implementation.AxesImp getImplementation() {
+			/* package-private */org.lgna.story.implementation.AxesImp getImplementation() {
 		return this.implementation;
-	}
-
-	@Override
-	public void setVehicle( SThing vehicle ) {
-		this.getImplementation().setVehicle( vehicle != null ? vehicle.getImplementation() : null );
 	}
 }

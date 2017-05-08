@@ -221,7 +221,7 @@ public class ShareWorldComposite extends AbstractShareComposite {
 
 				@Override
 				public void isChangedToPaused() {
-					edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnSwingThread( ( ) -> {
+					edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnSwingThread( () -> {
 						recordWorldPage.getIsRecordingState().setValueTransactionlessly( false );
 						recordWorldPage.getIsRecordingState().setEnabled( false );
 						recordWorldPage.getIsRecordingState().updateNameAndIcon();
@@ -278,7 +278,7 @@ public class ShareWorldComposite extends AbstractShareComposite {
 
 	@Override
 	protected String getShareDialogTitle() {
-		return "World";
+		return "Share as World";
 	}
 
 	public WorldPacket getWorldPacket() {

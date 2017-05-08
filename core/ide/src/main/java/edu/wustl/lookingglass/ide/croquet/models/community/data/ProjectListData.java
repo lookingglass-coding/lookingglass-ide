@@ -226,9 +226,14 @@ public abstract class ProjectListData extends CommunityListData<CommunityProject
 			projectPackets = edu.wustl.lookingglass.ide.LookingGlassIDE.getCommunityController().getWorlds( worldQuery );
 			break;
 		case TEMPLATE:
-			edu.wustl.lookingglass.community.CommunityController.TemplateQuery templateQuery = new TemplateQuery()
-					.filter( FilterType.getTemplateFilter( getFilterType() ) )
-					.query( getSearchQuery() )
+			edu.wustl.lookingglass.community.CommunityController.TemplateQuery templateQuery = new TemplateQuery();
+
+			if( ( getSearchQuery() != null ) && !getSearchQuery().isEmpty() ) {
+				// No filter if searching
+			} else {
+				templateQuery = templateQuery.filter( FilterType.getTemplateFilter( getFilterType() ) );
+			}
+			templateQuery = templateQuery.query( getSearchQuery() )
 					.pageSize( getPageSize() )
 					.page( getPageNumber() )
 					.limitVersion( true );

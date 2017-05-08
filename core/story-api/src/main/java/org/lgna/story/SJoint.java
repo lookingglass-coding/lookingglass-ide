@@ -48,7 +48,7 @@ import org.lgna.project.annotations.MethodTemplate;
 /**
  * @author Dennis Cosgrove
  */
-public class SJoint extends STurnable {
+public class SJoint extends SMovableTurnable {
 
 	private static final edu.cmu.cs.dennisc.map.MapToMap<SJointedModel, org.lgna.story.resources.JointId, SJoint> mapToMap = edu.cmu.cs.dennisc.map.MapToMap.newInstance();
 
@@ -103,7 +103,7 @@ public class SJoint extends STurnable {
 	}
 
 	@Override
-	/* package-private */org.lgna.story.implementation.JointImp getImplementation() {
+			/* package-private */org.lgna.story.implementation.JointImp getImplementation() {
 		return this.implementation;
 	}
 

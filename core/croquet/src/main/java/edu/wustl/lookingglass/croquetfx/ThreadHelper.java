@@ -45,6 +45,7 @@
 package edu.wustl.lookingglass.croquetfx;
 
 import java.awt.EventQueue;
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -53,6 +54,7 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import edu.cmu.cs.dennisc.java.util.logging.Logger;
 import javafx.application.Platform;
 
 /**
@@ -81,7 +83,12 @@ public class ThreadHelper {
 				}
 			}
 			if( t != null ) {
-				Thread.getDefaultUncaughtExceptionHandler().uncaughtException( Thread.currentThread(), t );
+				UncaughtExceptionHandler handler = Thread.getDefaultUncaughtExceptionHandler();
+				if( handler != null ) {
+					handler.uncaughtException( Thread.currentThread(), t );
+				} else {
+					Logger.throwable( t, this );
+				}
 			}
 		};
 	};

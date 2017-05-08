@@ -55,6 +55,7 @@ import javax.swing.SwingUtilities;
 import org.alice.ide.perspectives.ProjectPerspective;
 import org.lgna.croquet.history.Transaction;
 import org.lgna.croquet.triggers.Trigger;
+import org.lgna.project.io.IoUtilities;
 
 /**
  * @author Michael Pogran
@@ -75,7 +76,7 @@ public class LoadLocalRemixOperation extends org.lgna.croquet.Operation {
 			public boolean accept( File dir, String name ) {
 				int index = name.lastIndexOf( "." );
 				String ext = name.substring( index + 1, name.length() );
-				return ext.contentEquals( "lgr" ) || ext.contentEquals( "lgp" );
+				return ext.contentEquals( SnippetFileUtilities.SNIPPET_EXTENSION ) || ext.contentEquals( IoUtilities.PROJECT_EXTENSION );
 			}
 		};
 		java.io.File initDir = new java.io.File( homeDir + "/Documents/Looking Glass/Snippets" );
@@ -85,7 +86,7 @@ public class LoadLocalRemixOperation extends org.lgna.croquet.Operation {
 			String name = file.getName();
 			int index = name.lastIndexOf( "." );
 			String ext = name.substring( index + 1, name.length() );
-			if( ext.contentEquals( "lgr" ) ) {
+			if( ext.contentEquals( SnippetFileUtilities.SNIPPET_EXTENSION ) ) {
 
 				SnippetScript script = null;
 				String path = edu.cmu.cs.dennisc.java.io.FileUtilities.getCanonicalPathIfPossible( file );

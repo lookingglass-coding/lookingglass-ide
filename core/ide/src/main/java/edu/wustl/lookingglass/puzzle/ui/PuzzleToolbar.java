@@ -54,6 +54,7 @@ import edu.wustl.lookingglass.croquetfx.ThreadHelper;
 import edu.wustl.lookingglass.ide.LookingGlassIDE;
 import edu.wustl.lookingglass.ide.LookingGlassTheme;
 import edu.wustl.lookingglass.puzzle.CompletionPuzzle;
+import edu.wustl.lookingglass.puzzle.ui.croquet.CompletionPuzzleComposite;
 import javafx.fxml.FXML;
 
 /**
@@ -62,15 +63,17 @@ import javafx.fxml.FXML;
 public class PuzzleToolbar extends FxComponent {
 
 	private final CompletionPuzzle puzzle;
+	private final CompletionPuzzleComposite puzzleComposite;
 
 	@FXML private javafx.scene.control.Button undo;
 	@FXML private javafx.scene.control.Button redo;
 	@FXML private javafx.scene.control.Button reset;
 	@FXML private javafx.scene.control.Button done;
 
-	public PuzzleToolbar( CompletionPuzzle puzzle ) {
+	public PuzzleToolbar( CompletionPuzzle puzzle, CompletionPuzzleComposite puzzleComposite ) {
 		super( PuzzleToolbar.class );
 		this.puzzle = puzzle;
+		this.puzzleComposite = puzzleComposite;
 
 		this.undo.setGraphic( LookingGlassTheme.getFxImageView( "puzzle-undo", IconSize.SMALL ) );
 		this.undo.setTooltip( new javafx.scene.control.Tooltip( this.getResources().getString( "PuzzleToolbar.undo.tooltip" ) ) );
@@ -90,7 +93,7 @@ public class PuzzleToolbar extends FxComponent {
 		this.register( this.done, this::handleDoneAction );
 
 		// update widgets to show correct status for undo/redo/reset
-		this.puzzle.getPuzzleComposite().setHistoryListener( new org.lgna.croquet.undo.event.HistoryListener() {
+		this.puzzleComposite.setHistoryListener( new org.lgna.croquet.undo.event.HistoryListener() {
 			@Override
 			public void insertionIndexChanged( HistoryInsertionIndexEvent e ) {
 				org.lgna.croquet.undo.UndoHistory source = e.getTypedSource();
@@ -103,10 +106,10 @@ public class PuzzleToolbar extends FxComponent {
 	}
 
 	private void updateUndoRedoStatus() {
-		final int currentIndex = this.puzzle.getPuzzleComposite().getHistoryManager().getInsertionIndex();
-		final int stackSize = this.puzzle.getPuzzleComposite().getHistoryManager().getStack().size();
-		final int indexZero = this.puzzle.getPuzzleComposite().getHistoryIndexZero();
-		final org.lgna.croquet.edits.Edit activeEdit = this.puzzle.getPuzzleComposite().getHistoryManager().getActiveEdit();
+		final int currentIndex = this.puzzleComposite.getHistoryManager().getInsertionIndex();
+		final int stackSize = this.puzzleComposite.getHistoryManager().getStack().size();
+		final int indexZero = this.puzzleComposite.getHistoryIndexZero();
+		final org.lgna.croquet.edits.Edit activeEdit = this.puzzleComposite.getHistoryManager().getActiveEdit();
 
 		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( () -> {
 			// undo
@@ -135,7 +138,7 @@ public class PuzzleToolbar extends FxComponent {
 	private void handleUndoAction( javafx.event.ActionEvent event ) {
 		ThreadHelper.runOnSwingThread( () -> {
 			LookingGlassIDE.getActiveInstance().setCursor( Cursor.WAIT_CURSOR );
-			this.puzzle.getPuzzleComposite().undo();
+			this.puzzleComposite.undo();
 			LookingGlassIDE.getActiveInstance().setCursor( Cursor.DEFAULT_CURSOR );
 		} );
 	}
@@ -143,7 +146,7 @@ public class PuzzleToolbar extends FxComponent {
 	private void handleRedoAction( javafx.event.ActionEvent event ) {
 		ThreadHelper.runOnSwingThread( () -> {
 			LookingGlassIDE.getActiveInstance().setCursor( Cursor.WAIT_CURSOR );
-			this.puzzle.getPuzzleComposite().redo();
+			this.puzzleComposite.redo();
 			LookingGlassIDE.getActiveInstance().setCursor( Cursor.DEFAULT_CURSOR );
 		} );
 	}
@@ -151,16 +154,16 @@ public class PuzzleToolbar extends FxComponent {
 	private void handleResetAction( javafx.event.ActionEvent event ) {
 		ThreadHelper.runOnSwingThread( () -> {
 			LookingGlassIDE.getActiveInstance().setCursor( Cursor.WAIT_CURSOR );
-			this.puzzle.getPuzzleComposite().reset();
+			this.puzzleComposite.reset();
 			LookingGlassIDE.getActiveInstance().setCursor( Cursor.DEFAULT_CURSOR );
 		} );
 	}
 
 	private void handleDoneAction( javafx.event.ActionEvent event ) {
 		if( this.puzzle.getPuzzleComparison().isCorrect() ) {
-			this.puzzle.getPuzzleComposite().showCorrectPane();
+			this.puzzleComposite.showCorrectPane();
 		} else {
-			this.puzzle.getPuzzleComposite().showIncorrectPane();
+			this.puzzleComposite.showIncorrectPane();
 		}
 	}
 }

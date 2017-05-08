@@ -51,17 +51,17 @@ public abstract class VisualScaleModelImp extends ModelImp {
 		return new edu.cmu.cs.dennisc.property.InstanceProperty[] { this.getSgVisuals()[ 0 ].scale };
 	}
 
-	private edu.cmu.cs.dennisc.math.Matrix3x3 getSgVisualsScale() {
-		return this.getSgVisuals()[ 0 ].scale.getValue();
-	}
-
-	private void setSgVisualsScale( edu.cmu.cs.dennisc.math.Matrix3x3 m ) {
+	protected void setSgVisualsScale( edu.cmu.cs.dennisc.math.Matrix3x3 m ) {
 		for( edu.cmu.cs.dennisc.scenegraph.Visual sgVisual : this.getSgVisuals() ) {
 			sgVisual.scale.setValue( m );
 		}
 	}
 
-	private void applyScale( edu.cmu.cs.dennisc.math.Vector3 axis, boolean isScootDesired ) {
+	protected edu.cmu.cs.dennisc.math.Matrix3x3 getSgVisualsScale() {
+		return this.getSgVisuals()[ 0 ].scale.getValue();
+	}
+
+	protected void applyScale( edu.cmu.cs.dennisc.math.Vector3 axis, boolean isScootDesired ) {
 		if( isScootDesired ) {
 			edu.cmu.cs.dennisc.math.AffineMatrix4x4 m = this.getSgComposite().localTransformation.getValue();
 			m.translation.multiply( axis );
@@ -105,16 +105,13 @@ public abstract class VisualScaleModelImp extends ModelImp {
 		//		edu.cmu.cs.dennisc.math.Vector3 newScaleVec = new edu.cmu.cs.dennisc.math.Vector3(scale);
 		edu.cmu.cs.dennisc.math.Dimension3 currentScale = this.getScale();
 		edu.cmu.cs.dennisc.math.Vector3 appliedScaleVec = new edu.cmu.cs.dennisc.math.Vector3( scale.x / currentScale.x, scale.y / currentScale.y, scale.z / currentScale.z );
-		if( Double.isNaN( appliedScaleVec.x ) )
-		{
+		if( Double.isNaN( appliedScaleVec.x ) ) {
 			appliedScaleVec.x = 1;
 		}
-		if( Double.isNaN( appliedScaleVec.y ) )
-		{
+		if( Double.isNaN( appliedScaleVec.y ) ) {
 			appliedScaleVec.y = 1;
 		}
-		if( Double.isNaN( appliedScaleVec.z ) )
-		{
+		if( Double.isNaN( appliedScaleVec.z ) ) {
 			appliedScaleVec.z = 1;
 		}
 		if( edu.cmu.cs.dennisc.math.EpsilonUtilities.isWithinReasonableEpsilon( actualDuration, RIGHT_NOW ) ) {

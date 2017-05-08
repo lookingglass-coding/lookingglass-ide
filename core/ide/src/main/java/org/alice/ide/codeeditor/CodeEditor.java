@@ -68,8 +68,12 @@ public class CodeEditor extends org.alice.ide.codedrop.CodePanelWithDropReceptor
 		org.lgna.project.ast.UserCode userCode = (org.lgna.project.ast.UserCode)this.code;
 
 		org.lgna.project.ast.BlockStatement body = userCode.getBodyProperty().getValue();
+		if( LookingGlassIDE.getActiveInstance().isBatchPrintingModeEnabled() ) {
+			this.rootStatementListPropertyPane = new StatementListPropertyView( org.alice.ide.x.PreviewAstI18nFactory.getInstance(), bodyStatements, 32 );
 
-		this.rootStatementListPropertyPane = new StatementListPropertyView( factory, bodyStatements, 32 );
+		} else {
+			this.rootStatementListPropertyPane = new StatementListPropertyView( factory, bodyStatements, 32 );
+		}
 
 		org.lgna.croquet.views.SwingComponentView<?> statementListComponent = null;
 		if( body instanceof org.lgna.project.ast.ConstructorBlockStatement ) {

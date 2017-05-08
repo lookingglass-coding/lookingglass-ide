@@ -46,6 +46,8 @@ import org.alice.nonfree.NebulousIde;
 import org.lgna.project.Project;
 import org.lgna.project.ast.UserMethod;
 
+import edu.wustl.lookingglass.remix.SnippetScript;
+
 /**
  * @author Dennis Cosgrove
  */
@@ -106,10 +108,10 @@ public class StoryApiSpecificAstUtilities {
 									org.lgna.project.ast.Lambda lambda = lambdaExpression.value.getValue();
 									if( lambda instanceof org.lgna.project.ast.UserLambda ) {
 										org.lgna.project.ast.UserLambda userLambda = (org.lgna.project.ast.UserLambda)lambda;
-										edu.cmu.cs.dennisc.pattern.IsInstanceCrawler<org.lgna.project.ast.MethodInvocation> crawler = new edu.cmu.cs.dennisc.pattern.IsInstanceCrawler<org.lgna.project.ast.MethodInvocation>( org.lgna.project.ast.MethodInvocation.class) {
+										edu.cmu.cs.dennisc.pattern.IsInstanceCrawler<org.lgna.project.ast.MethodInvocation> crawler = new edu.cmu.cs.dennisc.pattern.IsInstanceCrawler<org.lgna.project.ast.MethodInvocation>( org.lgna.project.ast.MethodInvocation.class ) {
 											@Override
 											protected boolean isAcceptable( org.lgna.project.ast.MethodInvocation methodInvocation ) {
-												return methodInvocation.method.getValue().isUserAuthored( );
+												return methodInvocation.method.getValue().isUserAuthored();
 											}
 										};
 										userLambda.crawl( crawler, org.lgna.project.ast.CrawlPolicy.EXCLUDE_REFERENCES_ENTIRELY );
@@ -220,6 +222,20 @@ public class StoryApiSpecificAstUtilities {
 
 	public static boolean programHasRoom( org.lgna.project.ast.NamedUserType programType ) {
 		return getFirstFieldWithType( programType, NebulousIde.nonfree.getSRoomClass() ) != null;
+	}
+
+	public static int getUserMainBodySize( Project project ) {
+		UserMethod main = StoryApiSpecificAstUtilities.getUserMain( project );
+		return main.body.getValue().statements.size();
+	}
+
+	public static int getUserMainBodySize( SnippetScript snippet ) {
+		UserMethod main = snippet.getMainMethod();
+		return main.body.getValue().statements.size();
+	}
+
+	public static boolean isUserMainBodyEmpty( Project project ) {
+		return ( getUserMainBodySize( project ) > 0 );
 	}
 
 	// </lg>

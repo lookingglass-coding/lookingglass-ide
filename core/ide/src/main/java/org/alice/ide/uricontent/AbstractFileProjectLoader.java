@@ -47,6 +47,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.text.DateFormat;
 
+import org.lgna.project.io.IoUtilities;
+
 /**
  * @author Dennis Cosgrove
  */
@@ -159,7 +161,7 @@ public abstract class AbstractFileProjectLoader extends UriProjectLoader {
 	public String getTitle() {
 		String fileName = this.getUri().getPath();
 		fileName = fileName.substring( fileName.lastIndexOf( "/" ) + 1 );
-		String[] rv = fileName.split( ".lgp" );
+		String[] rv = fileName.split( "." + IoUtilities.PROJECT_EXTENSION );
 		return rv[ 0 ];
 	}
 

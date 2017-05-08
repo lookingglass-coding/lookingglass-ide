@@ -52,6 +52,7 @@ public class IconFactoryManager {
 		public org.lgna.croquet.icon.IconFactory createIconFactory();
 	}
 
+	// @formatter:off
 	private static java.util.Set<Class<? extends org.lgna.story.resources.JointedModelResource>> setOfClassesWithIcons = edu.cmu.cs.dennisc.java.util.Sets.newHashSet(
 			org.lgna.story.resources.BipedResource.class,
 			org.lgna.story.resources.FishResource.class,
@@ -59,12 +60,15 @@ public class IconFactoryManager {
 			org.lgna.story.resources.PropResource.class,
 			org.lgna.story.resources.QuadrupedResource.class,
 			org.lgna.story.resources.SwimmerResource.class,
+			org.lgna.story.resources.SlithererResource.class,
 			org.lgna.story.resources.MarineMammalResource.class,
 			org.lgna.story.resources.TransportResource.class,
 			org.lgna.story.resources.AutomobileResource.class,
 			org.lgna.story.resources.AircraftResource.class,
 			org.lgna.story.resources.WatercraftResource.class,
 			org.lgna.story.resources.TrainResource.class );
+
+	// @formatter:on
 
 	public static java.util.Set<Class<? extends org.lgna.story.resources.JointedModelResource>> getSetOfClassesWithIcons() {
 		return setOfClassesWithIcons;

@@ -53,8 +53,6 @@ import org.alice.stageide.sceneeditor.ThumbnailGenerator;
 import org.lgna.croquet.PlainStringValue;
 import org.lgna.croquet.WizardPageComposite;
 import org.lgna.croquet.history.CompletionStep;
-import org.lgna.project.ast.NamedUserType;
-import org.lgna.project.ast.UserMethod;
 
 import edu.wustl.lookingglass.community.CommunityStatus.AccessStatus;
 import edu.wustl.lookingglass.community.CommunityStatus.ConnectionStatus;
@@ -128,7 +126,8 @@ public class PreviewChallengePage extends WizardPageComposite<PreviewChallengeVi
 			getView().setPoster( new ImageIcon( posterImage ) );
 		}
 
-		getView().setWarningVisible( checkCodeInWorld() );
+		boolean containsCode = StoryApiSpecificAstUtilities.isUserMainBodyEmpty( LookingGlassIDE.getActiveInstance().getProject() );
+		getView().setWarningVisible( containsCode );
 
 		LookingGlassIDE.getCommunityController().addAndInvokeObserver( this );
 	}
@@ -145,15 +144,8 @@ public class PreviewChallengePage extends WizardPageComposite<PreviewChallengeVi
 
 	@Override
 	public void accessChanged( AccessStatus status ) {
-		ThreadHelper.runOnSwingThread( ( ) -> {
+		ThreadHelper.runOnSwingThread( () -> {
 			getView().setLoginDialogShowing( status != AccessStatus.USER_ACCESS );
 		} );
-	}
-
-	private boolean checkCodeInWorld() {
-		NamedUserType sceneType = StoryApiSpecificAstUtilities.getSceneTypeFromProject( LookingGlassIDE.getActiveInstance().getProject() );
-		UserMethod userMain = StoryApiSpecificAstUtilities.getUserMethodsInvokedSceneActivationListeners( sceneType ).get( 0 );
-
-		return userMain.body.getValue().statements.size() > 0;
 	}
 }

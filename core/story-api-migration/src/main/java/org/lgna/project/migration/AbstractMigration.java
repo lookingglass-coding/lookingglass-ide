@@ -65,9 +65,7 @@ public abstract class AbstractMigration implements Migration {
 	@Override
 	public boolean isApplicable( org.lgna.project.Version version ) {
 		if( ( this.minimumVersion != null ) && ( this.resultVersion != null ) ) {
-			return ( this.minimumVersion.compareTo( version ) <= 0 )
-					&&
-					( this.resultVersion.compareTo( version ) > 0 );
+			return ( this.minimumVersion.compareTo( version ) <= 0 ) && ( this.resultVersion.compareTo( version ) > 0 );
 		} else {
 			//todo?
 			return false;

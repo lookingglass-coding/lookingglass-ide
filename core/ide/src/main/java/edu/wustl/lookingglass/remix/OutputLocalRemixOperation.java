@@ -107,7 +107,7 @@ public class OutputLocalRemixOperation extends org.lgna.croquet.Operation {
 				directory.mkdirs();
 			}
 
-			java.io.File snippetFile = org.alice.ide.ProjectApplication.getActiveInstance().getDocumentFrame().showSaveFileDialog( directory, null, "lgr", true );
+			java.io.File snippetFile = org.alice.ide.ProjectApplication.getActiveInstance().getDocumentFrame().showSaveFileDialog( directory, null, SnippetFileUtilities.SNIPPET_EXTENSION, true );
 
 			if( snippetFile != null ) {
 				try {

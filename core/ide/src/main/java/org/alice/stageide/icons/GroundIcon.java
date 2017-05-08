@@ -52,7 +52,7 @@ public class GroundIcon extends ShapeIcon {
 
 	@Override
 	protected void paintIcon( java.awt.Component c, java.awt.Graphics2D g2, int width, int height, java.awt.Paint fillPaint, java.awt.Paint drawPaint ) {
-		java.awt.Shape shape = new java.awt.geom.Rectangle2D.Float( 0, 0, width, height );
+		java.awt.Shape shape = new java.awt.Polygon( new int[] { 0, width, (int)( width * .75 ), (int)( .25 * width ) }, new int[] { (int)( .8 * height ), (int)( .8 * height ), (int)( .2 * height ), (int)( .2 * height ) }, 4 );
 		g2.setPaint( fillPaint );
 		g2.fill( shape );
 	}

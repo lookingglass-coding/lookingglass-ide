@@ -54,9 +54,15 @@ public abstract class LayerStencil extends Panel {
 	private final Integer layerId;
 
 	public LayerStencil( AbstractWindow<?> window, Integer layerId ) {
+		assert window != null;
+		assert layerId != null;
+
 		this.window = window;
-		this.layer = this.window.getRootPane().getLayeredPane().getLayer( layerId );
 		this.layerId = layerId;
+
+		RootPane rootPane = this.window.getRootPane();
+		LayeredPane layeredPane = rootPane.getLayeredPane();
+		this.layer = layeredPane.getLayer( layerId );
 
 		ThreadHelper.runOnSwingThread( () -> this.setVisible( false ) ); // <lg/>
 	}

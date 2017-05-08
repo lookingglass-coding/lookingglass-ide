@@ -44,8 +44,11 @@
  *******************************************************************************/
 package edu.wustl.lookingglass.utilities.community;
 
+import org.lgna.project.io.IoUtilities;
+
 import edu.wustl.lookingglass.community.models.ModelField;
 import edu.wustl.lookingglass.community.models.ModelField.ModelFieldKeys;
+import edu.wustl.lookingglass.remix.SnippetFileUtilities;
 
 public class FieldExtractor {
 
@@ -60,9 +63,9 @@ public class FieldExtractor {
 	public static void main( String[] args ) throws Exception {
 		String path = args[ 0 ];
 		ModelFieldKeys[] fields = null;
-		if( path.endsWith( ".lgp" ) ) {
+		if( path.endsWith( "." + IoUtilities.PROJECT_EXTENSION ) ) {
 			fields = getWorldFields( org.lgna.project.io.IoUtilities.readProject( path ) );
-		} else if( path.endsWith( ".lgr" ) ) {
+		} else if( path.endsWith( "." + SnippetFileUtilities.SNIPPET_EXTENSION ) ) {
 			fields = getSnippetFields( edu.wustl.lookingglass.remix.SnippetFileUtilities.loadSnippet( path ) );
 		}
 

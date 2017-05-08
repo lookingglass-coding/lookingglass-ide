@@ -50,4 +50,8 @@ public class SpeechBubble extends Bubble {
 	public SpeechBubble( Originator originator ) {
 		super( originator );
 	}
+
+	public SpeechBubble( Originator originator, Bubble.PositionPreference positionPreference ) {
+		super( originator, positionPreference );
+	}
 }

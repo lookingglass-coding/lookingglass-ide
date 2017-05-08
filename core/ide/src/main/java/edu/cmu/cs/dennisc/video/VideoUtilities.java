@@ -42,16 +42,18 @@
  *******************************************************************************/
 package edu.cmu.cs.dennisc.video;
 
+import java.lang.Thread.UncaughtExceptionHandler;
+
 /**
  * @author Dennis Cosgrove
  */
 public class VideoUtilities {
-	public static VideoPlayer createVideoPlayer( org.alice.ide.issue.ExceptionHandler exceptionHandler ) {
+	public static VideoPlayer createVideoPlayer( UncaughtExceptionHandler exceptionHandler ) {
 		VideoPlayer rv = null;
 		try {
 			rv = edu.cmu.cs.dennisc.video.vlcj.VlcjUtilities.createVideoPlayer();
 		} catch( Throwable t ) {
-			edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnSwingThread( ( ) -> exceptionHandler.uncaughtException( Thread.currentThread(), t ) );
+			edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnSwingThread( () -> exceptionHandler.uncaughtException( Thread.currentThread(), t ) );
 			rv = null;
 		}
 		if( rv != null ) {

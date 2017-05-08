@@ -118,7 +118,7 @@ public class ShareRemixComposite extends AbstractShareComposite {
 					( (StateListeningVirtualMachine)program.getVirtualMachine() ).pauseVirtualMachine();
 				}
 				final double time = programStateEvent.getTime();
-				edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnSwingThread( ( ) -> recordRemixPage.setRecordTime( time ) );
+				edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnSwingThread( () -> recordRemixPage.setRecordTime( time ) );
 			}
 
 			@Override
@@ -147,7 +147,7 @@ public class ShareRemixComposite extends AbstractShareComposite {
 
 	@Override
 	protected String getShareDialogTitle() {
-		return "Remix";
+		return "Share as Remix";
 	}
 
 	@Override
@@ -181,7 +181,7 @@ public class ShareRemixComposite extends AbstractShareComposite {
 				cae.printStackTrace();
 			}
 		}
-		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnSwingThread( ( ) -> LookingGlassIDE.getActiveInstance().getDocumentFrame().setToCodePerspectiveTransactionlessly() );
+		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnSwingThread( () -> LookingGlassIDE.getActiveInstance().getDocumentFrame().setToCodePerspectiveTransactionlessly() );
 	}
 
 	@Override
@@ -210,8 +210,7 @@ public class ShareRemixComposite extends AbstractShareComposite {
 	public File getRecordedVideo() {
 		if( encoder != null ) {
 			return encoder.getEncodedVideoFile();
-		}
-		else {
+		} else {
 			return null;
 		}
 	}

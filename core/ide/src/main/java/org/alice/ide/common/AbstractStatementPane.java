@@ -107,8 +107,21 @@ public abstract class AbstractStatementPane extends org.alice.ide.common.Stateme
 		return this.annotationPanel;
 	}
 
+	private boolean isPuzzleFactory() {
+		return ( this.factory instanceof PuzzleAstI18nFactory );
+	}
+
+	@Override
+	public boolean isCopyAllowed() {
+		if( this.isPuzzleFactory() ) {
+			return false;
+		} else {
+			return super.isCopyAllowed();
+		}
+	}
+
 	protected void addPuzzleAnnotations() {
-		if( this.factory instanceof PuzzleAstI18nFactory ) {
+		if( this.isPuzzleFactory() ) {
 			PuzzleAstI18nFactory puzzleAstI18nFactory = (PuzzleAstI18nFactory)this.factory;
 			CompletionPuzzle puzzle = puzzleAstI18nFactory.getPuzzle();
 
@@ -264,7 +277,7 @@ public abstract class AbstractStatementPane extends org.alice.ide.common.Stateme
 	// <lg>
 	@Override
 	protected boolean isClickAndClackAppropriate() {
-		if( this.factory instanceof PuzzleAstI18nFactory ) {
+		if( this.isPuzzleFactory() ) {
 			PuzzleAstI18nFactory puzzleAstI18nFactory = (PuzzleAstI18nFactory)this.factory;
 			return puzzleAstI18nFactory.isClickAndClackAppropriate();
 		} else {

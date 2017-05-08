@@ -410,7 +410,11 @@ public class TypeManager {
 	}
 
 	public static org.lgna.project.ast.NamedUserType popSceneUserType() {
-		return sceneUserTypeStack.pop();
+		if( isSceneUserTypeEmpty() ) {
+			return null;
+		} else {
+			return sceneUserTypeStack.pop();
+		}
 	}
 
 	public static boolean isSceneUserTypeEmpty() {

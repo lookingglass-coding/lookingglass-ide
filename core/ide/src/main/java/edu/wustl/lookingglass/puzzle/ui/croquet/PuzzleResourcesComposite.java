@@ -53,13 +53,15 @@ import edu.wustl.lookingglass.puzzle.ui.croquet.views.PuzzleResourcesView;
 public class PuzzleResourcesComposite extends org.lgna.croquet.SimpleComposite<PuzzleResourcesView> {
 
 	private final CompletionPuzzle puzzle;
+	private final CompletionPuzzleComposite puzzleComposite;
 
 	private final javafx.scene.image.Image scenePreview;
 	private final PuzzleResourcesBinComposite resourcesBin;
 
-	public PuzzleResourcesComposite( CompletionPuzzle puzzle, javafx.scene.image.Image scenePreview ) {
+	public PuzzleResourcesComposite( CompletionPuzzle puzzle, CompletionPuzzleComposite puzzleComposite, javafx.scene.image.Image scenePreview ) {
 		super( java.util.UUID.fromString( "dc85c808-a265-4655-b7ea-32519f638f11" ) );
 		this.puzzle = puzzle;
+		this.puzzleComposite = puzzleComposite;
 		this.scenePreview = scenePreview;
 
 		this.resourcesBin = new PuzzleResourcesBinComposite( this.puzzle );
@@ -80,6 +82,6 @@ public class PuzzleResourcesComposite extends org.lgna.croquet.SimpleComposite<P
 
 	@Override
 	protected PuzzleResourcesView createView() {
-		return new PuzzleResourcesView( this, this.puzzle );
+		return new PuzzleResourcesView( this, this.puzzle, this.puzzleComposite );
 	}
 }

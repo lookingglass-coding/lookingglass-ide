@@ -46,7 +46,7 @@ package edu.wustl.lookingglass.ide.perspectives.openproject.projectselectionsour
 
 import java.net.URI;
 
-import org.alice.ide.croquet.models.projecturi.SaveProjectOperation;
+import org.alice.ide.ProjectApplication;
 import org.alice.ide.projecturi.DirectoryUriListData;
 import org.alice.ide.recentprojects.RecentProjectsListData;
 import org.alice.ide.uricontent.FileProjectLoader;
@@ -61,6 +61,7 @@ import org.lgna.croquet.history.CompletionStep;
 
 import edu.cmu.cs.dennisc.java.util.Lists;
 import edu.wustl.lookingglass.ide.croquet.models.data.MyProjectsData;
+import edu.wustl.lookingglass.ide.operations.OpenProjectBrowseOperation;
 import edu.wustl.lookingglass.ide.perspectives.openproject.SortState;
 import edu.wustl.lookingglass.ide.perspectives.openproject.views.ExistingProjectView;
 
@@ -87,7 +88,7 @@ public class ExistingProjectComposite extends OpenProjectTab {
 	public ExistingProjectComposite() {
 		super( java.util.UUID.fromString( "9b4ccebf-f452-4c51-9540-34a151021bca" ) );
 
-		java.util.List<URI> directoryData = Lists.newArrayList( new DirectoryUriListData( org.alice.ide.IDE.getActiveInstance().getMyProjectsDirectory() ).toArray() );
+		java.util.List<URI> directoryData = Lists.newArrayList( new DirectoryUriListData( ProjectApplication.getMyProjectsDirectory() ).toArray() );
 		java.util.List<FileProjectLoader> projects = edu.cmu.cs.dennisc.java.util.Lists.newArrayList();
 
 		for( URI uri : directoryData ) {
@@ -130,33 +131,7 @@ public class ExistingProjectComposite extends OpenProjectTab {
 			}
 		} );
 
-		this.browseOperation = this.createActionOperation( "browseOperation", new Action() {
-
-			@Override
-			public Edit perform( CompletionStep<?> step, org.lgna.croquet.AbstractComposite.InternalActionOperation source ) throws CancelException {
-				java.io.File file = org.lgna.croquet.Application.getActiveInstance().getDocumentFrame().showOpenFileDialog( org.alice.ide.ProjectApplication.getActiveInstance().getMyProjectsDirectory(), null, org.lgna.project.io.IoUtilities.PROJECT_EXTENSION, true );
-				if( file != null ) {
-					FileProjectLoader loader = new FileProjectLoader( file );
-
-					org.alice.ide.ProjectApplication application = org.alice.ide.ProjectApplication.getActiveInstance();
-
-					if( application.isProjectUpToDateWithFile() ) {
-						//pass
-					} else {
-						edu.cmu.cs.dennisc.javax.swing.option.YesNoCancelResult result = new edu.cmu.cs.dennisc.javax.swing.option.YesNoCancelDialog.Builder( "Opening a new world will close the world you were working on.  Would you like to save it?" )
-								.title( "Save changed world?" )
-								.buildAndShow();
-						if( result == edu.cmu.cs.dennisc.javax.swing.option.YesNoCancelResult.YES ) {
-							SaveProjectOperation.getInstance().fire();
-						} else if( result == edu.cmu.cs.dennisc.javax.swing.option.YesNoCancelResult.CANCEL ) {
-							return null;
-						}
-					}
-					edu.wustl.lookingglass.ide.LookingGlassIDE.getActiveInstance().loadProjectFrom( loader );
-				}
-				return null;
-			}
-		} );
+		this.browseOperation = new OpenProjectBrowseOperation();
 
 		this.searchListener = new org.lgna.croquet.event.ValueListener<String>() {
 
@@ -198,8 +173,7 @@ public class ExistingProjectComposite extends OpenProjectTab {
 					projectsData.sortByDate();
 					sortByDateOperation.setEnabled( false );
 
-				}
-				else if( nextValue.equals( SortState.NAME ) ) {
+				} else if( nextValue.equals( SortState.NAME ) ) {
 					projectsData.sortByName();
 					sortByNameOperation.setEnabled( false );
 				}
@@ -268,7 +242,7 @@ public class ExistingProjectComposite extends OpenProjectTab {
 
 		@Override
 		public void run() {
-			javax.swing.SwingUtilities.invokeLater( ( ) -> {
+			javax.swing.SwingUtilities.invokeLater( () -> {
 				getProjectsState().clearSelection();
 				projectsData.setSearch( this.searchTerm );
 

@@ -82,6 +82,7 @@ public abstract class MessageDialogComposite<V extends org.lgna.croquet.views.Pa
 	public final void perform( OwnedByCompositeOperationSubKey subKey, org.lgna.croquet.history.CompletionStep<?> completionStep ) {
 		java.awt.Component awtComponent = null; //todo
 		//todo: Icon
+		ModalFrameComposite.hideNonModalFrames();
 		javax.swing.JOptionPane.showMessageDialog( awtComponent, this.getRootComponent().getAwtComponent(), this.title, this.messageType.getInternal() );
 		completionStep.finish();
 	}

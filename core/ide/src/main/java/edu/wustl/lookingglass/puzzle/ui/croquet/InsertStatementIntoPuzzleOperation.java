@@ -61,14 +61,16 @@ import edu.wustl.lookingglass.puzzle.ui.croquet.edits.InsertStatementIntoPuzzleE
 public class InsertStatementIntoPuzzleOperation extends MoveStatementOperation {
 
 	private final CompletionPuzzle puzzle;
+	private final CompletionPuzzleComposite puzzleComposite;
 
-	public InsertStatementIntoPuzzleOperation( BlockStatementIndexPair fromLocation, Statement statement, BlockStatementIndexPair toLocation, boolean isMultiple, CompletionPuzzle puzzle ) {
+	public InsertStatementIntoPuzzleOperation( BlockStatementIndexPair fromLocation, Statement statement, BlockStatementIndexPair toLocation, boolean isMultiple, CompletionPuzzle puzzle, CompletionPuzzleComposite puzzleComposite ) {
 		super( UUID.fromString( "457559a4-08e7-4adb-9c92-2da61291928a" ), fromLocation, statement, toLocation, isMultiple );
 		this.puzzle = puzzle;
+		this.puzzleComposite = puzzleComposite;
 	}
 
 	@Override
 	protected MoveStatementEdit createEdit( CompletionStep step ) {
-		return new InsertStatementIntoPuzzleEdit( step, this.fromLocation, this.statement, this.toLocation, this.isMultiple, this.puzzle );
+		return new InsertStatementIntoPuzzleEdit( step, this.fromLocation, this.statement, this.toLocation, this.isMultiple, this.puzzle, this.puzzleComposite );
 	}
 }

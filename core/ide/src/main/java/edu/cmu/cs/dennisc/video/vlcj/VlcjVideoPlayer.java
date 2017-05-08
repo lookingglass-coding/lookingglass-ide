@@ -42,6 +42,7 @@
  *******************************************************************************/
 package edu.cmu.cs.dennisc.video.vlcj;
 
+import uk.co.caprica.vlcj.binding.internal.libvlc_media_t;
 import uk.co.caprica.vlcj.player.MediaPlayer;
 
 /**
@@ -189,6 +190,31 @@ public class VlcjVideoPlayer implements edu.cmu.cs.dennisc.video.VideoPlayer {
 		public void scrambledChanged( MediaPlayer mediaPlayer, int newScrambled ) {
 
 		}
+
+		@Override
+		public void corked( MediaPlayer mediaPlayer, boolean corked ) {
+		}
+
+		@Override
+		public void muted( MediaPlayer mediaPlayer, boolean muted ) {
+		}
+
+		@Override
+		public void volumeChanged( MediaPlayer mediaPlayer, float volume ) {
+		}
+
+		@Override
+		public void audioDeviceChanged( MediaPlayer mediaPlayer, String audioDevice ) {
+		}
+
+		// VLCJ 3.10.1
+		//		@Override
+		//		public void chapterChanged( MediaPlayer mediaPlayer, int newChapter ) {
+		//		}
+
+		@Override
+		public void mediaSubItemTreeAdded( MediaPlayer mediaPlayer, libvlc_media_t item ) {
+		}
 	};
 	private final java.util.List<edu.cmu.cs.dennisc.video.event.MediaListener> mediaListeners = new java.util.concurrent.CopyOnWriteArrayList<edu.cmu.cs.dennisc.video.event.MediaListener>();
 	private final VlcjMediaPlayerComponent mediaPlayerComponent;
@@ -327,12 +353,16 @@ public class VlcjVideoPlayer implements edu.cmu.cs.dennisc.video.VideoPlayer {
 			MediaPlayer mediaPlayer = this.mediaPlayerComponent.getMediaPlayer();
 			this.isPrepared = mediaPlayer.prepareMedia( this.mediaPath );
 		} else {
-			MediaPlayer mediaPlayer = this.mediaPlayerComponent.getMediaPlayer();
-			mediaPlayer.release();
-			this.mediaPath = null;
-			this.isPrepared = false;
+			shutdownMediaPlayer();
 		}
 		return this.isPrepared;
+	}
+
+	public void shutdownMediaPlayer() {
+		MediaPlayer mediaPlayer = this.mediaPlayerComponent.getMediaPlayer();
+		mediaPlayer.release();
+		this.mediaPath = null;
+		this.isPrepared = false;
 	}
 
 	@Override
@@ -555,16 +585,17 @@ public class VlcjVideoPlayer implements edu.cmu.cs.dennisc.video.VideoPlayer {
 
 	@Override
 	public java.awt.Image getSnapshot() {
-		MediaPlayer mediaPlayer = this.mediaPlayerComponent.getMediaPlayer();
-		java.awt.Image result = mediaPlayer.getSnapshot();
-		if( result != null ) {
-			return result;
-		} else {
-			// Try our backup...
-			edu.cmu.cs.dennisc.java.util.logging.Logger.warning( "failback to ffmpeg image snapshot" );
-			float seconds = this.getTimeInSeconds();
-			return edu.wustl.lookingglass.media.FFmpegImageExtractor.getFrameAt( this.mediaPath, seconds );
-		}
+		// TODO: vlcj's getSnapshot method has a serious path bug. Let's just not use it...
+		//		MediaPlayer mediaPlayer = this.mediaPlayerComponent.getMediaPlayer();
+		//		java.awt.Image result = mediaPlayer.getSnapshot();
+		//		if( result != null ) {
+		//			return result;
+		//		} else {
+		//			// Try our backup...
+		//			edu.cmu.cs.dennisc.java.util.logging.Logger.warning( "failback to ffmpeg image snapshot" );
+		float seconds = this.getTimeInSeconds();
+		return edu.wustl.lookingglass.media.FFmpegImageExtractor.getFrameAt( this.mediaPath, seconds );
+		//		}
 	}
 
 	@Override

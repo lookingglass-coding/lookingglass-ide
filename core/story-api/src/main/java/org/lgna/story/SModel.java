@@ -52,7 +52,7 @@ import org.lgna.project.annotations.Visibility;
  * @author Dennis Cosgrove
  */
 // <lg/> appear and disappear for LG users
-public abstract class SModel extends SMovableTurnable implements MutableRider, Resizable, Visual, ModelVisibility {
+public abstract class SModel extends SMovableTurnable implements MutableRider, Resizable, VisualWithPaint, ModelVisibility {
 	@Override
 	/* package-private */abstract org.lgna.story.implementation.ModelImp getImplementation();
 
@@ -61,6 +61,7 @@ public abstract class SModel extends SMovableTurnable implements MutableRider, R
 		this.getImplementation().setVehicle( vehicle != null ? vehicle.getImplementation() : null );
 	}
 
+	//VisualWithPaint interface
 	@Override
 	@MethodTemplate( )
 	@GetterTemplate( isPersistent = true )
@@ -74,6 +75,7 @@ public abstract class SModel extends SMovableTurnable implements MutableRider, R
 		this.getImplementation().paint.animateValue( paint, Duration.getValue( details ), AnimationStyle.getValue( details ).getInternal() );
 	}
 
+	//Visual interface
 	@Override
 	@MethodTemplate( )
 	@GetterTemplate( isPersistent = true )
@@ -91,6 +93,7 @@ public abstract class SModel extends SMovableTurnable implements MutableRider, R
 		this.getImplementation().opacity.animateValue( opacity.floatValue(), Duration.getValue( details ), AnimationStyle.getValue( details ).getInternal() );
 	}
 
+	//Resizable interface
 	@Override
 	@MethodTemplate( visibility = Visibility.TUCKED_AWAY )
 	public Scale getScale() {

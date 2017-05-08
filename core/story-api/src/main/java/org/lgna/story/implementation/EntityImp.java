@@ -105,6 +105,15 @@ public abstract class EntityImp extends PropertyOwnerImp implements ReferenceFra
 		return getAxisAlignedMinimumBoundingBox( AsSeenBy.SELF );
 	}
 
+	//Returns a bounding box that reflects any changes to the given entity. Namely any changes to the skeleton of jointed models
+	public edu.cmu.cs.dennisc.math.AxisAlignedBox getDynamicAxisAlignedMinimumBoundingBox( ReferenceFrame asSeenBy ) {
+		return this.getAxisAlignedMinimumBoundingBox( asSeenBy );
+	}
+
+	public edu.cmu.cs.dennisc.math.AxisAlignedBox getDynamicAxisAlignedMinimumBoundingBox() {
+		return getDynamicAxisAlignedMinimumBoundingBox( AsSeenBy.SELF );
+	}
+
 	//	private edu.cmu.cs.dennisc.scenegraph.bound.CumulativeBound createCumulativeBound( ReferenceFrame asSeenBy, HowMuch howMuch, OriginInclusionPolicy originPolicy ) {
 	//		java.util.List< Transformable > transformables = new java.util.LinkedList< Transformable >();
 	//		updateHowMuch( transformables, howMuch.isThisACandidate(), howMuch.isChildACandidate(), howMuch.isGrandchildAndBeyondACandidate() );
@@ -118,7 +127,7 @@ public abstract class EntityImp extends PropertyOwnerImp implements ReferenceFra
 	//		}
 	//		return rv;
 	//	}
-	//	
+	//
 	//	public edu.cmu.cs.dennisc.math.AxisAlignedBox getAxisAlignedMinimumBoundingBox( ReferenceFrame asSeenBy, HowMuch howMuch, OriginInclusionPolicy originPolicy ) {
 	//		edu.cmu.cs.dennisc.scenegraph.bound.CumulativeBound cumulativeBound = createCumulativeBound( asSeenBy, howMuch, originPolicy );
 	//		return cumulativeBound.getBoundingBox();
@@ -173,6 +182,11 @@ public abstract class EntityImp extends PropertyOwnerImp implements ReferenceFra
 			if( rv != null ) {
 				//pass
 			} else {
+				//this does happen when the vehicle is the ROOT bone of a biped
+				//ROOT apparently has no scenegraph counterpart.
+				//ROOT won't be the child of any joint. however it could be the child of something else in the scene.
+				//Therefore I realize that this is not a good fix in a generic EntityImp class.
+				//However I don't know what is. Therefore this is what I do for now.
 				rv = getEntityImpForSgObject( sgVehicle );
 				edu.cmu.cs.dennisc.java.util.logging.Logger.severe( "No instance found for sgVehicle " + sgVehicle + ". Searched parent and got " + rv );
 				if( rv != null ) {
@@ -273,7 +287,7 @@ public abstract class EntityImp extends PropertyOwnerImp implements ReferenceFra
 		if( duration == RIGHT_NOW ) {
 			//pass;
 		} else {
-			perform( new edu.cmu.cs.dennisc.animation.DurationBasedAnimation( duration ) {
+			perform( new edu.cmu.cs.dennisc.animation.DurationBasedAnimation( duration) {
 				@Override
 				protected void prologue() {
 				}
@@ -283,7 +297,7 @@ public abstract class EntityImp extends PropertyOwnerImp implements ReferenceFra
 				}
 
 				@Override
-				protected void epilogue() {
+				protected void epilogue( ) {
 				}
 			} );
 		}

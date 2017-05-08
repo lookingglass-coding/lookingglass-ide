@@ -79,6 +79,7 @@ public final class Role {
 
 	private int callerCount = 0;
 	private int paramCount = 0;
+	private Boolean substitutionsAllowed = true;
 
 	private Set<AbstractMethod> jointMethods = Sets.newHashSet(); // Does not get encoded, used during remixing
 
@@ -310,5 +311,13 @@ public final class Role {
 		sb.append( "Role: " );
 		sb.append( this.getName() );
 		return sb.toString();
+	}
+
+	public Boolean getSubstitutionsAllowed() {
+		return substitutionsAllowed;
+	}
+
+	public void setSubstitutionsAllowed( Boolean substitutionsAllowed ) {
+		this.substitutionsAllowed = substitutionsAllowed;
 	}
 }

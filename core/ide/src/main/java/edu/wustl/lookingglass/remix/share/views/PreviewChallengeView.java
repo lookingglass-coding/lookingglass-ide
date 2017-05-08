@@ -75,7 +75,7 @@ public class PreviewChallengeView extends org.lgna.croquet.views.MigPanel {
 		addComponent( this.posterLabel, "cell 0 1, center" );
 
 		// add warning label
-		this.warningLabel = new org.lgna.croquet.views.Label( composite.getCodeWarningString().getText() );
+		this.warningLabel = new org.lgna.croquet.views.Label( "<html>" + composite.getCodeWarningString().getText() + "</html>" );
 		this.warningLabel.setBackgroundColor( new java.awt.Color( 255, 204, 204 ) );
 		this.warningLabel.setForegroundColor( new java.awt.Color( 51, 0, 0 ) );
 
@@ -121,7 +121,7 @@ public class PreviewChallengeView extends org.lgna.croquet.views.MigPanel {
 	}
 
 	public void setLoginDialogShowing( boolean isShowing ) {
-		javax.swing.SwingUtilities.invokeLater( ( ) -> {
+		javax.swing.SwingUtilities.invokeLater( () -> {
 			if( isShowing ) {
 				if( this.loginStencil == null ) {
 					this.loginStencil = new OverlayPane.Builder( getRoot(), new CommunityLoginComposite().getView() ).closeOperation( getComposite().getOwner().getCancelOperation() ).build();

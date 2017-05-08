@@ -42,6 +42,9 @@
  *******************************************************************************/
 package org.lgna.croquet;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.lgna.croquet.views.Frame;
 
 import edu.cmu.cs.dennisc.java.util.logging.Logger;
@@ -91,6 +94,17 @@ public abstract class ModalFrameComposite<V extends org.lgna.croquet.views.Compo
 		return false;
 	}
 
+	private static final List<ModalFrameComposite<?>> nonModalComposites = new LinkedList<>();
+
+	public static void hideNonModalFrames() {
+		for( ModalFrameComposite<?> composite : nonModalComposites ) {
+			Frame frame = composite.getCurrentFrame();
+			if( frame != null ) {
+				frame.close();
+			}
+		}
+	}
+
 	private boolean isModal = true;
 
 	// Please note that is honestly quite a reasonable feature,
@@ -101,6 +115,14 @@ public abstract class ModalFrameComposite<V extends org.lgna.croquet.views.Compo
 	// so honestly this isn't really going to matter.
 	protected void setModal( boolean isModal ) {
 		this.isModal = isModal;
+
+		if( isModal ) {
+			nonModalComposites.remove( this );
+		} else {
+			if( !nonModalComposites.contains( this ) ) {
+				nonModalComposites.add( this );
+			}
+		}
 	}
 
 	private org.lgna.croquet.views.Frame currentFrame = null;
@@ -121,16 +143,6 @@ public abstract class ModalFrameComposite<V extends org.lgna.croquet.views.Compo
 
 		org.lgna.croquet.Application<?> application = org.lgna.croquet.Application.getActiveInstance();
 		DocumentFrame documentFrame = application.getDocumentFrame();
-
-		// This doesn't really make sense, but we don't really have a choice...
-		// instead of having one nice FrameComposite that uses simple
-		// member variables, like swing... there is an odd
-		// class hierarchy that forces features at the class level,
-		// further if you go up earlier to remove one feature, you loose
-		// many more... So I'll just hack this onto this...
-		if( this.isModal ) {
-			framesToDiable.add( documentFrame.getFrame() );
-		}
 
 		if( this.shouldReuseFrame && ( this.currentFrame != null ) ) {
 			this.handlePreShowWindow( this.currentFrame );
@@ -207,9 +219,7 @@ public abstract class ModalFrameComposite<V extends org.lgna.croquet.views.Compo
 			this.handlePreShowWindow( frame );
 			frame.setVisible( true );
 
-			if( this.shouldReuseFrame ) {
-				this.currentFrame = frame;
-			}
+			this.currentFrame = frame;
 		}
 
 		//			dialogOwner.handlePreShowDialog( step );

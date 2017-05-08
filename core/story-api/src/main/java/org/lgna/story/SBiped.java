@@ -43,6 +43,7 @@
 
 package org.lgna.story;
 
+import org.lgna.ik.core.IKCore.Limb;
 import org.lgna.project.annotations.MethodTemplate;
 import org.lgna.project.annotations.ValueTemplate;
 import org.lgna.project.annotations.Visibility;
@@ -58,7 +59,7 @@ public class SBiped extends SJointedModel implements Articulable {
 	}
 
 	@Override
-	/* package-private */org.lgna.story.implementation.BipedImp getImplementation() {
+			/* package-private */org.lgna.story.implementation.BipedImp getImplementation() {
 		return this.implementation;
 	}
 
@@ -78,13 +79,18 @@ public class SBiped extends SJointedModel implements Articulable {
 	@Override
 	@MethodTemplate( visibility = Visibility.TUCKED_AWAY )
 	public void walkTo( SThing entity ) {
-		javax.swing.JOptionPane.showMessageDialog( null, "todo: walkTo" );
+		//		implementation.walkTo( entity );
 	}
 
 	@Override
 	@MethodTemplate( visibility = Visibility.TUCKED_AWAY )
 	public void touch( SThing entity ) {
-		javax.swing.JOptionPane.showMessageDialog( null, "todo: touch" );
+		reachFor( Limb.RIGHT_ARM, entity );
+	}
+
+	@MethodTemplate( visibility = Visibility.TUCKED_AWAY )
+	public void reachFor( Limb limb, SThing target ) {
+		implementation.reachFor( target, limb );
 	}
 
 	@MethodTemplate( visibility = Visibility.TUCKED_AWAY )
@@ -270,5 +276,10 @@ public class SBiped extends SJointedModel implements Articulable {
 
 	public org.lgna.story.SJoint getLeftPinkyFingerKnuckle() {
 		return org.lgna.story.SJoint.getJoint( this, org.lgna.story.resources.BipedResource.LEFT_PINKY_FINGER_KNUCKLE );
+	}
+
+	@MethodTemplate( visibility = Visibility.COMPLETELY_HIDDEN )
+	public void strikePose( org.lgna.story.BipedPose pose, StrikePose.Detail... details ) {
+		super.strikePose( pose, details );
 	}
 }

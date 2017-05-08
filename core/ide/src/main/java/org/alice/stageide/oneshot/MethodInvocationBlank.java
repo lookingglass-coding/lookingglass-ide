@@ -83,6 +83,7 @@ public class MethodInvocationBlank extends org.lgna.croquet.CascadeBlank<MethodI
 
 		org.lgna.project.ast.AbstractType<?, ?, ?> instanceFactoryValueType = this.instanceFactory.getValueType();
 		java.util.List<org.lgna.project.ast.JavaMethod> methods = edu.cmu.cs.dennisc.java.util.Lists.newLinkedList();
+		java.util.Map<org.lgna.project.ast.MethodInvocation, java.util.List<org.lgna.project.ast.SimpleArgument>> poseMethods = edu.cmu.cs.dennisc.java.util.Maps.newHashMap();
 		if( turnableType.isAssignableFrom( instanceFactoryValueType ) ) {
 			methods.add( org.alice.stageide.ast.sort.OneShotSorter.TURN_METHOD );
 			methods.add( org.alice.stageide.ast.sort.OneShotSorter.ROLL_METHOD );
@@ -101,10 +102,41 @@ public class MethodInvocationBlank extends org.lgna.croquet.CascadeBlank<MethodI
 
 		if( jointedModelType.isAssignableFrom( instanceFactoryValueType ) ) {
 			methods.add( org.alice.stageide.ast.sort.OneShotSorter.STRAIGHTEN_OUT_JOINTS_METHOD );
+
+			if( flyerType.isAssignableFrom( instanceFactoryValueType ) ) {
+				methods.add( org.alice.stageide.ast.sort.OneShotSorter.SPREAD_WINGS_METHOD );
+				methods.add( org.alice.stageide.ast.sort.OneShotSorter.FOLD_WINGS_METHOD );
+			}
+
+			//Search the UserMethods on the type looking for generated pose animations
+			//Grab the java method invocation (strikePose) inside the pose animation and add it to the methodInvocations list
+			java.util.List<org.lgna.project.ast.AbstractMethod> declaredMethods = org.lgna.project.ast.AstUtilities.getAllMethods( instanceFactoryValueType );
+			for( org.lgna.project.ast.AbstractMethod method : declaredMethods ) {
+				if( method instanceof org.lgna.project.ast.UserMethod ) {
+					org.lgna.project.ast.UserMethod userMethod = (org.lgna.project.ast.UserMethod)method;
+					//Pose animations are GENERATED and have no return value
+					if( ( userMethod.managementLevel.getValue() == org.lgna.project.ast.ManagementLevel.GENERATED ) && ( userMethod.getReturnType() == org.lgna.project.ast.JavaType.VOID_TYPE ) ) {
+						//UserMethod pose animations contain a single JavaMethod in their body called "strikePose"
+						//Grab the first statement in the body and check to see if it's actually a pose call
+						org.lgna.project.ast.Statement poseStatement = userMethod.body.getValue().statements.get( 0 );
+						if( poseStatement instanceof org.lgna.project.ast.ExpressionStatement ) {
+							org.lgna.project.ast.ExpressionStatement expressionStatement = (org.lgna.project.ast.ExpressionStatement)poseStatement;
+							org.lgna.project.ast.Expression expression = expressionStatement.expression.getValue();
+							if( expression instanceof org.lgna.project.ast.MethodInvocation ) {
+								org.lgna.project.ast.MethodInvocation poseInvocation = (org.lgna.project.ast.MethodInvocation)expression;
+								if( "strikePose".equals( poseInvocation.method.getValue().getName() ) ) {
+									if( poseInvocation.method.getValue() instanceof org.lgna.project.ast.JavaMethod ) {
+										java.util.List<org.lgna.project.ast.SimpleArgument> arguments = poseInvocation.requiredArguments.getValue();
+										poseMethods.put( poseInvocation, arguments );
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
 		}
-		//		if( flyerType.isAssignableFrom( instanceFactoryValueType ) ) {
-		//			methods.add( org.alice.stageide.ast.sort.OneShotSorter.UNFOLD_WINGS_METHOD );
-		//		}
 		if( cameraType.isAssignableFrom( instanceFactoryValueType ) ) {
 			methods.add( org.alice.stageide.ast.sort.OneShotSorter.MOVE_AND_ORIENT_TO_A_GOOD_VANTAGE_POINT_METHOD );
 		}
@@ -132,12 +164,17 @@ public class MethodInvocationBlank extends org.lgna.croquet.CascadeBlank<MethodI
 					children.add( roomFillin );
 				} else if( "setOpacity".equals( method.getName() ) ) {
 					children.add( SetOpacityMethodInvocationFillIn.getInstance( this.instanceFactory, method ) );
+				} else if( "foldWings".equals( method.getName() ) || "spreadWings".equals( method.getName() ) ) {
+					children.add( JavaDefinedStrikePoseMethodInvocationFillIn.getInstance( this.instanceFactory, method ) );
 				} else {
 					children.add( LocalTransformationMethodInvocationFillIn.getInstance( this.instanceFactory, method ) );
 				}
 			} else {
 				children.add( org.lgna.croquet.CascadeLineSeparator.getInstance() );
 			}
+		}
+		for( java.util.Map.Entry<org.lgna.project.ast.MethodInvocation, java.util.List<org.lgna.project.ast.SimpleArgument>> poseMethodEntry : poseMethods.entrySet() ) {
+			children.add( StrikePoseMethodInvocationFillIn.getInstance( this.instanceFactory, (org.lgna.project.ast.JavaMethod)poseMethodEntry.getKey().method.getValue(), poseMethodEntry.getValue() ) );
 		}
 	}
 }

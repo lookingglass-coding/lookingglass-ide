@@ -46,6 +46,7 @@ package edu.wustl.lookingglass.ide.perspectives.dinah;
 
 import org.alice.ide.IDE;
 import org.alice.stageide.perspectives.CodePerspective;
+import org.alice.stageide.perspectives.code.CodePerspectiveComposite;
 import org.lgna.croquet.SplitComposite;
 import org.lgna.croquet.views.SplitPane;
 import org.lgna.croquet.views.SwingComponentView;
@@ -139,7 +140,7 @@ public class DinahMainComposite extends SplitComposite implements TimeScrubUpdat
 	@Override
 	public void handlePreActivation() {
 		CodePerspective codePerspective = IDE.getActiveInstance().getDocumentFrame().getCodePerspective();
-		SplitPane codePerspectivePane = codePerspective.getMainComposite().getView();
+		SplitPane codePerspectivePane = ( (CodePerspectiveComposite)codePerspective.getMainComposite() ).getView();
 
 		this.getView().addDividerLocationChangeListener( this.dividerLocationListener );
 		this.getView().setDividerLocation( codePerspectivePane.getDividerLocation() );
@@ -150,7 +151,7 @@ public class DinahMainComposite extends SplitComposite implements TimeScrubUpdat
 	@Override
 	public void handlePostDeactivation() {
 		CodePerspective codePerspective = IDE.getActiveInstance().getDocumentFrame().getCodePerspective();
-		SplitPane codePerspectivePane = codePerspective.getMainComposite().getView();
+		SplitPane codePerspectivePane = ( (CodePerspectiveComposite)codePerspective.getMainComposite() ).getView();
 
 		this.getView().removeDividerLocationChangeListener( this.dividerLocationListener );
 		codePerspectivePane.setDividerLocation( this.getView().getDividerLocation() );

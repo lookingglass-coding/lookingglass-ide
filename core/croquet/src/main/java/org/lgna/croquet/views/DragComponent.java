@@ -347,6 +347,10 @@ public abstract class DragComponent<M extends org.lgna.croquet.DragModel> extend
 		}
 	}
 
+	public boolean isCopyAllowed() {
+		return true;
+	}
+
 	private javax.swing.JLayeredPane getLayeredPane() {
 		AbstractWindow<?> root = this.getRoot();
 		if( root != null ) {
@@ -405,7 +409,7 @@ public abstract class DragComponent<M extends org.lgna.croquet.DragModel> extend
 				dx -= mousePressedEvent.getX();
 				dy -= mousePressedEvent.getY();
 
-				boolean isCopyDesired = edu.cmu.cs.dennisc.java.awt.event.InputEventUtilities.isQuoteControlUnquoteDown( e );
+				boolean isCopyDesired = this.isCopyAllowed() && edu.cmu.cs.dennisc.java.awt.event.InputEventUtilities.isQuoteControlUnquoteDown( e );
 				int x = e.getX() + dx;
 				int y = e.getY() + dy;
 				this.dragProxy.setCopyDesired( isCopyDesired );

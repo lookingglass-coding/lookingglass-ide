@@ -49,6 +49,7 @@ import org.lgna.croquet.icon.IconSize;
 import edu.wustl.lookingglass.croquetfx.FxComponent;
 import edu.wustl.lookingglass.ide.LookingGlassTheme;
 import edu.wustl.lookingglass.puzzle.CompletionPuzzle;
+import edu.wustl.lookingglass.puzzle.ui.croquet.CompletionPuzzleComposite;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 
@@ -58,6 +59,7 @@ import javafx.scene.layout.VBox;
 public class TimeOutPuzzlePane extends FxComponent {
 
 	private final CompletionPuzzle puzzle;
+	private final CompletionPuzzleComposite puzzleComposite;
 
 	@FXML private javafx.scene.image.ImageView face;
 	@FXML private javafx.scene.control.Button cancel;
@@ -65,9 +67,10 @@ public class TimeOutPuzzlePane extends FxComponent {
 	@FXML private VBox bubbleBox;
 	private SpeechBubble bubble;
 
-	public TimeOutPuzzlePane( CompletionPuzzle puzzle ) {
+	public TimeOutPuzzlePane( CompletionPuzzle puzzle, CompletionPuzzleComposite puzzleComposite ) {
 		super( TimeOutPuzzlePane.class );
 		this.puzzle = puzzle;
+		this.puzzleComposite = puzzleComposite;
 
 		this.face.setImage( LookingGlassTheme.getFxImage( "face-small-smile-100", IconSize.FIXED ) );
 		this.bubble = new SpeechBubble( this.getLocalizedString( "TimeOutPuzzlePane.bubble" ) );
@@ -78,7 +81,7 @@ public class TimeOutPuzzlePane extends FxComponent {
 	}
 
 	private void handleCancelAction( javafx.event.ActionEvent event ) {
-		this.puzzle.getPuzzleComposite().hideTimeOutPane();
+		this.puzzleComposite.hideTimeOutPane();
 	}
 
 	private void handleDoneAction( javafx.event.ActionEvent event ) {

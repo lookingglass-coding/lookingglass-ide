@@ -48,6 +48,8 @@ public class BodyPane extends org.alice.ide.common.StatementLikeSubstance {
 
 		// <lg/> add some extra space to the top element
 		this.addComponent( org.lgna.croquet.views.BoxUtilities.createVerticalSliver( 7 ), java.awt.BorderLayout.NORTH );
+		//		String doInOrderText = edu.cmu.cs.dennisc.java.util.ResourceBundleUtilities.getStringForKey( "DoInOrder", "org.alice.ide.controlflow.Templates", "do in order" );
+		//		this.addComponent( new org.lgna.croquet.views.Label( doInOrderText ), java.awt.BorderLayout.NORTH );
 		this.addComponent( statementListComponent, java.awt.BorderLayout.CENTER );
 		//</lg>
 	}

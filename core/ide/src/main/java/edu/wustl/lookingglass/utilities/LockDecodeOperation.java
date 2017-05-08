@@ -47,6 +47,7 @@ package edu.wustl.lookingglass.utilities;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 
+import org.alice.ide.ProjectApplication;
 import org.alice.ide.projecturi.DirectoryUriListData;
 import org.lgna.croquet.history.Transaction;
 import org.lgna.croquet.triggers.Trigger;
@@ -78,7 +79,7 @@ public class LockDecodeOperation extends org.lgna.croquet.Operation {
 
 	@Override
 	protected void perform( Transaction transaction, Trigger trigger ) {
-		DirectoryUriListData data = new DirectoryUriListData( org.alice.ide.IDE.getActiveInstance().getMyProjectsDirectory() );
+		DirectoryUriListData data = new DirectoryUriListData( ProjectApplication.getMyProjectsDirectory() );
 		for( java.net.URI uri : data ) {
 			edu.cmu.cs.dennisc.java.util.logging.Logger.outln( "START: ", uri.toString() );
 			org.alice.ide.uricontent.UriProjectLoader loader = org.alice.ide.uricontent.UriProjectLoader.createInstance( uri );

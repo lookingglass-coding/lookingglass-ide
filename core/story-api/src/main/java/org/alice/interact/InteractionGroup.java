@@ -43,36 +43,94 @@
 
 package org.alice.interact;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.alice.interact.HandleSupportingDragAdapter.ObjectType;
 import org.alice.interact.condition.ManipulatorConditionSet;
 import org.alice.interact.handle.HandleSet;
 
 public final class InteractionGroup {
-	public InteractionGroup( HandleSet handleSet, ManipulatorConditionSet manipulator, org.alice.interact.PickHint.PickType... acceptableTypes ) {
-		this.handleSet = handleSet;
-		this.manipulator = manipulator;
-		this.pickHint = new PickHint( acceptableTypes );
+
+	public static class PossibleObjects {
+
+		public PossibleObjects( ObjectType... possibleObjects ) {
+			this.possibleObjects = possibleObjects;
+		}
+
+		public boolean containsType( ObjectType type ) {
+			for( ObjectType t : this.possibleObjects ) {
+				if( ( t == type ) || ( t == ObjectType.ANY ) ) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		private final ObjectType[] possibleObjects;
 	}
 
-	public HandleSet getHandleSet() {
-		return this.handleSet;
+	public static class InteractionInfo {
+		public InteractionInfo( PossibleObjects possibleObjects, HandleSet handleSet, ManipulatorConditionSet manipulator, org.alice.interact.PickHint.PickType... acceptableTypes ) {
+			this.possibleObjects = possibleObjects;
+			this.handleSet = handleSet;
+			this.manipulator = manipulator;
+			this.pickHint = new PickHint( acceptableTypes );
+		}
+
+		public HandleSet getHandleSet() {
+			return this.handleSet;
+		}
+
+		public boolean canUseIteractionGroup( PickHint pickType ) {
+			return this.pickHint.intersects( pickType );
+		}
+
+		@Override
+		public String toString() {
+			return HandleSet.getStringForSet( this.handleSet );
+		}
+
+		private final HandleSet handleSet;
+		private final ManipulatorConditionSet manipulator;
+		private final PickHint pickHint;
+		private final PossibleObjects possibleObjects;
 	}
 
-	public boolean canUseIteractionGroup( PickHint pickType ) {
-		return this.pickHint.intersects( pickType );
+	public InteractionGroup() {
 	}
 
-	public void enabledManipulators( boolean enabled ) {
-		if( manipulator != null ) {
-			manipulator.setEnabled( enabled );
+	public InteractionGroup( InteractionInfo... interactionInfos ) {
+		for( InteractionInfo info : interactionInfos ) {
+			groups.add( info );
 		}
 	}
 
-	@Override
-	public String toString() {
-		return HandleSet.getStringForSet( this.handleSet );
+	public void addInteractionInfo( InteractionInfo info ) {
+		groups.add( info );
 	}
 
-	private final HandleSet handleSet;
-	private final ManipulatorConditionSet manipulator;
-	private final PickHint pickHint;
+	public void addInteractionInfo( PossibleObjects possibleObjects, HandleSet handleSet, ManipulatorConditionSet manipulator, org.alice.interact.PickHint.PickType... acceptableTypes ) {
+		groups.add( new InteractionInfo( possibleObjects, handleSet, manipulator, acceptableTypes ) );
+	}
+
+	public InteractionInfo getMatchingInfo( ObjectType objectType ) {
+		for( InteractionInfo e : groups ) {
+			if( e.possibleObjects.containsType( objectType ) ) {
+				return e;
+			}
+		}
+		return null;
+
+	}
+
+	public void enabledManipulators( boolean enabled ) {
+		for( InteractionInfo e : groups ) {
+			if( e.manipulator != null ) {
+				e.manipulator.setEnabled( enabled );
+			}
+		}
+	}
+
+	private List<InteractionInfo> groups = new LinkedList<InteractionInfo>();
 }

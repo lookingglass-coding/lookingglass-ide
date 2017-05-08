@@ -56,7 +56,7 @@
 
 	<!-- Note: when merging/upon conflict, do NOT accept Alice version number. -->
 	<!-- This version should ALWAYS be the current Looking Glass version. -->
-	<version>2015.11.06-SNAPSHOT</version>
+	<version>2017.05.05-SNAPSHOT</version>
 
 	<name>Looking Glass</name>
 	<url>https://lookingglass.wustl.edu/</url>
@@ -76,7 +76,7 @@
 
 		<jogl.version>2.3.2</jogl.version>
 
-		<alice.model.version>2014.08.20</alice.model.version>
+		<alice.model.version>2016.08.19</alice.model.version>
 		<sound.gallery.version>2013.08.08</sound.gallery.version>
 	</properties>
 
@@ -100,7 +100,7 @@
 			<dependency>
 				<groupId>uk.co.caprica</groupId>
 				<artifactId>vlcj</artifactId>
-				<version>3.1.0</version>
+				<version>3.9.0</version>
 			</dependency>
 			<dependency>
 				<groupId>com.miglayout</groupId>
@@ -185,7 +185,7 @@
 				<plugin>
 					<groupId>org.zanata</groupId>
 					<artifactId>zanata-maven-plugin</artifactId>
-					<version>3.7.3</version>
+					<version>4.1.1</version>
 					<configuration>
 						<projectConfig>${parent.basedir}/zanata.xml</projectConfig>
 						<sourceLang>en-US</sourceLang>
@@ -194,9 +194,9 @@
 						<srcDir>${project.basedir}/src/main</srcDir>
 						<transDir>${project.basedir}/src/l10n</transDir>
 
-						<!-- Use Zanata's crowdsouring feature to copy identical translations to our
+						<!-- Use Zanata's crowd-sourcing feature to copy identical translations to our
 							project. -->
-						<copyTrans>true</copyTrans>
+						<!-- <copyTrans>true</copyTrans> -->
 
 						<!-- <useCache>false</useCache> -->
 						<!-- <dryRun>true</dryRun> -->
@@ -405,12 +405,17 @@
 		<repository>
 			<id>edu.wustl.lookingglass</id>
 			<name>Looking Glass Repository</name>
-			<url>http://dev.lookingglass.wustl.edu/public/maven2/lookingglass</url>
+			<url>https://maven.lookingglass.wustl.edu/lookingglass/</url>
 		</repository>
 		<repository>
 			<id>edu.wustl.lookingglass.external</id>
 			<name>Looking Glass External Repository</name>
-			<url>http://dev.lookingglass.wustl.edu/public/maven2/external</url>
+			<url>https://maven.lookingglass.wustl.edu/external/</url>
+		</repository>
+		<repository>
+			<id>edu.wustl.lookingglass.nonfree</id>
+			<name>Looking Glass Non-Free Repository</name>
+			<url>https://maven.lookingglass.wustl.edu/nonfree/</url>
 		</repository>
 		<repository>
 			<id>org.alice</id>
@@ -428,12 +433,17 @@
 		<pluginRepository>
 			<id>edu.wustl.lookingglass</id>
 			<name>Looking Glass Repository</name>
-			<url>http://dev.lookingglass.wustl.edu/public/maven2/lookingglass</url>
+			<url>https://maven.lookingglass.wustl.edu/lookingglass/</url>
 		</pluginRepository>
 		<pluginRepository>
 			<id>edu.wustl.lookingglass.external</id>
 			<name>Looking Glass External Repository</name>
-			<url>http://dev.lookingglass.wustl.edu/public/maven2/external</url>
+			<url>https://maven.lookingglass.wustl.edu/external/</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>edu.wustl.lookingglass.nonfree</id>
+			<name>Looking Glass Non-Free Repository</name>
+			<url>https://maven.lookingglass.wustl.edu/nonfree/</url>
 		</pluginRepository>
 		<pluginRepository>
 			<id>org.alice</id>

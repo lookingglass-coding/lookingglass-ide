@@ -66,7 +66,7 @@ public abstract class AbstractType<C extends AbstractConstructor, M extends Abst
 		}
 	}
 
-	// <LG> Temporary method until Dennis fixes UserType comparision
+	// <lg> Temporary method until Dennis fixes UserType comparision
 	public boolean isAssignableFromLG( AbstractType<?, ?, ?> other ) {
 		if( this instanceof UserType<?> ) {
 			if( other != null ) {
@@ -82,8 +82,7 @@ public abstract class AbstractType<C extends AbstractConstructor, M extends Abst
 			return isAssignableFrom( other );
 		}
 	}
-
-	// </LG>
+	// </lg>
 
 	public final boolean isAssignableFrom( Class<?> other ) {
 		return isAssignableFrom( JavaType.getInstance( other ) );

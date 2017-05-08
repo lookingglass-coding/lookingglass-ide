@@ -56,7 +56,7 @@ public abstract class SScene extends SThing {
 	private final org.lgna.story.implementation.SceneImp implementation = new org.lgna.story.implementation.SceneImp( this );
 
 	@Override
-	public/* package-private */org.lgna.story.implementation.SceneImp getImplementation() {
+	public org.lgna.story.implementation.SceneImp getImplementation() {
 		return this.implementation;
 	}
 
@@ -129,8 +129,7 @@ public abstract class SScene extends SThing {
 
 	@MethodTemplate( )
 	public void setFogDensity(
-			@ValueTemplate( detailsEnumCls = org.lgna.story.annotation.PortionDetails.class )
-			Number density,
+			@ValueTemplate( detailsEnumCls = org.lgna.story.annotation.PortionDetails.class ) Number density,
 			SetFogDensity.Detail... details ) {
 		org.lgna.common.LgnaIllegalArgumentException.checkArgumentIsNotNull( density, 0 );
 		this.getImplementation().fogDensity.animateValue( density.floatValue(), Duration.getValue( details ), AnimationStyle.getValue( details ).getInternal() );
@@ -198,7 +197,7 @@ public abstract class SScene extends SThing {
 	@MethodTemplate( visibility = Visibility.PRIME_TIME )
 	@AddEventListenerTemplate( )
 	public void addObjectMoverFor( SMovableTurnable thing ) {
-		this.implementation.getEventManager().moveWithArrows( thing, 1.0 );
+		this.implementation.getEventManager().moveWithArrows( thing, 2.5 );
 	}
 
 	//TransformationListeners
@@ -309,8 +308,7 @@ public abstract class SScene extends SThing {
 	@Override
 	@MethodTemplate( visibility = Visibility.PRIME_TIME )
 	public void delay(
-			@ValueTemplate( detailsEnumCls = org.lgna.story.annotation.TimeDetails.class )
-			Number duration ) {
+			@ValueTemplate( detailsEnumCls = org.lgna.story.annotation.TimeDetails.class ) Number duration ) {
 		super.delay( duration );
 	}
 }

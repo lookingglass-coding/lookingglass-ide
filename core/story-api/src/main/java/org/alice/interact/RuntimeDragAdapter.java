@@ -157,4 +157,5 @@ public class RuntimeDragAdapter extends AbstractDragAdapter {
 	@Override
 	public void undoRedoEndManipulation( org.alice.interact.manipulator.AbstractManipulator manipulator, AffineMatrix4x4 originalTransformation ) {
 	}
+
 }

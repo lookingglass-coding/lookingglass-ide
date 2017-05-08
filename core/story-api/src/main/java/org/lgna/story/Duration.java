@@ -64,6 +64,8 @@ public class Duration implements
 		SetScale.Detail, SetSize.Detail, SetWidth.Detail, SetHeight.Detail, SetDepth.Detail, Resize.Detail, ResizeWidth.Detail, ResizeHeight.Detail, ResizeDepth.Detail,
 		//JointedModel
 		StraightenOutJoints.Detail, Say.Detail, Think.Detail,
+		//Biped (for now?)
+		StrikePose.Detail,
 		//Flyer
 		UnfoldWings.Detail,
 		//Room
@@ -79,8 +81,7 @@ public class Duration implements
 		//Torus
 		SetInnerRadius.Detail, SetOuterRadius.Detail,
 		//Cone
-		SetBaseRadius.Detail, SetLength.Detail
-{
+		SetBaseRadius.Detail, SetLength.Detail {
 	private static final double DEFAULT_VALUE = 1.0;
 	private final double value;
 
@@ -102,5 +103,10 @@ public class Duration implements
 
 	/* package-private */static double getValue( Object[] details ) {
 		return getValue( details, DEFAULT_VALUE );
+	}
+
+	//Testing a different way to make keyword parameters on the java side
+	public static Duration make( Number value ) {
+		return new Duration( value );
 	}
 }

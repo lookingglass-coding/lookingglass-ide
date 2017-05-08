@@ -51,6 +51,7 @@ import edu.wustl.lookingglass.croquetfx.ThreadHelper;
 import edu.wustl.lookingglass.ide.LookingGlassTheme;
 import edu.wustl.lookingglass.puzzle.CompletionPuzzle;
 import edu.wustl.lookingglass.puzzle.CompletionPuzzle.PuzzleProjectState;
+import edu.wustl.lookingglass.puzzle.ui.croquet.CompletionPuzzleComposite;
 import edu.wustl.lookingglass.puzzle.ui.croquet.PlayPuzzleProjectComposite;
 import javafx.animation.FadeTransition;
 import javafx.embed.swing.SwingNode;
@@ -71,6 +72,7 @@ import javafx.util.Duration;
 public class CheckPuzzlePane extends FxComponent {
 
 	private final CompletionPuzzle puzzle;
+	private final CompletionPuzzleComposite puzzleComposite;
 
 	@FXML private Button close;
 	@FXML private Label title;
@@ -89,9 +91,10 @@ public class CheckPuzzlePane extends FxComponent {
 	@FXML private HBox nextBox;
 	@FXML private Button next;
 
-	public CheckPuzzlePane( CompletionPuzzle puzzle ) {
+	public CheckPuzzlePane( CompletionPuzzle puzzle, CompletionPuzzleComposite puzzleComposite ) {
 		super( CheckPuzzlePane.class );
 		this.puzzle = puzzle;
+		this.puzzleComposite = puzzleComposite;
 
 		this.close.setGraphic( LookingGlassTheme.getFxImageView( "puzzle-quit", IconSize.SMALL ) );
 		this.playCorrect.setGraphic( LookingGlassTheme.getFxImageView( "puzzle-play", org.lgna.croquet.icon.IconSize.SMALL ) );
@@ -205,9 +208,9 @@ public class CheckPuzzlePane extends FxComponent {
 		this.setNextShowing( false );
 		this.puzzle.setTerminatingNonPuzzleStatementsEnabled( true );
 
-		this.puzzle.getPuzzleComposite().hideCheckPane();
+		this.puzzleComposite.hideCheckPane();
 		if( this.puzzle.getPuzzleComparison().isCorrect() ) {
-			this.puzzle.getPuzzleComposite().showCorrectPane();
+			this.puzzleComposite.showCorrectPane();
 		}
 	}
 

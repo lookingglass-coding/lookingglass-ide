@@ -51,6 +51,7 @@ import org.alice.ide.x.components.StatementListPropertyView;
 import edu.wustl.lookingglass.ide.LookingGlassIDE;
 import edu.wustl.lookingglass.puzzle.CompletionPuzzle;
 import edu.wustl.lookingglass.puzzle.PuzzleStatementUtility;
+import edu.wustl.lookingglass.puzzle.ui.croquet.CompletionPuzzleComposite;
 import edu.wustl.lookingglass.puzzle.ui.croquet.InsertStatementIntoPuzzleOperation;
 
 /**
@@ -359,7 +360,7 @@ public abstract class CodePanelWithDropReceptor extends org.lgna.croquet.views.B
 
 							org.lgna.project.ast.BlockStatement prevBlockStatement = (org.lgna.project.ast.BlockStatement)prevOwner.getOwner();
 							org.lgna.project.ast.BlockStatement nextBlockStatement = (org.lgna.project.ast.BlockStatement)nextOwner.getOwner();
-							if( edu.cmu.cs.dennisc.java.awt.event.InputEventUtilities.isQuoteControlUnquoteDown( eSource ) ) {
+							if( edu.cmu.cs.dennisc.java.awt.event.InputEventUtilities.isQuoteControlUnquoteDown( eSource ) && !LookingGlassIDE.getActiveInstance().isInCompletionPuzzlePerspective() ) {
 								org.alice.ide.IDE ide = org.alice.ide.IDE.getActiveInstance();
 								org.lgna.project.ast.Statement copy = ide.createCopy( statement );
 								rv = new org.alice.ide.code.InsertCopiedStatementOperation( nextBlockStatement, nextIndex, copy );
@@ -367,7 +368,7 @@ public abstract class CodePanelWithDropReceptor extends org.lgna.croquet.views.B
 								if( ( prevOwner == nextOwner ) && ( ( prevIndex == nextIndex ) || ( prevIndex == ( nextIndex - 1 ) ) ) ) {
 									rv = null;
 								} else {
-									boolean isMultiple = eSource.isShiftDown();
+									boolean isMultiple = eSource.isShiftDown() && !LookingGlassIDE.getActiveInstance().isInCompletionPuzzlePerspective();
 									BlockStatementIndexPair fromLocation = new BlockStatementIndexPair( prevBlockStatement, prevIndex );
 									BlockStatementIndexPair toLocation = new BlockStatementIndexPair( nextBlockStatement, nextIndex );
 									if( isMultiple && org.alice.ide.ast.code.ShiftDragStatementUtilities.isCandidateForEnvelop( statementDragModel ) ) {
@@ -388,7 +389,8 @@ public abstract class CodePanelWithDropReceptor extends org.lgna.croquet.views.B
 															( PuzzleStatementUtility.findParentNode( statement, ( node ) -> {
 																return ( puzzle.getBinBlockStatement() == node );
 															} ) != null ) ) ) {
-												rv = new InsertStatementIntoPuzzleOperation( fromLocation, statement, toLocation, isMultiple, puzzle );
+												CompletionPuzzleComposite puzzleComposite = LookingGlassIDE.getActiveInstance().getCompletionPuzzlePerspective().getMainComposite();
+												rv = new InsertStatementIntoPuzzleOperation( fromLocation, statement, toLocation, isMultiple, puzzle, puzzleComposite );
 											} else {
 												rv = org.alice.ide.ast.code.MoveStatementOperation.getInstance( fromLocation, statement, toLocation, isMultiple );
 											}

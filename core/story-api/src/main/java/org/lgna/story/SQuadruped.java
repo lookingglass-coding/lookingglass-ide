@@ -52,7 +52,7 @@ public class SQuadruped extends SJointedModel implements Articulable {
 	private final org.lgna.story.implementation.QuadrupedImp implementation;
 
 	@Override
-	/* package-private */org.lgna.story.implementation.QuadrupedImp getImplementation() {
+			/* package-private */org.lgna.story.implementation.QuadrupedImp getImplementation() {
 		return this.implementation;
 	}
 
@@ -113,9 +113,6 @@ public class SQuadruped extends SJointedModel implements Articulable {
 		return org.lgna.story.SJoint.getJoint( this, org.lgna.story.resources.QuadrupedResource.MOUTH );
 	}
 
-	//	public SJoint getJawTip() {
-	//		 return org.lgna.story.SJoint.getJoint( this, org.lgna.story.resources.QuadrupedResource.JAW_TIP);
-	//	}
 	public SJoint getRightEar() {
 		return org.lgna.story.SJoint.getJoint( this, org.lgna.story.resources.QuadrupedResource.RIGHT_EAR );
 	}
@@ -258,5 +255,10 @@ public class SQuadruped extends SJointedModel implements Articulable {
 
 	public SJoint getBackRightToe() {
 		return org.lgna.story.SJoint.getJoint( this, org.lgna.story.resources.QuadrupedResource.BACK_RIGHT_TOE );
+	}
+
+	@MethodTemplate( visibility = Visibility.COMPLETELY_HIDDEN )
+	public void strikePose( org.lgna.story.QuadrupedPose pose, StrikePose.Detail... details ) {
+		super.strikePose( pose, details );
 	}
 }

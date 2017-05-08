@@ -44,7 +44,6 @@ package org.alice.stageide.sceneeditor;
 
 import org.alice.nonfree.NebulousIde;
 import org.lgna.common.ComponentThread;
-import org.lgna.project.ast.AbstractType;
 
 /**
  * @author Dennis Cosgrove
@@ -211,7 +210,7 @@ public class SetUpMethodGenerator {
 		return new org.lgna.project.ast.ExpressionStatement( createSetterInvocation( isThis, field, setter, expression ) );
 	}
 
-	private static boolean shouldPlaceModelAboveGround( AbstractType<?, ?, ?> type ) {
+	private static boolean shouldPlaceModelAboveGround( org.lgna.project.ast.AbstractType<?, ?, ?> type ) {
 		return false;
 	}
 
@@ -378,13 +377,13 @@ public class SetUpMethodGenerator {
 				}
 				if( instance instanceof org.lgna.story.Resizable ) {
 					org.lgna.story.Resizable resizable = (org.lgna.story.Resizable)instance;
-					org.lgna.story.Size size = resizable.getSize();
+					org.lgna.story.Scale scale = resizable.getScale();
 					try {
 						statements.add(
 								createStatement(
-										org.lgna.story.Resizable.class, "setSize", new Class<?>[] { org.lgna.story.Size.class, org.lgna.story.SetSize.Detail[].class },
+										org.lgna.story.Resizable.class, "setScale", new Class<?>[] { org.lgna.story.Scale.class, org.lgna.story.SetScale.Detail[].class },
 										SetUpMethodGenerator.createInstanceExpression( isThis, field ),
-										getExpressionCreator().createExpression( size ) ) );
+										getExpressionCreator().createExpression( scale ) ) );
 					} catch( org.alice.ide.ast.ExpressionCreator.CannotCreateExpressionException ccee ) {
 						throw new RuntimeException( ccee );
 					}
@@ -393,45 +392,62 @@ public class SetUpMethodGenerator {
 					org.lgna.story.implementation.JointedModelImp<?, ?> jointedModelImp = org.lgna.story.EmployeesOnly.getImplementation( (org.lgna.story.SJointedModel)instance );
 					java.util.List<org.alice.stageide.ast.JointedTypeInfo> jointedTypeInfos = org.alice.stageide.ast.JointedTypeInfo.getInstances( field.getValueType() );
 					for( org.alice.stageide.ast.JointedTypeInfo jointInfo : jointedTypeInfos ) {
+						java.util.List<org.lgna.project.ast.Expression> jointAccessExpressions = edu.cmu.cs.dennisc.java.util.Lists.newLinkedList();
 						for( org.lgna.project.ast.AbstractMethod jointGetter : jointInfo.getJointGetters() ) {
 							// if we don't want to filter out invalid joints
 							//  -or-
 							// we do want to filter invalid ones and this one's valid
 							if( !filterInvalidJoints || ( ( filterInvalidJoints ) && ( org.alice.stageide.ast.JointMethodUtilities.isValidJointGetter( jointGetter ) ) ) ) {
-								try {
-									org.lgna.project.ast.Expression getJointExpression = new org.lgna.project.ast.MethodInvocation( new org.lgna.project.ast.FieldAccess( new org.lgna.project.ast.ThisExpression(), field ), jointGetter );
-									Object[] values = ComponentThread.invokeOnComponentThreadAndWait( () -> {
+								org.lgna.project.ast.Expression getJointExpression = new org.lgna.project.ast.MethodInvocation( new org.lgna.project.ast.FieldAccess( new org.lgna.project.ast.ThisExpression(), field ), jointGetter );
+								jointAccessExpressions.add( getJointExpression );
+							}
+						}
+						for( org.alice.stageide.ast.JointMethodArrayAccessInfo jointArrayGetter : jointInfo.getJointArrayAccessGetters() ) {
+							org.lgna.project.ast.Expression getJointExpression = new org.lgna.project.ast.MethodInvocation( new org.lgna.project.ast.FieldAccess( new org.lgna.project.ast.ThisExpression(), field ), jointArrayGetter.getMethod() );
+							org.lgna.project.ast.Expression arrayAccessExpression = new org.lgna.project.ast.ArrayAccess( jointArrayGetter.getMethod().getReturnType(), getJointExpression, new org.lgna.project.ast.IntegerLiteral( jointArrayGetter.getIndex() ) );
+							jointAccessExpressions.add( arrayAccessExpression );
+						}
+						for( org.lgna.project.ast.Expression getJointExpression : jointAccessExpressions ) {
+							Object[] values;
+							try {
+								values = ComponentThread.invokeOnComponentThreadAndWait( () -> {
+									return sceneInstance.getVM().ENTRY_POINT_evaluate(
+											sceneInstance,
+											new org.lgna.project.ast.Expression[] { getJointExpression } );
+								} );
+							} catch( Throwable t ) {
+								edu.cmu.cs.dennisc.java.util.logging.Logger.errln( "set up method generator failed:", getJointExpression );
+								values = new Object[ 0 ];
+							}
+							for( Object o : values ) {
+								if( o instanceof org.lgna.story.SJoint ) {
+									org.lgna.story.SJoint jointEntity = (org.lgna.story.SJoint)o;
+									org.lgna.story.implementation.JointImp gottenJoint = org.lgna.story.EmployeesOnly.getImplementation( jointEntity );
+									edu.cmu.cs.dennisc.math.AffineMatrix4x4 currentTransform = gottenJoint.getLocalTransformation();
+									edu.cmu.cs.dennisc.math.AffineMatrix4x4 originalTransform = gottenJoint.getOriginalTransformation();
+									if( captureFullState || !currentTransform.orientation.isWithinReasonableEpsilonOf( originalTransform.orientation ) ) {
 										try {
-											return sceneInstance.getVM().ENTRY_POINT_evaluate(
-													sceneInstance,
-													new org.lgna.project.ast.Expression[] { getJointExpression } );
-										} catch( Throwable t ) {
-											edu.cmu.cs.dennisc.java.util.logging.Logger.errln( "set up method generator failed:", jointGetter );
-											return new Object[ 0 ];
-										}
-									} );
-
-									for( Object o : values ) {
-										if( o instanceof org.lgna.story.SJoint ) {
-											org.lgna.story.SJoint jointEntity = (org.lgna.story.SJoint)o;
-											org.lgna.story.implementation.JointImp gottenJoint = org.lgna.story.EmployeesOnly.getImplementation( jointEntity );
-											edu.cmu.cs.dennisc.math.AffineMatrix4x4 currentTransform = gottenJoint.getLocalTransformation();
-											edu.cmu.cs.dennisc.math.AffineMatrix4x4 originalTransform = gottenJoint.getOriginalTransformation();
-											if( captureFullState || !currentTransform.orientation.isWithinReasonableEpsilonOf( originalTransform.orientation ) ) {
-												try {
-													org.lgna.story.Orientation orientation = jointEntity.getOrientationRelativeToVehicle();
-													org.lgna.project.ast.ExpressionStatement orientationStatement = createStatement(
-															org.lgna.story.STurnable.class, "setOrientationRelativeToVehicle", new Class<?>[] { org.lgna.story.Orientation.class, org.lgna.story.SetOrientationRelativeToVehicle.Detail[].class },
-															getJointExpression, getExpressionCreator().createExpression( orientation ) );
-													statements.add( orientationStatement );
-												} catch( org.alice.ide.ast.ExpressionCreator.CannotCreateExpressionException ccee ) {
-													throw new RuntimeException( ccee );
-												}
-											}
+											org.lgna.story.Orientation orientation = jointEntity.getOrientationRelativeToVehicle();
+											org.lgna.project.ast.ExpressionStatement orientationStatement = createStatement(
+													org.lgna.story.STurnable.class, "setOrientationRelativeToVehicle", new Class<?>[] { org.lgna.story.Orientation.class, org.lgna.story.SetOrientationRelativeToVehicle.Detail[].class },
+													getJointExpression, getExpressionCreator().createExpression( orientation ) );
+											statements.add( orientationStatement );
+										} catch( org.alice.ide.ast.ExpressionCreator.CannotCreateExpressionException ccee ) {
+											throw new RuntimeException( ccee );
 										}
 									}
-								} catch( Throwable t ) {
-									// todo
+									if( captureFullState || !currentTransform.translation.isWithinReasonableEpsilonOf( originalTransform.translation ) ) {
+										try {
+											org.lgna.story.Position position = jointEntity.getPositionRelativeToVehicle();
+											org.lgna.project.ast.ExpressionStatement positionStatement = createStatement(
+													org.lgna.story.SMovableTurnable.class, "setPositionRelativeToVehicle", new Class<?>[] { org.lgna.story.Position.class, org.lgna.story.SetPositionRelativeToVehicle.Detail[].class },
+													getJointExpression, getExpressionCreator().createExpression( position ) );
+											statements.add( positionStatement );
+										} catch( org.alice.ide.ast.ExpressionCreator.CannotCreateExpressionException ccee ) {
+											throw new RuntimeException( ccee );
+										}
+									}
+
 								}
 							}
 						}

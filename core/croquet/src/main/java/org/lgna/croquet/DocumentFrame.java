@@ -62,12 +62,6 @@ public abstract class DocumentFrame {
 		KEEP_JAVAFX_THREAD_ALIVE_PANEL.setMaximumSize( new java.awt.Dimension( 0, 0 ) );
 		KEEP_JAVAFX_THREAD_ALIVE_PANEL.setVisible( false );
 		this.frame.getAwtComponent().add( KEEP_JAVAFX_THREAD_ALIVE_PANEL );
-
-		// Set JavaFX default style
-		javafx.application.Application.setUserAgentStylesheet( javafx.application.Application.STYLESHEET_MODENA );
-
-		// Also, let System.exit() do this implicitly...
-		javafx.application.Platform.setImplicitExit( false );
 		// </lg>
 	}
 

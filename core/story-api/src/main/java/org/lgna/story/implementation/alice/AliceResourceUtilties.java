@@ -123,6 +123,15 @@ public class AliceResourceUtilties {
 			return this.key.hashCode();
 		}
 
+		@Override
+		public String toString() {
+			StringBuilder sb = new StringBuilder();
+			sb.append( "ResourceIdentifier[" );
+			sb.append( this.key );
+			sb.append( "]" );
+			return sb.toString();
+		}
+
 	}
 
 	/*private*/protected AliceResourceUtilties() {
@@ -166,13 +175,11 @@ public class AliceResourceUtilties {
 	}
 
 	public static edu.cmu.cs.dennisc.scenegraph.SkeletonVisual decodeVisual( URL url ) {
-		try
-		{
+		try {
 			java.io.InputStream is = url.openStream();
 			edu.cmu.cs.dennisc.codec.BinaryDecoder decoder = new edu.cmu.cs.dennisc.codec.InputStreamBinaryDecoder( is );
 			return decoder.decodeReferenceableBinaryEncodableAndDecodable( new java.util.HashMap<Integer, edu.cmu.cs.dennisc.codec.ReferenceableBinaryEncodableAndDecodable>() );
-		} catch( Exception e )
-		{
+		} catch( Exception e ) {
 			e.printStackTrace();
 		}
 		return null;
@@ -452,8 +459,7 @@ public class AliceResourceUtilties {
 		return getTextureNameFromClassAndResource( resource.getClass(), resource.toString() );
 	}
 
-	public static String getVisualResourceFileName( Object resource )
-	{
+	public static String getVisualResourceFileName( Object resource ) {
 		return getVisualResourceFileName( resource.getClass(), resource.toString() );
 	}
 
@@ -478,6 +484,9 @@ public class AliceResourceUtilties {
 	}
 
 	private static String createTextureBaseName( String modelName, String textureName ) {
+		if( modelName == null ) {
+			return null;
+		}
 		if( textureName == null ) {
 			textureName = "_cls";
 		} else if( textureName.equalsIgnoreCase( getDefaultTextureEnumName( modelName ) ) || modelName.equalsIgnoreCase( enumToCamelCase( textureName ) ) || textureName.equalsIgnoreCase( AliceResourceUtilties.makeEnumName( modelName ) ) ) {
@@ -485,7 +494,7 @@ public class AliceResourceUtilties {
 		} else if( textureName.length() > 0 ) {
 			textureName = "_" + makeEnumName( textureName );
 		}
-		return modelName.toLowerCase( java.util.Locale.ENGLISH ) + textureName;
+		return ( modelName != null ? modelName.toLowerCase( java.util.Locale.ENGLISH ) : null ) + textureName;
 	}
 
 	public static String getThumbnailResourceFileName( String modelName, String textureName ) {
@@ -563,6 +572,8 @@ public class AliceResourceUtilties {
 		edu.cmu.cs.dennisc.scenegraph.Geometry[] sgGeometries = sgOriginal.geometries.getValue();
 		edu.cmu.cs.dennisc.scenegraph.TexturedAppearance[] sgTextureAppearances = sgOriginal.textures.getValue();
 		edu.cmu.cs.dennisc.scenegraph.WeightedMesh[] sgWeightedMeshes = sgOriginal.weightedMeshes.getValue();
+		edu.cmu.cs.dennisc.scenegraph.WeightedMesh[] sgDefaultPoseWeightedMeshes = sgOriginal.defaultPoseWeightedMeshes.getValue();
+		boolean hasDefaultPoseWeightedMeshes = sgOriginal.hasDefaultPoseWeightedMeshes.getValue();
 		edu.cmu.cs.dennisc.scenegraph.Joint sgSkeletonRoot = sgOriginal.skeleton.getValue();
 		edu.cmu.cs.dennisc.math.AxisAlignedBox bbox = sgOriginal.baseBoundingBox.getValue();
 		edu.cmu.cs.dennisc.math.Matrix3x3 scaleCopy = new edu.cmu.cs.dennisc.math.Matrix3x3( sgOriginal.scale.getValue() );
@@ -590,6 +601,8 @@ public class AliceResourceUtilties {
 		rv.skeleton.setValue( sgSkeletonRootCopy );
 		rv.geometries.setValue( sgGeometries );
 		rv.weightedMeshes.setValue( sgWeightedMeshes );
+		rv.defaultPoseWeightedMeshes.setValue( sgDefaultPoseWeightedMeshes );
+		rv.hasDefaultPoseWeightedMeshes.setValue( hasDefaultPoseWeightedMeshes );
 		rv.textures.setValue( sgTextureAppearances );
 		rv.frontFacingAppearance.setValue( sgFrontAppearanceCopy );
 		rv.backFacingAppearance.setValue( sgBackAppearanceCopy );
@@ -807,8 +820,7 @@ public class AliceResourceUtilties {
 		if( info != null ) {
 			if( locale == null ) {
 				return info.getModelName();
-			}
-			else {
+			} else {
 				String packageName = modelResource.getPackage().getName();
 				return findLocalizedText( getClassNameLocalizationBundleName(), packageName + "." + info.getModelName(), locale );
 			}
@@ -889,7 +901,8 @@ public class AliceResourceUtilties {
 	}
 
 	private static String[] getLocalizedTags( String[] tags, String localizerBundleName, Locale locale, boolean acceptNull ) {
-		if( Locale.ENGLISH.getLanguage().equals( locale.getLanguage() ) ) {
+		//		if( Locale.ENGLISH.getLanguage().equals( locale.getLanguage() ) )
+		{
 			java.util.List<String> localizedTags = edu.cmu.cs.dennisc.java.util.Lists.newArrayList();
 			for( String tag : tags ) {
 				String[] splitTags = tag.split( ":" );
@@ -900,8 +913,7 @@ public class AliceResourceUtilties {
 					String stringToUse;
 					if( hasStar ) {
 						stringToUse = t.substring( 1 );
-					}
-					else {
+					} else {
 						stringToUse = t;
 					}
 					String localizationKey = makeLocalizationKey( stringToUse );
@@ -924,9 +936,10 @@ public class AliceResourceUtilties {
 				}
 			}
 			return localizedTags.toArray( new String[ localizedTags.size() ] );
-		} else {
-			return new String[ 0 ];
 		}
+		//		else {
+		//			return new String[ 0 ];
+		//		}
 	}
 
 	public static String[] getTags( Class<?> modelResource, String resourceName, Locale locale ) {
@@ -943,8 +956,7 @@ public class AliceResourceUtilties {
 		}
 	}
 
-	public static String[] getGroupTags( Class<?> modelResource, String resourceName, Locale locale )
-	{
+	public static String[] getGroupTags( Class<?> modelResource, String resourceName, Locale locale ) {
 		ModelResourceInfo info = getModelResourceInfo( modelResource, resourceName );
 		if( info != null ) {
 			if( ( locale == null ) || true ) {
@@ -957,8 +969,20 @@ public class AliceResourceUtilties {
 		}
 	}
 
-	public static String[] getThemeTags( Class<?> modelResource, String resourceName, Locale locale )
-	{
+	public static String getLocalizedTag( String tag, Locale locale ) {
+		if( locale == null ) {
+			return tag;
+		}
+		String result = findLocalizedText( getTagsLocalizationBundleName(), tag, locale );
+		if( result != null ) {
+			return result;
+		} else {
+			//			Logger.severe( "No localization for gallery tag '" + tag + "' for locale " + locale );
+			return tag;
+		}
+	}
+
+	public static String[] getThemeTags( Class<?> modelResource, String resourceName, Locale locale ) {
 		ModelResourceInfo info = getModelResourceInfo( modelResource, resourceName );
 		if( info != null ) {
 			if( ( locale == null ) || true ) {

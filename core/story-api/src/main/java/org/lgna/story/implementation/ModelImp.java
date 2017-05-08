@@ -43,6 +43,9 @@
 
 package org.lgna.story.implementation;
 
+import edu.cmu.cs.dennisc.property.event.PropertyEvent;
+import edu.cmu.cs.dennisc.property.event.PropertyListener;
+
 /**
  * @author Dennis Cosgrove
  */
@@ -80,7 +83,7 @@ public abstract class ModelImp extends TransformableImp implements edu.cmu.cs.de
 					if( edu.cmu.cs.dennisc.java.util.Objects.equals( texture, sgTexturedAppearance.diffuseColorTexture.getValue() ) ) {
 						//pass
 					} else {
-						sgTexturedAppearance.diffuseColorTexture.setValue( texture );
+						sgTexturedAppearance.setDiffuseColorTextureAndInferAlphaBlend( texture );
 					}
 				}
 			}
@@ -186,11 +189,7 @@ public abstract class ModelImp extends TransformableImp implements edu.cmu.cs.de
 		edu.cmu.cs.dennisc.math.Dimension3 prevSize = this.getSize();
 		edu.cmu.cs.dennisc.math.Dimension3 prevScale = this.getScale();
 
-		edu.cmu.cs.dennisc.math.Dimension3 size = new edu.cmu.cs.dennisc.math.Dimension3(
-				scale.x * ( prevSize.x / prevScale.x ),
-				scale.y * ( prevSize.y / prevScale.y ),
-				scale.z * ( prevSize.z / prevScale.z )
-				);
+		edu.cmu.cs.dennisc.math.Dimension3 size = new edu.cmu.cs.dennisc.math.Dimension3( scale.x * ( prevSize.x / prevScale.x ), scale.y * ( prevSize.y / prevScale.y ), scale.z * ( prevSize.z / prevScale.z ) );
 		return size;
 	}
 
@@ -198,11 +197,7 @@ public abstract class ModelImp extends TransformableImp implements edu.cmu.cs.de
 		edu.cmu.cs.dennisc.math.Dimension3 prevSize = this.getSize();
 		edu.cmu.cs.dennisc.math.Dimension3 prevScale = this.getScale();
 
-		edu.cmu.cs.dennisc.math.Dimension3 scale = new edu.cmu.cs.dennisc.math.Dimension3(
-				size.x / ( prevSize.x / prevScale.x ),
-				size.y / ( prevSize.y / prevScale.y ),
-				size.z / ( prevSize.z / prevScale.z )
-				);
+		edu.cmu.cs.dennisc.math.Dimension3 scale = new edu.cmu.cs.dennisc.math.Dimension3( size.x / ( prevSize.x / prevScale.x ), size.y / ( prevSize.y / prevScale.y ), size.z / ( prevSize.z / prevScale.z ) );
 		if( Double.isNaN( scale.x ) ) {
 			scale.x = 1;
 		}
@@ -226,7 +221,7 @@ public abstract class ModelImp extends TransformableImp implements edu.cmu.cs.de
 	//		assert bBox.isNaN() == false;
 	//		return bBox;
 	//	}
-	//	
+	//
 	public edu.cmu.cs.dennisc.math.Dimension3 getSize() {
 		return getAxisAlignedMinimumBoundingBox().getSize();
 	}
@@ -424,16 +419,7 @@ public abstract class ModelImp extends TransformableImp implements edu.cmu.cs.de
 	protected edu.cmu.cs.dennisc.scenegraph.graphics.Bubble.Originator createOriginator() {
 		return new edu.cmu.cs.dennisc.scenegraph.graphics.Bubble.Originator() {
 			@Override
-			public void calculate(
-					java.awt.geom.Point2D.Float out_originOfTail,
-					java.awt.geom.Point2D.Float out_bodyConnectionLocationOfTail,
-					java.awt.geom.Point2D.Float out_textBoundsOffset,
-					edu.cmu.cs.dennisc.scenegraph.graphics.Bubble bubble,
-					edu.cmu.cs.dennisc.render.RenderTarget renderTarget,
-					java.awt.Rectangle actualViewport,
-					edu.cmu.cs.dennisc.scenegraph.AbstractCamera sgCamera,
-					java.awt.geom.Dimension2D textSize
-					) {
+			public void calculate( java.awt.geom.Point2D.Float out_originOfTail, java.awt.geom.Point2D.Float out_bodyConnectionLocationOfTail, java.awt.geom.Point2D.Float out_textBoundsOffset, edu.cmu.cs.dennisc.scenegraph.graphics.Bubble bubble, edu.cmu.cs.dennisc.render.RenderTarget renderTarget, java.awt.Rectangle actualViewport, edu.cmu.cs.dennisc.scenegraph.AbstractCamera sgCamera, java.awt.geom.Dimension2D textSize ) {
 				edu.cmu.cs.dennisc.math.Vector4 offsetAsSeenBySubject;
 				if( bubble instanceof edu.cmu.cs.dennisc.scenegraph.graphics.SpeechBubble ) {
 					offsetAsSeenBySubject = getSpeechBubbleOffset();
@@ -455,6 +441,40 @@ public abstract class ModelImp extends TransformableImp implements edu.cmu.cs.de
 		};
 	}
 
+	protected edu.cmu.cs.dennisc.scenegraph.util.BoundingBoxDecorator boundingBoxDecorator;
+
+	protected edu.cmu.cs.dennisc.scenegraph.Leaf getVisualization() {
+		if( this.boundingBoxDecorator != null ) {
+			//pass
+		} else {
+			this.boundingBoxDecorator = new edu.cmu.cs.dennisc.scenegraph.util.BoundingBoxDecorator();
+			this.boundingBoxDecorator.setBox( this.getAxisAlignedMinimumBoundingBox() );
+
+			this.addScaleListener( new PropertyListener() {
+
+				@Override
+				public void propertyChanging( PropertyEvent e ) {
+				}
+
+				@Override
+				public void propertyChanged( PropertyEvent e ) {
+					boundingBoxDecorator.setBox( getAxisAlignedMinimumBoundingBox() );
+				}
+			} );
+		}
+		return this.boundingBoxDecorator;
+	}
+
+	public void showVisualization() {
+		this.getVisualization().setParent( this.getSgComposite() );
+	}
+
+	public void hideVisualization() {
+		if( this.boundingBoxDecorator != null ) {
+			this.boundingBoxDecorator.setParent( null );
+		}
+	}
+
 	//	@Override
 	//	protected edu.cmu.cs.dennisc.scenegraph.bound.CumulativeBound updateCumulativeBound( edu.cmu.cs.dennisc.scenegraph.bound.CumulativeBound rv, edu.cmu.cs.dennisc.math.AffineMatrix4x4 trans, boolean isOriginIncluded ) {
 	//		super.updateCumulativeBound( rv, trans, isOriginIncluded );
@@ -462,7 +482,7 @@ public abstract class ModelImp extends TransformableImp implements edu.cmu.cs.de
 	//		rv.add( this.sgBackFace, trans );
 	//		return rv;
 	//	}
-	//	
+	//
 	//	@Override
 	//	protected void applyScale( edu.cmu.cs.dennisc.math.Vector3 axis, boolean isScootDesired ) {
 	//		super.applyScale( axis, isScootDesired );

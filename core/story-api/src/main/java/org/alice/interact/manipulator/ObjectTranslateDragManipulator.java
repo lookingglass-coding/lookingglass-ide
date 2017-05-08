@@ -268,7 +268,7 @@ public class ObjectTranslateDragManipulator extends AbstractManipulator implemen
 
 	@Override
 	protected HandleSet getHandleSetToEnable() {
-		return HandleSet.STOOD_UP_GROUND_TRANSLATION_VISUALIZATION;
+		return HandleSet.ABSOLUTE_GROUND_TRANSLATION_VISUALIZATION;
 	}
 
 	private Point3 initialClickPoint = new Point3();

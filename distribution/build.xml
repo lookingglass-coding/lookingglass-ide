@@ -394,17 +394,6 @@ ${alice.license}</echo>
 		</sequential>
 	</macrodef>
 
-	<target name="release-dir-linux-i586" depends="release-dir-linux">
-		<!-- Platform resources -->
-		<copy todir="${project.distribution.staging.directory}/platform">
-			<fileset dir="${project.distribution.platform.directory}">
-				<include name="linux-i586/**/**" />
-			</fileset>
-		</copy>
-
-		<linux-jre arch="i586" />
-	</target>
-
 	<target name="release-dir-linux-amd64" depends="release-dir-linux">
 		<!-- Platform resources -->
 		<copy todir="${project.distribution.staging.directory}/platform">
@@ -429,10 +418,6 @@ ${alice.license}</echo>
 			</exec>
 		</sequential>
 	</macrodef>
-
-	<target name="linux-i586-tar" depends="release-dir-linux-i586">
-		<build-tar arch="i586" />
-	</target>
 
 	<target name="linux-amd64-tar" depends="release-dir-linux-amd64">
 		<build-tar arch="x64" />
@@ -477,10 +462,6 @@ ${alice.license}</echo>
 		<chmod perm="a+x" file="${project.distribution.build.directory}/${application.file}" />
 	</target>
 
-	<target name="linux-i586-deb" depends="release-dir-linux-i586, deb-build-dir">
-		<build-deb arch="i386" />
-	</target>
-
 	<target name="linux-amd64-deb" depends="release-dir-linux-amd64, deb-build-dir">
 		<build-deb arch="amd64" />
 	</target>
@@ -505,10 +486,6 @@ ${alice.license}</echo>
 		</tar>
 	</target>
 
-	<target name="linux-i586-rpm" depends="release-dir-linux-i586, rpm-build-dir" if="platform-linux">
-		<build-rpm arch="i586" />
-	</target>
-
 	<target name="linux-amd64-rpm" depends="release-dir-linux-amd64, rpm-build-dir" if="platform-linux">
 		<build-rpm arch="x86_64" />
 	</target>
@@ -516,7 +493,16 @@ ${alice.license}</echo>
 	<target name="community-bundle" depends="release-dir-linux-amd64">
 		<echo file="${project.distribution.staging.directory}/${application.file}.classpath">lookingglass_dir=$(dirname "$(readlink -f "$BASH_SOURCE")")
 lookingglass_classpath="${project.classpath.community}"</echo>
-		<tar destfile="${project.build.directory}/community-${application.file}-${application.version}.tar.gz" longfile="gnu" compression="gzip" basedir="${project.distribution.staging.directory}" />
+		<exec executable="tar">
+			<arg value="-cz" />
+			<arg value="--file=${project.build.directory}/lookingglass-community-bundle.tar.gz" />
+			<arg value="-C" />
+			<arg value="${project.distribution.staging.directory}" />
+			<arg value="--dereference" />
+			<arg value="--transform" />
+			<arg value="s,^.,lookingglass," />
+			<arg value="." />
+		</exec>
 	</target>
 
 </project>

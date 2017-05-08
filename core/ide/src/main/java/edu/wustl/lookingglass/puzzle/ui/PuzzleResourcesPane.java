@@ -44,13 +44,13 @@
  *******************************************************************************/
 package edu.wustl.lookingglass.puzzle.ui;
 
-import javafx.fxml.FXML;
-
 import org.lgna.croquet.icon.IconSize;
 
 import edu.wustl.lookingglass.croquetfx.FxComponent;
 import edu.wustl.lookingglass.ide.LookingGlassTheme;
 import edu.wustl.lookingglass.puzzle.CompletionPuzzle;
+import edu.wustl.lookingglass.puzzle.ui.croquet.CompletionPuzzleComposite;
+import javafx.fxml.FXML;
 
 /**
  * @author Kyle J. Harms
@@ -58,15 +58,17 @@ import edu.wustl.lookingglass.puzzle.CompletionPuzzle;
 public class PuzzleResourcesPane extends FxComponent {
 
 	private final CompletionPuzzle puzzle;
+	private final CompletionPuzzleComposite puzzleComposite;
 
 	@FXML private javafx.scene.layout.VBox resourcesPane;
 	@FXML private javafx.scene.image.ImageView scene;
 	@FXML private javafx.scene.control.Button playCorrect;
 	@FXML private javafx.scene.control.Button playMine;
 
-	public PuzzleResourcesPane( CompletionPuzzle puzzle, javafx.scene.image.Image scenePreview ) {
+	public PuzzleResourcesPane( CompletionPuzzle puzzle, CompletionPuzzleComposite puzzleComposite, javafx.scene.image.Image scenePreview ) {
 		super( PuzzleResourcesPane.class );
 		this.puzzle = puzzle;
+		this.puzzleComposite = puzzleComposite;
 
 		this.scene.fitWidthProperty().bind( resourcesPane.widthProperty() );
 		this.scene.setImage( scenePreview );
@@ -82,10 +84,10 @@ public class PuzzleResourcesPane extends FxComponent {
 	}
 
 	private void handlePlayOriginalAction( javafx.event.ActionEvent event ) {
-		this.puzzle.getPuzzleComposite().showCheckPane( CompletionPuzzle.PuzzleProjectState.REFERENCE );
+		this.puzzleComposite.showCheckPane( CompletionPuzzle.PuzzleProjectState.REFERENCE );
 	}
 
 	private void handlePlayPuzzleAction( javafx.event.ActionEvent event ) {
-		this.puzzle.getPuzzleComposite().showCheckPane( CompletionPuzzle.PuzzleProjectState.PUZZLE );
+		this.puzzleComposite.showCheckPane( CompletionPuzzle.PuzzleProjectState.PUZZLE );
 	}
 }

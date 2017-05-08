@@ -227,10 +227,10 @@ public final class CommunityController extends CommunityBaseController {
 
 		CommunityRepository repo = this.getProjectsRepository();
 
-		// TODO: remove this once we create UI and properly integrate projects sync into LG.
-		repo.setShouldWorkOffline( true );
-
 		if( repo != null ) {
+			// TODO: remove this once we create UI and properly integrate projects sync into LG.
+			repo.setShouldWorkOffline( true );
+
 			repo.sync( ( status ) -> {
 				if( status.getStatus() == SyncStatus.UNKNOWN_FAILURE ) {
 					// These errors shouldn't have happened... it means we have a problem

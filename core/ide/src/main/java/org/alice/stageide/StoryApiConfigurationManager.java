@@ -406,6 +406,8 @@ public class StoryApiConfigurationManager extends org.alice.ide.ApiConfiguration
 		rv.add( org.lgna.project.ast.JavaType.getInstance( org.lgna.story.MoveDirection.class ) );
 		rv.add( org.lgna.project.ast.JavaType.getInstance( org.lgna.story.TurnDirection.class ) );
 		rv.add( org.lgna.project.ast.JavaType.getInstance( org.lgna.story.RollDirection.class ) );
+		rv.add( null );
+		rv.add( org.lgna.project.ast.JavaType.getInstance( org.lgna.story.AudioSource.class ) );
 		return rv;
 	}
 
@@ -448,6 +450,9 @@ public class StoryApiConfigurationManager extends org.alice.ide.ApiConfiguration
 					org.lgna.project.ast.JavaMethod getJointArrayMethod = JOINTED_MODEL_TYPE.getDeclaredMethod( "getJointArray", org.lgna.story.resources.JointId[].class );
 					org.lgna.project.ast.JavaMethod getJointArrayIdMethod = JOINTED_MODEL_TYPE.getDeclaredMethod( "getJointArray", org.lgna.story.resources.JointArrayId.class );
 					org.lgna.project.ast.JavaMethod getJointMethod = JOINTED_MODEL_TYPE.getDeclaredMethod( "getJoint", org.lgna.story.resources.JointId.class );
+					org.lgna.project.ast.JavaMethod getPoseMethod = JOINTED_MODEL_TYPE.getDeclaredMethod( "getPose", org.lgna.story.JointedModelPose.class );
+
+					org.lgna.project.ast.JavaMethod strikePoseMethod = JOINTED_MODEL_TYPE.getDeclaredMethod( "strikePose", org.lgna.story.Pose.class, org.lgna.story.StrikePose.Detail[].class );
 					for( org.lgna.project.ast.AbstractField field : resourceType.getDeclaredFields() ) {
 						if( field.isStatic() ) {
 							if( field.getValueType().isAssignableTo( org.lgna.story.resources.JointId.class ) && ( field.getVisibility() != org.lgna.project.annotations.Visibility.COMPLETELY_HIDDEN ) ) {
@@ -492,6 +497,21 @@ public class StoryApiConfigurationManager extends org.alice.ide.ApiConfiguration
 										org.lgna.project.ast.AstUtilities.createStaticFieldAccess( field ) );
 								body.statements.add( org.lgna.project.ast.AstUtilities.createReturnStatement( org.lgna.story.SJoint[].class, expression ) );
 								rv.methods.add( method );
+							} else if( field.getValueType().isAssignableTo( org.lgna.story.Pose.class ) && ( field.getVisibility() != org.lgna.project.annotations.Visibility.COMPLETELY_HIDDEN ) ) {
+								String methodName = getFieldMethodNameHint( field );
+								if( methodName == null ) {
+									methodName = org.alice.ide.identifier.IdentifierNameGenerator.SINGLETON.convertConstantNameToMethodName( field.getName() );
+								}
+								org.lgna.project.ast.UserMethod method = org.lgna.project.ast.AstUtilities.createProcedure( methodName );
+								method.managementLevel.setValue( org.lgna.project.ast.ManagementLevel.GENERATED );
+								//								UserParameter detailsParameter = new UserParameter( "details", StrikePose.Detail.class );
+								//								method.getVariableLengthParameter().
+								//								method.requiredParameters.add( detailsParameter );
+								org.lgna.project.ast.BlockStatement body = method.body.getValue();
+								org.lgna.project.ast.MethodInvocation mi = org.lgna.project.ast.AstUtilities.createMethodInvocation( new org.lgna.project.ast.ThisExpression(), strikePoseMethod, org.lgna.project.ast.AstUtilities.createStaticFieldAccess( field ) );
+								//mi.variableArguments.add( new SimpleArgument( strikePoseMethod.getVariableLengthParameter(), new ParameterAccess( detailsParameter ) ) );
+								body.statements.add( new org.lgna.project.ast.ExpressionStatement( mi ) );
+								rv.methods.add( method );
 							}
 						}
 					}
@@ -508,6 +528,41 @@ public class StoryApiConfigurationManager extends org.alice.ide.ApiConfiguration
 		} else {
 			return false;
 		}
+	}
+
+	private org.lgna.project.ast.AbstractType<?, ?, ?> getSpecificPoseBuilderType( org.lgna.project.ast.Expression expression ) {
+		if( expression instanceof org.lgna.project.ast.MethodInvocation ) {
+			org.lgna.project.ast.MethodInvocation methodInvocation = (org.lgna.project.ast.MethodInvocation)expression;
+			return getSpecificPoseBuilderType( methodInvocation.expression.getValue() );
+		} else if( expression instanceof org.lgna.project.ast.InstanceCreation ) {
+			org.lgna.project.ast.InstanceCreation instanceCreation = (org.lgna.project.ast.InstanceCreation)expression;
+			return instanceCreation.getType();
+		} else {
+			return null;
+		}
+	}
+
+	private org.lgna.project.ast.AbstractType<?, ?, ?> getBuildMethodPoseBuilderType( org.lgna.project.ast.MethodInvocation methodInvocation, boolean isSpecificPoseBuilderTypeRequired ) {
+		org.lgna.project.ast.AbstractMethod method = methodInvocation.method.getValue();
+		if( "build".equals( method.getName() ) ) {
+			org.lgna.project.ast.AbstractType<?, ?, ?> type = methodInvocation.expression.getExpressionType();
+			if( type.isAssignableTo( org.lgna.story.PoseBuilder.class ) ) {
+				if( isSpecificPoseBuilderTypeRequired ) {
+					return getSpecificPoseBuilderType( methodInvocation.expression.getValue() );
+				} else {
+					return type;
+				}
+			}
+		}
+		return null;
+	}
+
+	public org.lgna.project.ast.AbstractType<?, ?, ?> getBuildMethodPoseBuilderType( org.lgna.project.ast.MethodInvocation methodInvocation ) {
+		return getBuildMethodPoseBuilderType( methodInvocation, true );
+	}
+
+	public boolean isBuildMethod( org.lgna.project.ast.MethodInvocation methodInvocation ) {
+		return getBuildMethodPoseBuilderType( methodInvocation, false ) != null;
 	}
 
 	@Override

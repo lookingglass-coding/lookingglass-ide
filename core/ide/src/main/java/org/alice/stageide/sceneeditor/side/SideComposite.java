@@ -47,6 +47,7 @@ import java.util.List;
 import org.alice.interact.handle.HandleStyle;
 
 import edu.cmu.cs.dennisc.java.util.Lists;
+import edu.cmu.cs.dennisc.java.util.logging.Logger;
 
 /**
  * @author Dennis Cosgrove
@@ -97,7 +98,7 @@ public class SideComposite extends org.lgna.croquet.SimpleComposite<org.alice.st
 	private final ObjectPropertiesToolPalette objectPropertiesTab = new ObjectPropertiesToolPalette();
 	private final ObjectMarkersToolPalette objectMarkersTab = new ObjectMarkersToolPalette();
 	private final CameraMarkersToolPalette cameraMarkersTab = new CameraMarkersToolPalette();
-	private final org.lgna.croquet.ImmutableDataSingleSelectListState<HandleStyle> handleStyleState;
+	private final org.lgna.croquet.ImmutableDataSingleSelectListState<HandleStyle> handleStyleState = this.createImmutableListState( "handleStyleState", HandleStyle.class, HandleStyleCodec.INSTANCE, 0, HandleStyle.values() );
 
 	private final org.lgna.croquet.BooleanState isSnapEnabledState = this.createBooleanState( "isSnapEnabledState", false );
 
@@ -105,9 +106,6 @@ public class SideComposite extends org.lgna.croquet.SimpleComposite<org.alice.st
 
 	public SideComposite() {
 		super( java.util.UUID.fromString( "3adc7b8a-f317-467d-8c8a-807086fffaea" ) );
-		List<HandleStyle> handleStyles = Lists.newArrayList( HandleStyle.values() );
-		handleStyles.remove( handleStyles.size() - 1 );
-		handleStyleState = this.createImmutableListState( "handleStyleState", HandleStyle.class, HandleStyleCodec.INSTANCE, 0, handleStyles.toArray( new HandleStyle[ handleStyles.size() ] ) );
 	}
 
 	@Override

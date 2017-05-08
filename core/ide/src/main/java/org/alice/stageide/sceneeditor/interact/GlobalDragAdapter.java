@@ -44,6 +44,7 @@
 package org.alice.stageide.sceneeditor.interact;
 
 import java.awt.event.KeyEvent;
+import java.util.Map.Entry;
 
 import javax.swing.SwingUtilities;
 
@@ -106,14 +107,20 @@ import org.alice.stageide.sceneeditor.interact.manipulators.ScaleDragManipulator
 
 import edu.cmu.cs.dennisc.color.Color4f;
 import edu.cmu.cs.dennisc.math.AffineMatrix4x4;
+import edu.wustl.lookingglass.croquetfx.ThreadHelper;
 
 /**
  * @author David Culyba
  */
 public class GlobalDragAdapter extends org.alice.stageide.sceneeditor.interact.CroquetSupportingDragAdapter {
 
-	//Used to lock down the scene editor so only selection is available as an interaction (moving objects, moving the camera and whatnot are all disabled)
-	private boolean enableSelectionOnlyMode = true;
+	// Used to make merges easier. Do not change. Do not use.
+	private static final boolean ENABLE_SELECTION_ONLY_MODE = false; // Do not use!
+
+	// Used to lock down the scene editor so only selection is available as an interaction (moving objects, moving the camera and whatnot are all disabled)
+	private boolean enableSelectionOnlyMode = false;
+	private ManipulatorConditionSet selectManipulatorConditionSet;
+	protected final java.util.Map<ManipulatorConditionSet, Boolean> manipulatorsToRestore = edu.cmu.cs.dennisc.java.util.Maps.newHashMap();
 
 	TargetManipulator dropTargetManipulator;
 
@@ -129,497 +136,494 @@ public class GlobalDragAdapter extends org.alice.stageide.sceneeditor.interact.C
 		return this.sceneEditor != null;
 	}
 
-	//<lg>
-	public void setSelectionOnlyMode( boolean enableSelectionOnlyMode ) {
-		this.enableSelectionOnlyMode = enableSelectionOnlyMode;
+	// <lg/>
+	public void setSelectionOnlyMode( boolean selectionOnlyMode ) {
+		if( this.enableSelectionOnlyMode != selectionOnlyMode ) {
+			if( selectionOnlyMode ) {
+				this.setHandleSelectionState( HandleStyle.SELECT );
 
-		if( this.enableSelectionOnlyMode ) {
-			getHandleStyleState().setValueTransactionlessly( HandleStyle.SELECT );
-			for( ManipulatorConditionSet manipulator : this.manipulators ) {
-				if( !manipulator.getName().contentEquals( "Select Object" ) ) {
-					manipulator.setEnabled( false );
+				this.manipulatorsToRestore.clear();
+				for( ManipulatorConditionSet manipulator : this.manipulators ) {
+					this.manipulatorsToRestore.put( manipulator, manipulator.isEnabled() );
+					if( manipulator != this.selectManipulatorConditionSet ) {
+						manipulator.setEnabled( false );
+					}
 				}
+			} else {
+				for( Entry<ManipulatorConditionSet, Boolean> pair : this.manipulatorsToRestore.entrySet() ) {
+					ManipulatorConditionSet manipulator = pair.getKey();
+					boolean value = pair.getValue();
+					manipulator.setEnabled( value );
+				}
+				this.manipulatorsToRestore.clear();
+				this.setHandleSelectionState( org.alice.interact.handle.HandleStyle.DEFAULT );
 			}
-		} else {
-			for( ManipulatorConditionSet manipulator : this.manipulators ) {
-				manipulator.setEnabled( true );
-			}
-			for( InteractionGroup interactionGroups : this.mapHandleStyleToInteractionGroup.values() ) {
-				interactionGroups.enabledManipulators( false );
-			}
-			getHandleStyleState().setValueTransactionlessly( HandleStyle.DEFAULT );
+			this.enableSelectionOnlyMode = selectionOnlyMode;
 		}
 	}
 
+	// <lg/>
 	public boolean isSelectionOnlyMode() {
 		return this.enableSelectionOnlyMode;
 	}
 
-	//</lg>
-
 	private void setUpControls() {
-		MovementKey[] movementKeys = {
-				//Forward
-				new MovementKey( KeyEvent.VK_UP, new MovementDescription( MovementDirection.FORWARD ) ),
-				//				new MovementKey(KeyEvent.VK_NUMPAD8, new MovementDescription(MovementDirection.FORWARD)),
-				//				new MovementKey(KeyEvent.VK_W, new MovementDescription(MovementDirection.FORWARD)),
-				//Backward
-				new MovementKey( KeyEvent.VK_DOWN, new MovementDescription( MovementDirection.BACKWARD ) ),
-				//				new MovementKey(KeyEvent.VK_NUMPAD2, new MovementDescription(MovementDirection.BACKWARD)),
-				//				new MovementKey(KeyEvent.VK_S, new MovementDescription(MovementDirection.BACKWARD)),
-				//Left
-				new MovementKey( KeyEvent.VK_LEFT, new MovementDescription( MovementDirection.LEFT ) ),
-				//				new MovementKey(KeyEvent.VK_NUMPAD4, new MovementDescription(MovementDirection.LEFT)),
-				//				new MovementKey(KeyEvent.VK_A, new MovementDescription(MovementDirection.LEFT)),
-				//Right
-				new MovementKey( KeyEvent.VK_RIGHT, new MovementDescription( MovementDirection.RIGHT ) ),
-				//				new MovementKey(KeyEvent.VK_NUMPAD6, new MovementDescription(MovementDirection.RIGHT)),
-				//				new MovementKey(KeyEvent.VK_D,  new MovementDescription(MovementDirection.RIGHT)),
-				//Up
-				new MovementKey( KeyEvent.VK_PAGE_UP, new MovementDescription( MovementDirection.UP, MovementType.LOCAL ), .5d ),
-				//Down
-				new MovementKey( KeyEvent.VK_PAGE_DOWN, new MovementDescription( MovementDirection.DOWN, MovementType.LOCAL ), .5d ),
-				//Up Left
-				//				new MovementKey(KeyEvent.VK_NUMPAD7, new Point3(-1, 0, -1)),
-				//				//Up Right
-				//				new MovementKey(KeyEvent.VK_NUMPAD9, new Point3(1, 0, -1)),
-				//				//Back Left
-				//				new MovementKey(KeyEvent.VK_NUMPAD1, new Point3(-1, 0, 1)),
-				//				//Back Right
-				//				new MovementKey(KeyEvent.VK_NUMPAD3, new Point3(1, 0, 1)),
-		};
+		if( ENABLE_SELECTION_ONLY_MODE ) {
+			//Selection visual handle
+			org.alice.interact.handle.SelectionIndicator selectionIndicator = new org.alice.interact.handle.SelectionIndicator();
+			selectionIndicator.addToGroup( HandleSet.HandleGroup.SELECTION );
+			this.addManipulationListener( selectionIndicator );
+			selectionIndicator.setDragAdapterAndAddHandle( this );
 
-		MovementKey[] zoomKeys = {
-				//Zoom out
-				new MovementKey( KeyEvent.VK_MINUS, new MovementDescription( MovementDirection.BACKWARD, MovementType.LOCAL ) ),
-				new MovementKey( KeyEvent.VK_SUBTRACT, new MovementDescription( MovementDirection.BACKWARD, MovementType.LOCAL ) ),
-				//Zoom in
-				new MovementKey( KeyEvent.VK_EQUALS, new MovementDescription( MovementDirection.FORWARD, MovementType.LOCAL ) ),
-				new MovementKey( KeyEvent.VK_ADD, new MovementDescription( MovementDirection.FORWARD, MovementType.LOCAL ) ),
-		};
+			//Selection manipulator
+			ManipulatorConditionSet selectObject = new ManipulatorConditionSet( new SelectObjectDragManipulator( this ) );
+			selectObject.addCondition( new MousePressCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.PickType.SELECTABLE.pickHint() ) ) );
+			this.addManipulatorConditionSet( selectObject );
 
-		MovementKey[] turnKeys = {
-				//Left
-				new MovementKey( KeyEvent.VK_OPEN_BRACKET, new MovementDescription( MovementDirection.LEFT, MovementType.LOCAL ), 2.0d ),
-				//Right
-				new MovementKey( KeyEvent.VK_CLOSE_BRACKET, new MovementDescription( MovementDirection.RIGHT, MovementType.LOCAL ), -2.0d ),
-		};
+			//Ability to drag stuff in from gallery
+			OmniDirectionalBoundingBoxManipulator boundingBoxManipulator = new OmniDirectionalBoundingBoxManipulator();
+			this.dropTargetManipulator = boundingBoxManipulator;
+			ManipulatorConditionSet dragFromGallery = new ManipulatorConditionSet( boundingBoxManipulator, "Bounding Box Translate" );
+			dragFromGallery.addCondition( new DragAndDropCondition() );
+			this.addManipulatorConditionSet( dragFromGallery );
 
-		ModifierMask noModifiers = new ModifierMask( ModifierMask.NO_MODIFIERS_DOWN );
+			if( this.sceneEditor != null ) {
+				final InteractionGroup.PossibleObjects anyObjects = new InteractionGroup.PossibleObjects( ObjectType.ANY );
+				InteractionGroup selectionOnly = new InteractionGroup( new InteractionGroup.InteractionInfo( anyObjects, HandleSet.DEFAULT_INTERACTION, selectObject, org.alice.interact.PickHint.PickType.MOVEABLE ) );
 
-		CameraTranslateKeyManipulator cameraTranslateManip = new CameraTranslateKeyManipulator( movementKeys );
-		cameraTranslateManip.addKeys( zoomKeys );
-		ManipulatorConditionSet cameraTranslate = new ManipulatorConditionSet( cameraTranslateManip );
-		for( MovementKey movementKey : movementKeys ) {
-			AndInputCondition keyAndNotSelected = new AndInputCondition( new KeyPressCondition( movementKey.keyValue ), new SelectedObjectCondition( PickHint.getNonInteractiveHint(), InvertedSelectedObjectCondition.ObjectSwitchBehavior.IGNORE_SWITCH ) );
-			cameraTranslate.addCondition( keyAndNotSelected );
-		}
-		for( MovementKey zoomKey : zoomKeys ) {
-			AndInputCondition keyAndNotSelected = new AndInputCondition( new KeyPressCondition( zoomKey.keyValue, noModifiers ), new SelectedObjectCondition( PickHint.getNonInteractiveHint(), InvertedSelectedObjectCondition.ObjectSwitchBehavior.IGNORE_SWITCH ) );
-			cameraTranslate.addCondition( keyAndNotSelected );
-		}
-		//	this.addManipulator( cameraTranslate );
+				this.mapHandleStyleToInteractionGroup.put( org.alice.interact.handle.HandleStyle.DEFAULT, selectionOnly );
+				this.mapHandleStyleToInteractionGroup.put( org.alice.interact.handle.HandleStyle.ROTATION, selectionOnly );
+				this.mapHandleStyleToInteractionGroup.put( org.alice.interact.handle.HandleStyle.TRANSLATION, selectionOnly );
+				this.mapHandleStyleToInteractionGroup.put( org.alice.interact.handle.HandleStyle.RESIZE, selectionOnly );
 
-		ManipulatorConditionSet objectTranslate = new ManipulatorConditionSet( new ObjectTranslateKeyManipulator( movementKeys ) );
-		for( MovementKey movementKey : movementKeys ) {
-			AndInputCondition keyAndSelected = new AndInputCondition( new KeyPressCondition( movementKey.keyValue ), new SelectedObjectCondition( PickHint.PickType.MOVEABLE.pickHint() ) );
-			objectTranslate.addCondition( keyAndSelected );
-		}
-		this.addManipulatorConditionSet( objectTranslate );
-
-		ManipulatorConditionSet cameraRotate = new ManipulatorConditionSet( new CameraRotateKeyManipulator( turnKeys ) );
-		for( MovementKey turnKey : turnKeys ) {
-			AndInputCondition keyAndNotSelected = new AndInputCondition( new KeyPressCondition( turnKey.keyValue ), new SelectedObjectCondition( PickHint.getNonInteractiveHint(), InvertedSelectedObjectCondition.ObjectSwitchBehavior.IGNORE_SWITCH ) );
-			cameraRotate.addCondition( keyAndNotSelected );
-		}
-		this.addManipulatorConditionSet( cameraRotate );
-
-		//Camera mouse control
-		MouseDragCondition leftAndNoModifiers = new MouseDragCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.getNonInteractiveHint() ), new ModifierMask( ModifierMask.NO_MODIFIERS_DOWN ) );
-		MouseDragCondition leftAndShift = new MouseDragCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.getNonInteractiveHint() ), new ModifierMask( ModifierMask.JUST_SHIFT ) );
-		MouseDragCondition leftAndControl = new MouseDragCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.getNonInteractiveHint() ), new ModifierMask( ModifierMask.JUST_CONTROL ) );
-		MouseDragCondition middleMouseAndAnything = new MouseDragCondition( java.awt.event.MouseEvent.BUTTON2, new PickCondition( PickHint.getAnythingHint() ) );
-		MouseDragCondition rightMouseAndNonInteractive = new MouseDragCondition( java.awt.event.MouseEvent.BUTTON3, new PickCondition( PickHint.getNonInteractiveHint() ) );
-
-		ManipulatorConditionSet cameraOrbit = new ManipulatorConditionSet( new CameraOrbitDragManipulator() );
-		//		cameraOrbit.addCondition(rightMouseAndNonInteractive);
-		cameraOrbit.addCondition( middleMouseAndAnything );
-		this.addManipulatorConditionSet( cameraOrbit );
-
-		ManipulatorConditionSet cameraTilt = new ManipulatorConditionSet( new CameraTiltDragManipulator() );
-		cameraTilt.addCondition( rightMouseAndNonInteractive );
-		cameraTilt.addCondition( leftAndControl );
-		this.addManipulatorConditionSet( cameraTilt );
-
-		ManipulatorConditionSet cameraMouseTranslate = new ManipulatorConditionSet( new CameraMoveDragManipulator() );
-		cameraMouseTranslate.addCondition( leftAndNoModifiers );
-		this.addManipulatorConditionSet( cameraMouseTranslate );
-
-		ManipulatorConditionSet cameraMousePan = new ManipulatorConditionSet( new CameraPanDragManipulator() );
-		cameraMousePan.addCondition( leftAndShift );
-		this.addManipulatorConditionSet( cameraMousePan );
-
-		//Object Manipulation
-		OmniDirectionalBoundingBoxManipulator boundingBoxManipulator = new OmniDirectionalBoundingBoxManipulator();
-		this.dropTargetManipulator = boundingBoxManipulator;
-		ManipulatorConditionSet dragFromGallery = new ManipulatorConditionSet( boundingBoxManipulator, "Bounding Box Translate" );
-		dragFromGallery.addCondition( new DragAndDropCondition() );
-		this.addManipulatorConditionSet( dragFromGallery );
-
-		MouseDragCondition leftClickMoveableObjects = new MouseDragCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.PickType.MOVEABLE.pickHint() ), new ModifierMask( ModifierMask.NO_MODIFIERS_DOWN ) );
-		MouseDragCondition leftClickTurnableObjects = new MouseDragCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.PickType.TURNABLE.pickHint() ), new ModifierMask( ModifierMask.NO_MODIFIERS_DOWN ) );
-		MouseDragCondition leftClickResizableObjects = new MouseDragCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.PickType.RESIZABLE.pickHint() ), new ModifierMask( ModifierMask.NO_MODIFIERS_DOWN ) );
-
-		ManipulatorConditionSet leftClickMouseTranslateObject = new ManipulatorConditionSet( new OmniDirectionalDragManipulator(), "Mouse Translate" );
-		leftClickMouseTranslateObject.addCondition( leftClickMoveableObjects );
-		this.addManipulatorConditionSet( leftClickMouseTranslateObject );
-
-		ManipulatorConditionSet leftClickMouseRotateObjectLeftRight = new ManipulatorConditionSet( new HandlelessObjectRotateDragManipulator( MovementDirection.UP ) );
-		leftClickMouseRotateObjectLeftRight.addCondition( leftClickTurnableObjects );
-		//This manipulation is used only when the "rotation" interaction group is selected. Disabled by default.
-		leftClickMouseRotateObjectLeftRight.setEnabled( false );
-		this.addManipulatorConditionSet( leftClickMouseRotateObjectLeftRight );
-
-		ManipulatorConditionSet leftClickMouseResizeObject = new ManipulatorConditionSet( new ResizeDragManipulator( edu.cmu.cs.dennisc.scenegraph.scale.Resizer.UNIFORM, edu.cmu.cs.dennisc.scenegraph.scale.Resizer.XY_PLANE, edu.cmu.cs.dennisc.scenegraph.scale.Resizer.XZ_PLANE, edu.cmu.cs.dennisc.scenegraph.scale.Resizer.YZ_PLANE ) );
-		leftClickMouseResizeObject.addCondition( leftClickResizableObjects );
-		//This manipulation is used only when the "resize" interaction group is selected. Disabled by default.
-		leftClickMouseResizeObject.setEnabled( false );
-		this.addManipulatorConditionSet( leftClickMouseResizeObject );
-
-		ManipulatorConditionSet mouseUpDownTranslateObject = new ManipulatorConditionSet( new ObjectUpDownDragManipulator() );
-		MouseDragCondition moveableObjectWithShift = new MouseDragCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.PickType.MOVEABLE.pickHint() ), new ModifierMask( ModifierKey.SHIFT ) );
-		mouseUpDownTranslateObject.addCondition( moveableObjectWithShift );
-		this.addManipulatorConditionSet( mouseUpDownTranslateObject );
-
-		ManipulatorConditionSet mouseRotateObjectLeftRight = new ManipulatorConditionSet( new HandlelessObjectRotateDragManipulator( MovementDirection.UP ) );
-		MouseDragCondition moveableObjectWithCtrl = new MouseDragCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.PickType.TURNABLE.pickHint() ), new ModifierMask( ModifierKey.CONTROL ) );
-		mouseRotateObjectLeftRight.addCondition( moveableObjectWithCtrl );
-		this.addManipulatorConditionSet( mouseRotateObjectLeftRight );
-
-		ManipulatorConditionSet mouseCopyAndMoveObject = new ManipulatorConditionSet( new CopyObjectDragManipulator() );
-		MouseDragCondition copyObjectWithAlt = new MouseDragCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.PickType.MOVEABLE.pickHint() ), new ModifierMask( ModifierKey.ALT ) );
-		mouseCopyAndMoveObject.addCondition( copyObjectWithAlt );
-		this.addManipulatorConditionSet( mouseCopyAndMoveObject );
-
-		ManipulatorConditionSet mouseHandleDrag = new ManipulatorConditionSet( new ObjectGlobalHandleDragManipulator() );
-		MouseDragCondition handleObjectCondition = new MouseDragCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.PickType.THREE_D_HANDLE.pickHint() ), new ModifierMask( ModifierMask.NO_MODIFIERS_DOWN ) );
-		MouseCondition handleObjectClickCondition = new MouseCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.PickType.TWO_D_HANDLE.pickHint() ), new ModifierMask( ModifierMask.NO_MODIFIERS_DOWN ) );
-		mouseHandleDrag.addCondition( handleObjectCondition );
-		mouseHandleDrag.addCondition( handleObjectClickCondition );
-		this.addManipulatorConditionSet( mouseHandleDrag );
-
-		//		ManipulatorConditionSet mouseHandleClick = new ManipulatorConditionSet( new ObjectGlobalHandleDragManipulator() );
-		//		MousePressCondition handleObjectClickCondition = new MousePressCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.TWO_D_HANDLES));
-		//		System.out.println("Looking for condition: "+handleObjectCondition.hashCode()+", in set "+mouseHandleClick.hashCode());
-		//		mouseHandleClick.addCondition( handleObjectClickCondition );
-		//		this.addManipulator( mouseHandleClick );
-
-		ManipulatorConditionSet selectObject = new ManipulatorConditionSet( new SelectObjectDragManipulator( this ), "Select Object" );
-		selectObject.addCondition( new MousePressCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.PickType.SELECTABLE.pickHint() ) ) );
-		this.addManipulatorConditionSet( selectObject );
-
-		ManipulatorConditionSet getAGoodLookAtObject = new ManipulatorConditionSet( new GetAGoodLookAtManipulator() );
-		getAGoodLookAtObject.addCondition( new DoubleClickedObjectCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.PickType.VIEWABLE.pickHint() ), new ModifierMask( ModifierMask.JUST_CONTROL ) ) );
-		this.addManipulatorConditionSet( getAGoodLookAtObject );
-
-		ManipulatorConditionSet mouseWheelCameraZoom = new ManipulatorConditionSet( new CameraZoomMouseWheelManipulator() );
-		MouseWheelCondition mouseWheelCondition = new MouseWheelCondition( new ModifierMask( ModifierMask.NO_MODIFIERS_DOWN ) );
-		mouseWheelCameraZoom.addCondition( mouseWheelCondition );
-		this.addManipulatorConditionSet( mouseWheelCameraZoom );
-
-		//todo: move down?
-		for( ManipulatorConditionSet manipulatorConditionSet : this.getManipulatorConditionSets() ) {
-			manipulatorConditionSet.getManipulator().setDragAdapter( this );
-		}
-
-		ManipulationAxes handleAxis = new org.alice.interact.handle.ManipulationAxes();
-
-		handleAxis.addToGroup( HandleSet.HandleGroup.VISUALIZATION );
-
-		//		handleAxis.addToSet( HandleSet.DEFAULT_INTERACTION );
-		//		handleAxis.addToSet( HandleSet.ROTATION_INTERACTION );
-		//		handleAxis.addToSet( HandleSet.JOINT_ROTATION_INTERACTION );
-		//		handleAxis.addToSet( HandleSet.TRANSLATION_INTERACTION );
-
-		handleAxis.addCondition( new ManipulationEventCriteria( ManipulationEvent.EventType.Rotate, null, PickHint.getAnythingHint() ) );
-		handleAxis.addCondition( new ManipulationEventCriteria( ManipulationEvent.EventType.Translate, null, PickHint.getAnythingHint() ) );
-		this.addManipulationListener( handleAxis );
-		handleAxis.setDragAdapterAndAddHandle( this );
-		handleAxis.setName( "handleAxis" );
-
-		StoodUpRotationRingHandle rotateAboutYAxisStoodUp = new StoodUpRotationRingHandle( MovementDirection.UP, RotationRingHandle.HandlePosition.BOTTOM );
-		rotateAboutYAxisStoodUp.setManipulation( new ObjectRotateDragManipulator() {
-			@Override
-			protected HandleSet getHandleSetToEnable() {
-				return new HandleSet( HandleSet.HandleGroup.Y_AXIS, HandleSet.HandleGroup.VISUALIZATION, HandleSet.HandleGroup.STOOD_UP_ROTATION );
+				org.alice.stageide.sceneeditor.side.SideComposite.getInstance().getHandleStyleState().addAndInvokeNewSchoolValueListener( this.handleStyleListener );
 			}
-		} );
-		//			rotateAboutYAxisStoodUp.addToSet( HandleSet.ROTATION_INTERACTION );
-		rotateAboutYAxisStoodUp.addToSet( HandleSet.DEFAULT_INTERACTION );
-		rotateAboutYAxisStoodUp.addToGroups( HandleSet.HandleGroup.DEFAULT, HandleSet.HandleGroup.Y_AXIS, HandleSet.HandleGroup.VISUALIZATION, HandleSet.HandleGroup.STOOD_UP_ROTATION );
-		rotateAboutYAxisStoodUp.addCondition( new ManipulationEventCriteria(
-				ManipulationEvent.EventType.Rotate,
-				new MovementDescription( MovementDirection.UP, MovementType.STOOD_UP ),
-				PickHint.PickType.TURNABLE.pickHint() ) );
-		rotateAboutYAxisStoodUp.addCondition(
-				new ManipulationEventCriteria( ManipulationEvent.EventType.Rotate,
-						new MovementDescription( MovementDirection.DOWN, MovementType.STOOD_UP ),
-						PickHint.PickType.TURNABLE.pickHint() ) );
-		this.addManipulationListener( rotateAboutYAxisStoodUp );
-		rotateAboutYAxisStoodUp.setDragAdapterAndAddHandle( this );
-		rotateAboutYAxisStoodUp.setName( "rotateAboutYAxisStoodUp" );
+		} else {
+			MovementKey[] movementKeys = {
+					//Forward
+					new MovementKey( KeyEvent.VK_UP, new MovementDescription( MovementDirection.FORWARD ) ),
+					//				new MovementKey(KeyEvent.VK_NUMPAD8, new MovementDescription(MovementDirection.FORWARD)),
+					//				new MovementKey(KeyEvent.VK_W, new MovementDescription(MovementDirection.FORWARD)),
+					//Backward
+					new MovementKey( KeyEvent.VK_DOWN, new MovementDescription( MovementDirection.BACKWARD ) ),
+					//				new MovementKey(KeyEvent.VK_NUMPAD2, new MovementDescription(MovementDirection.BACKWARD)),
+					//				new MovementKey(KeyEvent.VK_S, new MovementDescription(MovementDirection.BACKWARD)),
+					//Left
+					new MovementKey( KeyEvent.VK_LEFT, new MovementDescription( MovementDirection.LEFT ) ),
+					//				new MovementKey(KeyEvent.VK_NUMPAD4, new MovementDescription(MovementDirection.LEFT)),
+					//				new MovementKey(KeyEvent.VK_A, new MovementDescription(MovementDirection.LEFT)),
+					//Right
+					new MovementKey( KeyEvent.VK_RIGHT, new MovementDescription( MovementDirection.RIGHT ) ),
+					//				new MovementKey(KeyEvent.VK_NUMPAD6, new MovementDescription(MovementDirection.RIGHT)),
+					//				new MovementKey(KeyEvent.VK_D,  new MovementDescription(MovementDirection.RIGHT)),
+					//Up
+					new MovementKey( KeyEvent.VK_PAGE_UP, new MovementDescription( MovementDirection.UP, MovementType.LOCAL ), .5d ),
+					//Down
+					new MovementKey( KeyEvent.VK_PAGE_DOWN, new MovementDescription( MovementDirection.DOWN, MovementType.LOCAL ), .5d ),
+					//Up Left
+					//				new MovementKey(KeyEvent.VK_NUMPAD7, new Point3(-1, 0, -1)),
+					//				//Up Right
+					//				new MovementKey(KeyEvent.VK_NUMPAD9, new Point3(1, 0, -1)),
+					//				//Back Left
+					//				new MovementKey(KeyEvent.VK_NUMPAD1, new Point3(-1, 0, 1)),
+					//				//Back Right
+					//				new MovementKey(KeyEvent.VK_NUMPAD3, new Point3(1, 0, 1)),
+			};
 
-		RotationRingHandle rotateAboutYAxis = new RotationRingHandle( MovementDirection.UP, Color4f.GREEN );
-		rotateAboutYAxis.setManipulation( new ObjectRotateDragManipulator() );
-		rotateAboutYAxis.addToSet( HandleSet.ROTATION_INTERACTION );
-		rotateAboutYAxis.addToGroups( HandleSet.HandleGroup.Y_AXIS, HandleSet.HandleGroup.VISUALIZATION );
-		rotateAboutYAxis.setDragAdapterAndAddHandle( this );
-		rotateAboutYAxis.setName( "rotateAboutYAxis" );
+			MovementKey[] zoomKeys = {
+					//Zoom out
+					new MovementKey( KeyEvent.VK_MINUS, new MovementDescription( MovementDirection.BACKWARD, MovementType.LOCAL ) ), new MovementKey( KeyEvent.VK_SUBTRACT, new MovementDescription( MovementDirection.BACKWARD, MovementType.LOCAL ) ),
+					//Zoom in
+					new MovementKey( KeyEvent.VK_EQUALS, new MovementDescription( MovementDirection.FORWARD, MovementType.LOCAL ) ), new MovementKey( KeyEvent.VK_ADD, new MovementDescription( MovementDirection.FORWARD, MovementType.LOCAL ) ),
+			};
 
-		RotationRingHandle rotateAboutXAxis = new RotationRingHandle( MovementDirection.LEFT, Color4f.RED );
-		rotateAboutXAxis.setManipulation( new ObjectRotateDragManipulator() );
-		rotateAboutXAxis.addToSet( HandleSet.ROTATION_INTERACTION );
-		rotateAboutXAxis.addToGroups( HandleSet.HandleGroup.X_AXIS, HandleSet.HandleGroup.VISUALIZATION );
-		rotateAboutXAxis.setDragAdapterAndAddHandle( this );
-		rotateAboutXAxis.setName( "rotateAboutXAxis" );
+			MovementKey[] turnKeys = {
+					//Left
+					new MovementKey( KeyEvent.VK_OPEN_BRACKET, new MovementDescription( MovementDirection.LEFT, MovementType.LOCAL ), 2.0d ),
+					//Right
+					new MovementKey( KeyEvent.VK_CLOSE_BRACKET, new MovementDescription( MovementDirection.RIGHT, MovementType.LOCAL ), -2.0d ),
+			};
 
-		RotationRingHandle rotateAboutZAxis = new RotationRingHandle( MovementDirection.BACKWARD, Color4f.BLUE );
-		rotateAboutZAxis.setManipulation( new ObjectRotateDragManipulator() );
-		rotateAboutZAxis.addToSet( HandleSet.ROTATION_INTERACTION );
-		rotateAboutZAxis.addToGroups( HandleSet.HandleGroup.Z_AXIS, HandleSet.HandleGroup.VISUALIZATION );
-		rotateAboutZAxis.setDragAdapterAndAddHandle( this );
-		rotateAboutZAxis.setName( "rotateAboutZAxis" );
+			ModifierMask noModifiers = new ModifierMask( ModifierMask.NO_MODIFIERS_DOWN );
 
-		JointRotationRingHandle rotateJointAboutZAxis = new org.alice.interact.handle.JointRotationRingHandle( MovementDirection.BACKWARD, Color4f.BLUE );
-		rotateJointAboutZAxis.setManipulation( new ObjectRotateDragManipulator() );
-		rotateJointAboutZAxis.addToSet( HandleSet.JOINT_ROTATION_INTERACTION );
-		rotateJointAboutZAxis.addToGroups( HandleSet.HandleGroup.Z_AXIS, HandleSet.HandleGroup.VISUALIZATION, HandleSet.HandleGroup.JOINT );
-		rotateJointAboutZAxis.setDragAdapterAndAddHandle( this );
-		rotateJointAboutZAxis.setName( "rotateJointAboutZAxis" );
+			CameraTranslateKeyManipulator cameraTranslateManip = new CameraTranslateKeyManipulator( movementKeys );
+			cameraTranslateManip.addKeys( zoomKeys );
+			ManipulatorConditionSet cameraTranslate = new ManipulatorConditionSet( cameraTranslateManip );
+			for( MovementKey movementKey : movementKeys ) {
+				AndInputCondition keyAndNotSelected = new AndInputCondition( new KeyPressCondition( movementKey.keyValue ), new SelectedObjectCondition( PickHint.getNonInteractiveHint(), InvertedSelectedObjectCondition.ObjectSwitchBehavior.IGNORE_SWITCH ) );
+				cameraTranslate.addCondition( keyAndNotSelected );
+			}
+			for( MovementKey zoomKey : zoomKeys ) {
+				AndInputCondition keyAndNotSelected = new AndInputCondition( new KeyPressCondition( zoomKey.keyValue, noModifiers ), new SelectedObjectCondition( PickHint.getNonInteractiveHint(), InvertedSelectedObjectCondition.ObjectSwitchBehavior.IGNORE_SWITCH ) );
+				cameraTranslate.addCondition( keyAndNotSelected );
+			}
+			//	this.addManipulator( cameraTranslate );
 
-		JointRotationRingHandle rotateJointAboutYAxis = new org.alice.interact.handle.JointRotationRingHandle( MovementDirection.UP, Color4f.GREEN );
-		rotateJointAboutYAxis.setManipulation( new ObjectRotateDragManipulator() );
-		rotateJointAboutYAxis.addToSet( HandleSet.JOINT_ROTATION_INTERACTION );
-		rotateJointAboutYAxis.addToGroups( HandleSet.HandleGroup.Y_AXIS, HandleSet.HandleGroup.VISUALIZATION, HandleSet.HandleGroup.JOINT );
-		rotateJointAboutYAxis.setDragAdapterAndAddHandle( this );
-		rotateJointAboutYAxis.setName( "rotateJointAboutYAxis" );
+			ManipulatorConditionSet objectTranslate = new ManipulatorConditionSet( new ObjectTranslateKeyManipulator( movementKeys ) );
+			for( MovementKey movementKey : movementKeys ) {
+				AndInputCondition keyAndSelected = new AndInputCondition( new KeyPressCondition( movementKey.keyValue ), new SelectedObjectCondition( PickHint.PickType.MOVEABLE.pickHint() ) );
+				objectTranslate.addCondition( keyAndSelected );
+			}
+			this.addManipulatorConditionSet( objectTranslate );
 
-		JointRotationRingHandle rotateJointAboutXAxis = new org.alice.interact.handle.JointRotationRingHandle( MovementDirection.LEFT, Color4f.RED );
-		rotateJointAboutXAxis.setManipulation( new ObjectRotateDragManipulator() );
-		rotateJointAboutXAxis.addToSet( HandleSet.JOINT_ROTATION_INTERACTION );
-		rotateJointAboutXAxis.addToGroups( HandleSet.HandleGroup.X_AXIS, HandleSet.HandleGroup.VISUALIZATION, HandleSet.HandleGroup.JOINT );
-		rotateJointAboutXAxis.setDragAdapterAndAddHandle( this );
-		rotateJointAboutXAxis.setName( "rotateJointAboutXAxis" );
+			ManipulatorConditionSet cameraRotate = new ManipulatorConditionSet( new CameraRotateKeyManipulator( turnKeys ) );
+			for( MovementKey turnKey : turnKeys ) {
+				AndInputCondition keyAndNotSelected = new AndInputCondition( new KeyPressCondition( turnKey.keyValue ), new SelectedObjectCondition( PickHint.getNonInteractiveHint(), InvertedSelectedObjectCondition.ObjectSwitchBehavior.IGNORE_SWITCH ) );
+				cameraRotate.addCondition( keyAndNotSelected );
+			}
+			this.addManipulatorConditionSet( cameraRotate );
 
-		LinearTranslateHandle translateUp = new LinearTranslateHandle( new MovementDescription( MovementDirection.UP, MovementType.ABSOLUTE ), Color4f.YELLOW );
-		LinearTranslateHandle translateDown = new LinearTranslateHandle( new MovementDescription( MovementDirection.DOWN, MovementType.ABSOLUTE ), Color4f.YELLOW );
-		translateUp.setManipulation( new LinearDragManipulator() );
-		translateUp.addToGroups( HandleSet.HandleGroup.ABSOLUTE_TRANSLATION, HandleSet.HandleGroup.Y_AXIS, HandleSet.HandleGroup.VISUALIZATION );
-		translateDown.addToGroups( HandleSet.HandleGroup.ABSOLUTE_TRANSLATION, HandleSet.HandleGroup.Y_AXIS, HandleSet.HandleGroup.VISUALIZATION );
-		translateUp.addToGroup( HandleSet.HandleGroup.INTERACTION );
-		translateUp.addToGroup( HandleSet.HandleGroup.VISUALIZATION );
-		translateDown.addToGroup( HandleSet.HandleGroup.VISUALIZATION );
-		//			translateDown.addCondition( new ManipulationEventCriteria(
-		//					ManipulationEvent.EventType.Translate,
-		//					new MovementDescription( MovementDirection.DOWN, MovementType.STOOD_UP ),
-		//					PickHint.PickType.MOVEABLE.pickHint() ) );
-		//			translateUp.addCondition( new ManipulationEventCriteria(
-		//					ManipulationEvent.EventType.Translate,
-		//					new MovementDescription( MovementDirection.UP, MovementType.STOOD_UP ),
-		//					PickHint.PickType.MOVEABLE.pickHint() ) );
-		translateDown.addCondition( new ManipulationEventCriteria(
-				ManipulationEvent.EventType.Translate,
-				new MovementDescription( MovementDirection.DOWN, MovementType.ABSOLUTE ),
-				PickHint.PickType.MOVEABLE.pickHint() ) );
-		translateUp.addCondition( new ManipulationEventCriteria(
-				ManipulationEvent.EventType.Translate,
-				new MovementDescription( MovementDirection.UP, MovementType.ABSOLUTE ),
-				PickHint.PickType.MOVEABLE.pickHint() ) );
-		this.addManipulationListener( translateUp );
-		this.addManipulationListener( translateDown );
-		translateDown.setDragAdapterAndAddHandle( this );
-		translateUp.setDragAdapterAndAddHandle( this );
-		translateDown.setName( "translateDown" );
-		translateUp.setName( "translateUp" );
+			//Camera mouse control
+			MouseDragCondition leftAndNoModifiers = new MouseDragCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.getNonInteractiveHint() ), new ModifierMask( ModifierMask.NO_MODIFIERS_DOWN ) );
+			MouseDragCondition leftAndShift = new MouseDragCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.getNonInteractiveHint() ), new ModifierMask( ModifierMask.JUST_SHIFT ) );
+			MouseDragCondition leftAndControl = new MouseDragCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.getNonInteractiveHint() ), new ModifierMask( ModifierMask.JUST_CONTROL ) );
+			MouseDragCondition middleMouseAndAnything = new MouseDragCondition( java.awt.event.MouseEvent.BUTTON2, new PickCondition( PickHint.getAnythingHint() ) );
+			MouseDragCondition rightMouseAndNonInteractive = new MouseDragCondition( java.awt.event.MouseEvent.BUTTON3, new PickCondition( PickHint.getNonInteractiveHint() ) );
 
-		LinearTranslateHandle translateXAxisRight = new LinearTranslateHandle( new MovementDescription( MovementDirection.RIGHT, MovementType.ABSOLUTE ), Color4f.YELLOW );
-		LinearTranslateHandle translateXAxisLeft = new LinearTranslateHandle( new MovementDescription( MovementDirection.LEFT, MovementType.ABSOLUTE ), Color4f.YELLOW );
-		translateXAxisLeft.setManipulation( new LinearDragManipulator() );
-		//Add the left handle to the group to be shown by the system
-		translateXAxisLeft.addToGroups( HandleSet.HandleGroup.ABSOLUTE_TRANSLATION, HandleSet.HandleGroup.X_AXIS, HandleSet.HandleGroup.X_AND_Z_AXIS );
-		translateXAxisRight.addToGroups( HandleSet.HandleGroup.ABSOLUTE_TRANSLATION, HandleSet.HandleGroup.X_AXIS, HandleSet.HandleGroup.X_AND_Z_AXIS );
-		translateXAxisLeft.addToGroup( HandleSet.HandleGroup.INTERACTION );
-		translateXAxisLeft.addToGroup( HandleSet.HandleGroup.VISUALIZATION );
-		translateXAxisRight.addToGroup( HandleSet.HandleGroup.VISUALIZATION );
-		//			translateXAxisLeft.addCondition( new ManipulationEventCriteria(
-		//					ManipulationEvent.EventType.Translate,
-		//					new MovementDescription( MovementDirection.LEFT, MovementType.STOOD_UP ),
-		//					PickHint.PickType.MOVEABLE.pickHint() ) );
-		//			translateXAxisRight.addCondition( new ManipulationEventCriteria(
-		//					ManipulationEvent.EventType.Translate,
-		//					new MovementDescription( MovementDirection.RIGHT, MovementType.STOOD_UP ),
-		//					PickHint.PickType.MOVEABLE.pickHint() ) );
-		translateXAxisLeft.addCondition( new ManipulationEventCriteria(
-				ManipulationEvent.EventType.Translate,
-				new MovementDescription( MovementDirection.LEFT, MovementType.ABSOLUTE ),
-				PickHint.PickType.MOVEABLE.pickHint() ) );
-		translateXAxisRight.addCondition( new ManipulationEventCriteria(
-				ManipulationEvent.EventType.Translate,
-				new MovementDescription( MovementDirection.RIGHT, MovementType.ABSOLUTE ),
-				PickHint.PickType.MOVEABLE.pickHint() ) );
-		this.addManipulationListener( translateXAxisRight );
-		this.addManipulationListener( translateXAxisLeft );
-		translateXAxisRight.setDragAdapterAndAddHandle( this );
-		translateXAxisLeft.setDragAdapterAndAddHandle( this );
-		translateXAxisRight.setName( "translateXAxisRight" );
-		translateXAxisLeft.setName( "translateXAxisLeft" );
+			ManipulatorConditionSet cameraOrbit = new ManipulatorConditionSet( new CameraOrbitDragManipulator() );
+			//		cameraOrbit.addCondition(rightMouseAndNonInteractive);
+			cameraOrbit.addCondition( middleMouseAndAnything );
+			this.addManipulatorConditionSet( cameraOrbit );
 
-		LinearTranslateHandle translateForward = new LinearTranslateHandle( new MovementDescription( MovementDirection.FORWARD, MovementType.ABSOLUTE ), Color4f.YELLOW );
-		LinearTranslateHandle translateBackward = new LinearTranslateHandle( new MovementDescription( MovementDirection.BACKWARD, MovementType.ABSOLUTE ), Color4f.YELLOW );
-		translateForward.setManipulation( new LinearDragManipulator() );
-		translateForward.addToGroups( HandleSet.HandleGroup.ABSOLUTE_TRANSLATION, HandleSet.HandleGroup.Z_AXIS, HandleSet.HandleGroup.X_AND_Z_AXIS, HandleSet.HandleGroup.VISUALIZATION );
-		translateBackward.addToGroups( HandleSet.HandleGroup.ABSOLUTE_TRANSLATION, HandleSet.HandleGroup.Z_AXIS, HandleSet.HandleGroup.X_AND_Z_AXIS, HandleSet.HandleGroup.VISUALIZATION );
-		translateForward.addToGroup( HandleSet.HandleGroup.INTERACTION );
-		translateForward.addToGroup( HandleSet.HandleGroup.VISUALIZATION );
-		translateBackward.addToGroup( HandleSet.HandleGroup.VISUALIZATION );
-		//			translateBackward.addCondition( new ManipulationEventCriteria(
-		//					ManipulationEvent.EventType.Translate,
-		//					new MovementDescription( MovementDirection.BACKWARD, MovementType.STOOD_UP ),
-		//					PickHint.PickType.MOVEABLE.pickHint() ) );
-		//			translateForward.addCondition( new ManipulationEventCriteria(
-		//					ManipulationEvent.EventType.Translate,
-		//					new MovementDescription( MovementDirection.FORWARD, MovementType.STOOD_UP ),
-		//					PickHint.PickType.MOVEABLE.pickHint() ) );
-		translateBackward.addCondition( new ManipulationEventCriteria(
-				ManipulationEvent.EventType.Translate,
-				new MovementDescription( MovementDirection.BACKWARD, MovementType.ABSOLUTE ),
-				PickHint.PickType.MOVEABLE.pickHint() ) );
-		translateForward.addCondition( new ManipulationEventCriteria(
-				ManipulationEvent.EventType.Translate,
-				new MovementDescription( MovementDirection.FORWARD, MovementType.ABSOLUTE ),
-				PickHint.PickType.MOVEABLE.pickHint() ) );
-		this.addManipulationListener( translateForward );
-		this.addManipulationListener( translateBackward );
-		translateForward.setDragAdapterAndAddHandle( this );
-		translateBackward.setDragAdapterAndAddHandle( this );
-		translateForward.setName( "translateForward" );
-		translateBackward.setName( "translateBackward" );
+			ManipulatorConditionSet cameraTilt = new ManipulatorConditionSet( new CameraTiltDragManipulator() );
+			cameraTilt.addCondition( rightMouseAndNonInteractive );
+			cameraTilt.addCondition( leftAndControl );
+			this.addManipulatorConditionSet( cameraTilt );
 
-		LinearScaleHandle scaleAxisUniform = LinearScaleHandle.createFromResizer( edu.cmu.cs.dennisc.scenegraph.scale.Resizer.UNIFORM );
-		scaleAxisUniform.setManipulation( new ScaleDragManipulator() );
-		scaleAxisUniform.addToSet( HandleSet.RESIZE_INTERACTION );
-		scaleAxisUniform.addToGroups( HandleSet.HandleGroup.RESIZE_AXIS, HandleSet.HandleGroup.VISUALIZATION );
-		scaleAxisUniform.addCondition( new ManipulationEventCriteria(
-				ManipulationEvent.EventType.Scale,
-				scaleAxisUniform.getMovementDescription(),
-				PickHint.PickType.RESIZABLE.pickHint() ) );
-		scaleAxisUniform.setDragAdapterAndAddHandle( this );
-		scaleAxisUniform.setName( "scaleAxisUniform" );
+			ManipulatorConditionSet cameraMouseTranslate = new ManipulatorConditionSet( new CameraMoveDragManipulator() );
+			cameraMouseTranslate.addCondition( leftAndNoModifiers );
+			this.addManipulatorConditionSet( cameraMouseTranslate );
 
-		LinearScaleHandle scaleAxisX = LinearScaleHandle.createFromResizer( edu.cmu.cs.dennisc.scenegraph.scale.Resizer.X_AXIS );
-		scaleAxisX.setManipulation( new ScaleDragManipulator() );
-		scaleAxisX.addToSet( HandleSet.RESIZE_INTERACTION );
-		scaleAxisX.addToGroups( HandleSet.HandleGroup.X_AXIS, HandleSet.HandleGroup.VISUALIZATION );
-		scaleAxisX.addCondition( new ManipulationEventCriteria(
-				ManipulationEvent.EventType.Scale,
-				scaleAxisX.getMovementDescription(),
-				PickHint.PickType.RESIZABLE.pickHint() ) );
-		scaleAxisX.setDragAdapterAndAddHandle( this );
-		scaleAxisX.setName( "scaleAxisX" );
+			ManipulatorConditionSet cameraMousePan = new ManipulatorConditionSet( new CameraPanDragManipulator() );
+			cameraMousePan.addCondition( leftAndShift );
+			this.addManipulatorConditionSet( cameraMousePan );
 
-		LinearScaleHandle scaleAxisY = LinearScaleHandle.createFromResizer( edu.cmu.cs.dennisc.scenegraph.scale.Resizer.Y_AXIS );
-		scaleAxisY.setManipulation( new ScaleDragManipulator() );
-		scaleAxisY.addToSet( HandleSet.RESIZE_INTERACTION );
-		scaleAxisY.addToGroups( HandleSet.HandleGroup.Y_AXIS, HandleSet.HandleGroup.VISUALIZATION );
-		scaleAxisY.addCondition( new ManipulationEventCriteria(
-				ManipulationEvent.EventType.Scale,
-				scaleAxisY.getMovementDescription(),
-				PickHint.PickType.RESIZABLE.pickHint() ) );
-		scaleAxisY.setDragAdapterAndAddHandle( this );
-		scaleAxisY.setName( "scaleAxisY" );
+			//Object Manipulation
+			OmniDirectionalBoundingBoxManipulator boundingBoxManipulator = new OmniDirectionalBoundingBoxManipulator();
+			this.dropTargetManipulator = boundingBoxManipulator;
+			ManipulatorConditionSet dragFromGallery = new ManipulatorConditionSet( boundingBoxManipulator, "Bounding Box Translate" );
+			dragFromGallery.addCondition( new DragAndDropCondition() );
+			this.addManipulatorConditionSet( dragFromGallery );
 
-		LinearScaleHandle scaleAxisZ = LinearScaleHandle.createFromResizer( edu.cmu.cs.dennisc.scenegraph.scale.Resizer.Z_AXIS );
-		scaleAxisZ.setManipulation( new ScaleDragManipulator() );
-		scaleAxisZ.addToSet( HandleSet.RESIZE_INTERACTION );
-		scaleAxisZ.addToGroups( HandleSet.HandleGroup.Z_AXIS, HandleSet.HandleGroup.VISUALIZATION );
-		scaleAxisZ.addCondition( new ManipulationEventCriteria(
-				ManipulationEvent.EventType.Scale,
-				scaleAxisZ.getMovementDescription(),
-				PickHint.PickType.RESIZABLE.pickHint() ) );
-		scaleAxisZ.setDragAdapterAndAddHandle( this );
-		scaleAxisZ.setName( "scaleAxisZ" );
+			MouseDragCondition leftClickMoveableObjects = new MouseDragCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.PickType.MOVEABLE.pickHint() ), new ModifierMask( ModifierMask.NO_MODIFIERS_DOWN ) );
+			MouseDragCondition leftClickTurnableObjects = new MouseDragCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.PickType.TURNABLE.pickHint() ), new ModifierMask( ModifierMask.NO_MODIFIERS_DOWN ) );
+			MouseDragCondition leftClickResizableObjects = new MouseDragCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.PickType.RESIZABLE.pickHint() ), new ModifierMask( ModifierMask.NO_MODIFIERS_DOWN ) );
 
-		LinearScaleHandle scaleAxisXY = LinearScaleHandle.createFromResizer( edu.cmu.cs.dennisc.scenegraph.scale.Resizer.XY_PLANE );
-		scaleAxisXY.setManipulation( new ScaleDragManipulator() );
-		scaleAxisXY.addToSet( HandleSet.RESIZE_INTERACTION );
-		scaleAxisXY.addToGroups( HandleSet.HandleGroup.X_AND_Y_AXIS, HandleSet.HandleGroup.VISUALIZATION );
-		scaleAxisXY.addCondition( new ManipulationEventCriteria(
-				ManipulationEvent.EventType.Scale,
-				scaleAxisXY.getMovementDescription(),
-				PickHint.PickType.RESIZABLE.pickHint() ) );
-		scaleAxisXY.setDragAdapterAndAddHandle( this );
-		scaleAxisXY.setName( "scaleAxisXY" );
+			ManipulatorConditionSet leftClickMouseTranslateObject = new ManipulatorConditionSet( new OmniDirectionalDragManipulator(), "Mouse Translate" );
+			leftClickMouseTranslateObject.addCondition( leftClickMoveableObjects );
+			this.addManipulatorConditionSet( leftClickMouseTranslateObject );
 
-		LinearScaleHandle scaleAxisXZ = LinearScaleHandle.createFromResizer( edu.cmu.cs.dennisc.scenegraph.scale.Resizer.XZ_PLANE );
-		scaleAxisXZ.setManipulation( new ScaleDragManipulator() );
-		scaleAxisXZ.addToSet( HandleSet.RESIZE_INTERACTION );
-		scaleAxisXZ.addToGroups( HandleSet.HandleGroup.X_AND_Z_AXIS, HandleSet.HandleGroup.VISUALIZATION );
-		scaleAxisXZ.addCondition( new ManipulationEventCriteria(
-				ManipulationEvent.EventType.Scale,
-				scaleAxisXZ.getMovementDescription(),
-				PickHint.PickType.RESIZABLE.pickHint() ) );
-		scaleAxisXZ.setDragAdapterAndAddHandle( this );
-		scaleAxisXZ.setName( "scaleAxisXZ" );
+			ManipulatorConditionSet leftClickMouseRotateObjectLeftRight = new ManipulatorConditionSet( new HandlelessObjectRotateDragManipulator( MovementDirection.UP ) );
+			leftClickMouseRotateObjectLeftRight.addCondition( leftClickTurnableObjects );
+			//This manipulation is used only when the "rotation" interaction group is selected. Disabled by default.
+			leftClickMouseRotateObjectLeftRight.setEnabled( false );
+			this.addManipulatorConditionSet( leftClickMouseRotateObjectLeftRight );
 
-		LinearScaleHandle scaleAxisYZ = LinearScaleHandle.createFromResizer( edu.cmu.cs.dennisc.scenegraph.scale.Resizer.YZ_PLANE );
-		scaleAxisYZ.setManipulation( new ScaleDragManipulator() );
-		scaleAxisYZ.addToSet( HandleSet.RESIZE_INTERACTION );
-		scaleAxisYZ.addToGroups( HandleSet.HandleGroup.Y_AND_Z_AXIS, HandleSet.HandleGroup.VISUALIZATION );
-		scaleAxisYZ.addCondition( new ManipulationEventCriteria(
-				ManipulationEvent.EventType.Scale,
-				scaleAxisYZ.getMovementDescription(),
-				PickHint.PickType.RESIZABLE.pickHint() ) );
-		scaleAxisYZ.setDragAdapterAndAddHandle( this );
-		scaleAxisYZ.setName( "scaleAxisYZ" );
+			ManipulatorConditionSet leftClickMouseResizeObject = new ManipulatorConditionSet( new ResizeDragManipulator( edu.cmu.cs.dennisc.scenegraph.scale.Resizer.UNIFORM, edu.cmu.cs.dennisc.scenegraph.scale.Resizer.XY_PLANE, edu.cmu.cs.dennisc.scenegraph.scale.Resizer.XZ_PLANE, edu.cmu.cs.dennisc.scenegraph.scale.Resizer.YZ_PLANE ) );
+			leftClickMouseResizeObject.addCondition( leftClickResizableObjects );
+			//This manipulation is used only when the "resize" interaction group is selected. Disabled by default.
+			leftClickMouseResizeObject.setEnabled( false );
+			this.addManipulatorConditionSet( leftClickMouseResizeObject );
 
-		// <lg>
-		//Selection visual handle
-		org.alice.interact.handle.SelectionIndicator selectionIndicator = new org.alice.interact.handle.SelectionIndicator();
-		selectionIndicator.addToGroup( HandleSet.HandleGroup.SELECTION );
-		this.addManipulationListener( selectionIndicator );
-		selectionIndicator.setDragAdapterAndAddHandle( this );
+			ManipulatorConditionSet mouseUpDownTranslateObject = new ManipulatorConditionSet( new ObjectUpDownDragManipulator() );
+			MouseDragCondition moveableObjectWithShift = new MouseDragCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.PickType.MOVEABLE.pickHint() ), new ModifierMask( ModifierKey.SHIFT ) );
+			mouseUpDownTranslateObject.addCondition( moveableObjectWithShift );
+			this.addManipulatorConditionSet( mouseUpDownTranslateObject );
 
-		InteractionGroup selectionOnly = new InteractionGroup( HandleSet.SELECTION_ONLY, null );
-		this.mapHandleStyleToInteractionGroup.put( org.alice.interact.handle.HandleStyle.SELECT, selectionOnly );
-		// </lg>
+			ManipulatorConditionSet mouseRotateObjectLeftRight = new ManipulatorConditionSet( new HandlelessObjectRotateDragManipulator( MovementDirection.UP ) );
+			MouseDragCondition moveableObjectWithCtrl = new MouseDragCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.PickType.TURNABLE.pickHint() ), new ModifierMask( ModifierKey.CONTROL ) );
+			mouseRotateObjectLeftRight.addCondition( moveableObjectWithCtrl );
+			this.addManipulatorConditionSet( mouseRotateObjectLeftRight );
 
-		if( this.sceneEditor != null ) {
-			InteractionGroup defaultInteraction = new InteractionGroup( HandleSet.DEFAULT_INTERACTION, leftClickMouseTranslateObject, org.alice.interact.PickHint.PickType.MOVEABLE );
-			InteractionGroup rotationInteraction = new InteractionGroup( HandleSet.ROTATION_INTERACTION, leftClickMouseRotateObjectLeftRight, org.alice.interact.PickHint.PickType.TURNABLE );
-			InteractionGroup translationInteraction = new InteractionGroup( HandleSet.ABSOLUTE_TRANSLATION_INTERACTION, leftClickMouseTranslateObject, org.alice.interact.PickHint.PickType.MOVEABLE );
-			InteractionGroup resizeInteraction = new InteractionGroup( HandleSet.RESIZE_INTERACTION, leftClickMouseResizeObject, org.alice.interact.PickHint.PickType.RESIZABLE );
+			ManipulatorConditionSet mouseCopyAndMoveObject = new ManipulatorConditionSet( new CopyObjectDragManipulator() );
+			MouseDragCondition copyObjectWithAlt = new MouseDragCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.PickType.MOVEABLE.pickHint() ), new ModifierMask( ModifierKey.ALT ) );
+			mouseCopyAndMoveObject.addCondition( copyObjectWithAlt );
+			this.addManipulatorConditionSet( mouseCopyAndMoveObject );
 
-			this.mapHandleStyleToInteractionGroup.put( org.alice.interact.handle.HandleStyle.DEFAULT, defaultInteraction );
-			this.mapHandleStyleToInteractionGroup.put( org.alice.interact.handle.HandleStyle.ROTATION, rotationInteraction );
-			this.mapHandleStyleToInteractionGroup.put( org.alice.interact.handle.HandleStyle.TRANSLATION, translationInteraction );
-			this.mapHandleStyleToInteractionGroup.put( org.alice.interact.handle.HandleStyle.RESIZE, resizeInteraction );
-			//			this.interactionSelectionState.addItem(defaultInteraction);
-			//			this.interactionSelectionState.addItem(rotationInteraction);
-			//			this.interactionSelectionState.addItem(translationInteraction);
-			//			this.interactionSelectionState.addItem(resizeInteraction);
-			//
-			//			this.interactionSelectionState.setSelectedItem(defaultInteraction);
+			ManipulatorConditionSet mouseHandleDrag = new ManipulatorConditionSet( new ObjectGlobalHandleDragManipulator() );
+			MouseDragCondition handleObjectCondition = new MouseDragCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.PickType.THREE_D_HANDLE.pickHint() ), new ModifierMask( ModifierMask.NO_MODIFIERS_DOWN ) );
+			MouseCondition handleObjectClickCondition = new MouseCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.PickType.TWO_D_HANDLE.pickHint() ), new ModifierMask( ModifierMask.NO_MODIFIERS_DOWN ) );
+			mouseHandleDrag.addCondition( handleObjectCondition );
+			mouseHandleDrag.addCondition( handleObjectClickCondition );
+			this.addManipulatorConditionSet( mouseHandleDrag );
 
-			getHandleStyleState().addAndInvokeNewSchoolValueListener( this.handleStyleListener );
+			//		ManipulatorConditionSet mouseHandleClick = new ManipulatorConditionSet( new ObjectGlobalHandleDragManipulator() );
+			//		MousePressCondition handleObjectClickCondition = new MousePressCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.TWO_D_HANDLES));
+			//		System.out.println("Looking for condition: "+handleObjectCondition.hashCode()+", in set "+mouseHandleClick.hashCode());
+			//		mouseHandleClick.addCondition( handleObjectClickCondition );
+			//		this.addManipulator( mouseHandleClick );
 
-			// <lg/> HACK! selection only mode doesn't seem to get initialized correctly
-			// unless it's setup later. Somehow if you set this here, now (instead of later)
-			// the initialization sequence doesn't quite finish correctly. This appears to be
-			// due to how the observers get setup later and don't pick up this change. But
-			// I don't have time to fix it. So this hack works for now.
-			SwingUtilities.invokeLater( () -> {
-				setSelectionOnlyMode( true );
+			ManipulatorConditionSet selectObject = new ManipulatorConditionSet( new SelectObjectDragManipulator( this ) );
+			selectObject.addCondition( new MousePressCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.PickType.SELECTABLE.pickHint() ) ) );
+			this.addManipulatorConditionSet( selectObject );
+
+			ManipulatorConditionSet getAGoodLookAtObject = new ManipulatorConditionSet( new GetAGoodLookAtManipulator() );
+			getAGoodLookAtObject.addCondition( new DoubleClickedObjectCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.PickType.VIEWABLE.pickHint() ), new ModifierMask( ModifierMask.JUST_CONTROL ) ) );
+			this.addManipulatorConditionSet( getAGoodLookAtObject );
+
+			ManipulatorConditionSet mouseWheelCameraZoom = new ManipulatorConditionSet( new CameraZoomMouseWheelManipulator() );
+			MouseWheelCondition mouseWheelCondition = new MouseWheelCondition( new ModifierMask( ModifierMask.NO_MODIFIERS_DOWN ) );
+			mouseWheelCameraZoom.addCondition( mouseWheelCondition );
+			this.addManipulatorConditionSet( mouseWheelCameraZoom );
+
+			//todo: move down?
+			for( ManipulatorConditionSet manipulatorConditionSet : this.getManipulatorConditionSets() ) {
+				manipulatorConditionSet.getManipulator().setDragAdapter( this );
+			}
+
+			ManipulationAxes handleAxis = new org.alice.interact.handle.ManipulationAxes();
+
+			handleAxis.addToGroup( HandleSet.HandleGroup.VISUALIZATION );
+
+			//		handleAxis.addToSet( HandleSet.DEFAULT_INTERACTION );
+			//		handleAxis.addToSet( HandleSet.ROTATION_INTERACTION );
+			//		handleAxis.addToSet( HandleSet.JOINT_ROTATION_INTERACTION );
+			//		handleAxis.addToSet( HandleSet.TRANSLATION_INTERACTION );
+
+			handleAxis.addCondition( new ManipulationEventCriteria( ManipulationEvent.EventType.Rotate, null, PickHint.getAnythingHint() ) );
+			handleAxis.addCondition( new ManipulationEventCriteria( ManipulationEvent.EventType.Translate, null, PickHint.getAnythingHint() ) );
+			this.addManipulationListener( handleAxis );
+			handleAxis.setDragAdapterAndAddHandle( this );
+			handleAxis.setName( "handleAxis" );
+
+			StoodUpRotationRingHandle rotateAboutYAxisStoodUp = new StoodUpRotationRingHandle( MovementDirection.UP, RotationRingHandle.HandlePosition.BOTTOM );
+			rotateAboutYAxisStoodUp.setManipulation( new ObjectRotateDragManipulator() {
+				@Override
+				protected HandleSet getHandleSetToEnable() {
+					return new HandleSet( HandleSet.HandleGroup.Y_AXIS, HandleSet.HandleGroup.VISUALIZATION, HandleSet.HandleGroup.STOOD_UP_ROTATION );
+				}
 			} );
+			//			rotateAboutYAxisStoodUp.addToSet( HandleSet.ROTATION_INTERACTION );
+			rotateAboutYAxisStoodUp.addToSet( HandleSet.DEFAULT_INTERACTION );
+			rotateAboutYAxisStoodUp.addToGroups( HandleSet.HandleGroup.DEFAULT, HandleSet.HandleGroup.Y_AXIS, HandleSet.HandleGroup.VISUALIZATION, HandleSet.HandleGroup.STOOD_UP_ROTATION );
+			rotateAboutYAxisStoodUp.addCondition( new ManipulationEventCriteria( ManipulationEvent.EventType.Rotate, new MovementDescription( MovementDirection.UP, MovementType.STOOD_UP ), PickHint.PickType.TURNABLE.pickHint() ) );
+			rotateAboutYAxisStoodUp.addCondition( new ManipulationEventCriteria( ManipulationEvent.EventType.Rotate, new MovementDescription( MovementDirection.DOWN, MovementType.STOOD_UP ), PickHint.PickType.TURNABLE.pickHint() ) );
+			this.addManipulationListener( rotateAboutYAxisStoodUp );
+			rotateAboutYAxisStoodUp.setDragAdapterAndAddHandle( this );
+			rotateAboutYAxisStoodUp.setName( "rotateAboutYAxisStoodUp" );
+
+			RotationRingHandle rotateAboutYAxis = new RotationRingHandle( MovementDirection.UP, Color4f.RED );
+			rotateAboutYAxis.setManipulation( new ObjectRotateDragManipulator() );
+			rotateAboutYAxis.addToSet( HandleSet.ROTATION_INTERACTION );
+			rotateAboutYAxis.addToGroups( HandleSet.HandleGroup.Y_AXIS, HandleSet.HandleGroup.VISUALIZATION );
+			rotateAboutYAxis.setDragAdapterAndAddHandle( this );
+			rotateAboutYAxis.setName( "rotateAboutYAxis" );
+
+			RotationRingHandle rotateAboutXAxis = new RotationRingHandle( MovementDirection.LEFT, Color4f.BLUE );
+			rotateAboutXAxis.setManipulation( new ObjectRotateDragManipulator() );
+			rotateAboutXAxis.addToSet( HandleSet.ROTATION_INTERACTION );
+			rotateAboutXAxis.addToGroups( HandleSet.HandleGroup.X_AXIS, HandleSet.HandleGroup.VISUALIZATION );
+			rotateAboutXAxis.setDragAdapterAndAddHandle( this );
+			rotateAboutXAxis.setName( "rotateAboutXAxis" );
+
+			RotationRingHandle rotateAboutZAxis = new RotationRingHandle( MovementDirection.BACKWARD, Color4f.WHITE );
+			rotateAboutZAxis.setManipulation( new ObjectRotateDragManipulator() );
+			rotateAboutZAxis.addToSet( HandleSet.ROTATION_INTERACTION );
+			rotateAboutZAxis.addToGroups( HandleSet.HandleGroup.Z_AXIS, HandleSet.HandleGroup.VISUALIZATION );
+			rotateAboutZAxis.setDragAdapterAndAddHandle( this );
+			rotateAboutZAxis.setName( "rotateAboutZAxis" );
+
+			JointRotationRingHandle rotateJointAboutZAxis = new org.alice.interact.handle.JointRotationRingHandle( MovementDirection.BACKWARD, Color4f.WHITE );
+			rotateJointAboutZAxis.setManipulation( new ObjectRotateDragManipulator() );
+			rotateJointAboutZAxis.addToSet( HandleSet.JOINT_ROTATION_INTERACTION );
+			rotateJointAboutZAxis.addToGroups( HandleSet.HandleGroup.Z_AXIS, HandleSet.HandleGroup.VISUALIZATION, HandleSet.HandleGroup.JOINT );
+			rotateJointAboutZAxis.setDragAdapterAndAddHandle( this );
+			rotateJointAboutZAxis.setName( "rotateJointAboutZAxis" );
+
+			JointRotationRingHandle rotateJointAboutYAxis = new org.alice.interact.handle.JointRotationRingHandle( MovementDirection.UP, Color4f.RED );
+			rotateJointAboutYAxis.setManipulation( new ObjectRotateDragManipulator() );
+			rotateJointAboutYAxis.addToSet( HandleSet.JOINT_ROTATION_INTERACTION );
+			rotateJointAboutYAxis.addToGroups( HandleSet.HandleGroup.Y_AXIS, HandleSet.HandleGroup.VISUALIZATION, HandleSet.HandleGroup.JOINT );
+			rotateJointAboutYAxis.setDragAdapterAndAddHandle( this );
+			rotateJointAboutYAxis.setName( "rotateJointAboutYAxis" );
+
+			JointRotationRingHandle rotateJointAboutXAxis = new org.alice.interact.handle.JointRotationRingHandle( MovementDirection.LEFT, Color4f.BLUE );
+			rotateJointAboutXAxis.setManipulation( new ObjectRotateDragManipulator() );
+			rotateJointAboutXAxis.addToSet( HandleSet.JOINT_ROTATION_INTERACTION );
+			rotateJointAboutXAxis.addToGroups( HandleSet.HandleGroup.X_AXIS, HandleSet.HandleGroup.VISUALIZATION, HandleSet.HandleGroup.JOINT );
+			rotateJointAboutXAxis.setDragAdapterAndAddHandle( this );
+			rotateJointAboutXAxis.setName( "rotateJointAboutXAxis" );
+
+			LinearTranslateHandle translateJointYAxis = new LinearTranslateHandle( new MovementDescription( MovementDirection.UP, MovementType.LOCAL ), Color4f.GREEN );
+			translateJointYAxis.setManipulation( new LinearDragManipulator() );
+			translateJointYAxis.addToGroups( HandleSet.HandleGroup.LOCAL, HandleSet.HandleGroup.Y_AXIS, HandleSet.HandleGroup.VISUALIZATION, HandleSet.HandleGroup.JOINT );
+			translateJointYAxis.addToSet( HandleSet.JOINT_TRANSLATION_INTERACTION );
+			translateJointYAxis.setDragAdapterAndAddHandle( this );
+			translateJointYAxis.setName( "translateJointYAxis" );
+
+			LinearTranslateHandle translateJointXAxis = new LinearTranslateHandle( new MovementDescription( MovementDirection.RIGHT, MovementType.LOCAL ), Color4f.RED );
+			translateJointXAxis.setManipulation( new LinearDragManipulator() );
+			translateJointXAxis.addToGroups( HandleSet.HandleGroup.LOCAL, HandleSet.HandleGroup.X_AXIS, HandleSet.HandleGroup.VISUALIZATION, HandleSet.HandleGroup.JOINT );
+			translateJointXAxis.addToSet( HandleSet.JOINT_TRANSLATION_INTERACTION );
+			translateJointXAxis.setDragAdapterAndAddHandle( this );
+			translateJointXAxis.setName( "translateJointXAxis" );
+
+			LinearTranslateHandle translateJointZAxis = new LinearTranslateHandle( new MovementDescription( MovementDirection.FORWARD, MovementType.LOCAL ), Color4f.WHITE );
+			translateJointZAxis.setManipulation( new LinearDragManipulator() );
+			translateJointZAxis.addToGroups( HandleSet.HandleGroup.LOCAL, HandleSet.HandleGroup.Z_AXIS, HandleSet.HandleGroup.VISUALIZATION, HandleSet.HandleGroup.JOINT );
+			translateJointZAxis.addToSet( HandleSet.JOINT_TRANSLATION_INTERACTION );
+			translateJointZAxis.setDragAdapterAndAddHandle( this );
+			translateJointZAxis.setName( "translateJointZAxis" );
+
+			LinearTranslateHandle translateUp = new LinearTranslateHandle( new MovementDescription( MovementDirection.UP, MovementType.ABSOLUTE ), Color4f.YELLOW );
+			LinearTranslateHandle translateDown = new LinearTranslateHandle( new MovementDescription( MovementDirection.DOWN, MovementType.ABSOLUTE ), Color4f.YELLOW );
+			translateUp.setManipulation( new LinearDragManipulator() );
+			translateUp.addToGroups( HandleSet.HandleGroup.ABSOLUTE_TRANSLATION, HandleSet.HandleGroup.Y_AXIS, HandleSet.HandleGroup.VISUALIZATION );
+			translateDown.addToGroups( HandleSet.HandleGroup.ABSOLUTE_TRANSLATION, HandleSet.HandleGroup.Y_AXIS, HandleSet.HandleGroup.VISUALIZATION );
+			translateUp.addToGroup( HandleSet.HandleGroup.INTERACTION );
+			translateUp.addToGroup( HandleSet.HandleGroup.VISUALIZATION );
+			translateDown.addToGroup( HandleSet.HandleGroup.VISUALIZATION );
+			translateDown.addCondition( new ManipulationEventCriteria( ManipulationEvent.EventType.Translate, new MovementDescription( MovementDirection.DOWN, MovementType.ABSOLUTE ), PickHint.PickType.MOVEABLE.pickHint() ) );
+			translateUp.addCondition( new ManipulationEventCriteria( ManipulationEvent.EventType.Translate, new MovementDescription( MovementDirection.UP, MovementType.ABSOLUTE ), PickHint.PickType.MOVEABLE.pickHint() ) );
+			this.addManipulationListener( translateUp );
+			this.addManipulationListener( translateDown );
+			translateDown.setDragAdapterAndAddHandle( this );
+			translateUp.setDragAdapterAndAddHandle( this );
+			translateDown.setName( "translateDown" );
+			translateUp.setName( "translateUp" );
+
+			LinearTranslateHandle translateXAxisRight = new LinearTranslateHandle( new MovementDescription( MovementDirection.RIGHT, MovementType.ABSOLUTE ), Color4f.YELLOW );
+			LinearTranslateHandle translateXAxisLeft = new LinearTranslateHandle( new MovementDescription( MovementDirection.LEFT, MovementType.ABSOLUTE ), Color4f.YELLOW );
+			translateXAxisLeft.setManipulation( new LinearDragManipulator() );
+			//Add the left handle to the group to be shown by the system
+			translateXAxisLeft.addToGroups( HandleSet.HandleGroup.ABSOLUTE_TRANSLATION, HandleSet.HandleGroup.X_AXIS, HandleSet.HandleGroup.X_AND_Z_AXIS );
+			translateXAxisRight.addToGroups( HandleSet.HandleGroup.ABSOLUTE_TRANSLATION, HandleSet.HandleGroup.X_AXIS, HandleSet.HandleGroup.X_AND_Z_AXIS );
+			translateXAxisLeft.addToGroup( HandleSet.HandleGroup.INTERACTION );
+			translateXAxisLeft.addToGroup( HandleSet.HandleGroup.VISUALIZATION );
+			translateXAxisRight.addToGroup( HandleSet.HandleGroup.VISUALIZATION );
+			translateXAxisLeft.addCondition( new ManipulationEventCriteria( ManipulationEvent.EventType.Translate, new MovementDescription( MovementDirection.LEFT, MovementType.ABSOLUTE ), PickHint.PickType.MOVEABLE.pickHint() ) );
+			translateXAxisRight.addCondition( new ManipulationEventCriteria( ManipulationEvent.EventType.Translate, new MovementDescription( MovementDirection.RIGHT, MovementType.ABSOLUTE ), PickHint.PickType.MOVEABLE.pickHint() ) );
+			this.addManipulationListener( translateXAxisRight );
+			this.addManipulationListener( translateXAxisLeft );
+			translateXAxisRight.setDragAdapterAndAddHandle( this );
+			translateXAxisLeft.setDragAdapterAndAddHandle( this );
+			translateXAxisRight.setName( "translateXAxisRight" );
+			translateXAxisLeft.setName( "translateXAxisLeft" );
+
+			LinearTranslateHandle translateForward = new LinearTranslateHandle( new MovementDescription( MovementDirection.FORWARD, MovementType.ABSOLUTE ), Color4f.YELLOW );
+			LinearTranslateHandle translateBackward = new LinearTranslateHandle( new MovementDescription( MovementDirection.BACKWARD, MovementType.ABSOLUTE ), Color4f.YELLOW );
+			translateForward.setManipulation( new LinearDragManipulator() );
+			translateForward.addToGroups( HandleSet.HandleGroup.ABSOLUTE_TRANSLATION, HandleSet.HandleGroup.Z_AXIS, HandleSet.HandleGroup.X_AND_Z_AXIS, HandleSet.HandleGroup.VISUALIZATION );
+			translateBackward.addToGroups( HandleSet.HandleGroup.ABSOLUTE_TRANSLATION, HandleSet.HandleGroup.Z_AXIS, HandleSet.HandleGroup.X_AND_Z_AXIS, HandleSet.HandleGroup.VISUALIZATION );
+			translateForward.addToGroup( HandleSet.HandleGroup.INTERACTION );
+			translateForward.addToGroup( HandleSet.HandleGroup.VISUALIZATION );
+			translateBackward.addToGroup( HandleSet.HandleGroup.VISUALIZATION );
+			translateBackward.addCondition( new ManipulationEventCriteria( ManipulationEvent.EventType.Translate, new MovementDescription( MovementDirection.BACKWARD, MovementType.ABSOLUTE ), PickHint.PickType.MOVEABLE.pickHint() ) );
+			translateForward.addCondition( new ManipulationEventCriteria( ManipulationEvent.EventType.Translate, new MovementDescription( MovementDirection.FORWARD, MovementType.ABSOLUTE ), PickHint.PickType.MOVEABLE.pickHint() ) );
+			this.addManipulationListener( translateForward );
+			this.addManipulationListener( translateBackward );
+			translateForward.setDragAdapterAndAddHandle( this );
+			translateBackward.setDragAdapterAndAddHandle( this );
+			translateForward.setName( "translateForward" );
+			translateBackward.setName( "translateBackward" );
+
+			LinearScaleHandle scaleAxisUniform = LinearScaleHandle.createFromResizer( edu.cmu.cs.dennisc.scenegraph.scale.Resizer.UNIFORM );
+			scaleAxisUniform.setManipulation( new ScaleDragManipulator() );
+			scaleAxisUniform.addToSet( HandleSet.RESIZE_INTERACTION );
+			scaleAxisUniform.addToGroups( HandleSet.HandleGroup.RESIZE_AXIS, HandleSet.HandleGroup.VISUALIZATION );
+			scaleAxisUniform.addCondition( new ManipulationEventCriteria( ManipulationEvent.EventType.Scale, scaleAxisUniform.getMovementDescription(), PickHint.PickType.RESIZABLE.pickHint() ) );
+			scaleAxisUniform.setDragAdapterAndAddHandle( this );
+			scaleAxisUniform.setName( "scaleAxisUniform" );
+
+			LinearScaleHandle scaleAxisX = LinearScaleHandle.createFromResizer( edu.cmu.cs.dennisc.scenegraph.scale.Resizer.X_AXIS );
+			scaleAxisX.setManipulation( new ScaleDragManipulator() );
+			scaleAxisX.addToSet( HandleSet.RESIZE_INTERACTION );
+			scaleAxisX.addToGroups( HandleSet.HandleGroup.X_AXIS, HandleSet.HandleGroup.VISUALIZATION );
+			scaleAxisX.addCondition( new ManipulationEventCriteria( ManipulationEvent.EventType.Scale, scaleAxisX.getMovementDescription(), PickHint.PickType.RESIZABLE.pickHint() ) );
+			scaleAxisX.setDragAdapterAndAddHandle( this );
+			scaleAxisX.setName( "scaleAxisX" );
+
+			LinearScaleHandle scaleAxisY = LinearScaleHandle.createFromResizer( edu.cmu.cs.dennisc.scenegraph.scale.Resizer.Y_AXIS );
+			scaleAxisY.setManipulation( new ScaleDragManipulator() );
+			scaleAxisY.addToSet( HandleSet.RESIZE_INTERACTION );
+			scaleAxisY.addToGroups( HandleSet.HandleGroup.Y_AXIS, HandleSet.HandleGroup.VISUALIZATION );
+			scaleAxisY.addCondition( new ManipulationEventCriteria( ManipulationEvent.EventType.Scale, scaleAxisY.getMovementDescription(), PickHint.PickType.RESIZABLE.pickHint() ) );
+			scaleAxisY.setDragAdapterAndAddHandle( this );
+			scaleAxisY.setName( "scaleAxisY" );
+
+			LinearScaleHandle scaleAxisZ = LinearScaleHandle.createFromResizer( edu.cmu.cs.dennisc.scenegraph.scale.Resizer.Z_AXIS );
+			scaleAxisZ.setManipulation( new ScaleDragManipulator() );
+			scaleAxisZ.addToSet( HandleSet.RESIZE_INTERACTION );
+			scaleAxisZ.addToGroups( HandleSet.HandleGroup.Z_AXIS, HandleSet.HandleGroup.VISUALIZATION );
+			scaleAxisZ.addCondition( new ManipulationEventCriteria( ManipulationEvent.EventType.Scale, scaleAxisZ.getMovementDescription(), PickHint.PickType.RESIZABLE.pickHint() ) );
+			scaleAxisZ.setDragAdapterAndAddHandle( this );
+			scaleAxisZ.setName( "scaleAxisZ" );
+
+			LinearScaleHandle scaleAxisXY = LinearScaleHandle.createFromResizer( edu.cmu.cs.dennisc.scenegraph.scale.Resizer.XY_PLANE );
+			scaleAxisXY.setManipulation( new ScaleDragManipulator() );
+			scaleAxisXY.addToSet( HandleSet.RESIZE_INTERACTION );
+			scaleAxisXY.addToGroups( HandleSet.HandleGroup.X_AND_Y_AXIS, HandleSet.HandleGroup.VISUALIZATION );
+			scaleAxisXY.addCondition( new ManipulationEventCriteria( ManipulationEvent.EventType.Scale, scaleAxisXY.getMovementDescription(), PickHint.PickType.RESIZABLE.pickHint() ) );
+			scaleAxisXY.setDragAdapterAndAddHandle( this );
+			scaleAxisXY.setName( "scaleAxisXY" );
+
+			LinearScaleHandle scaleAxisXZ = LinearScaleHandle.createFromResizer( edu.cmu.cs.dennisc.scenegraph.scale.Resizer.XZ_PLANE );
+			scaleAxisXZ.setManipulation( new ScaleDragManipulator() );
+			scaleAxisXZ.addToSet( HandleSet.RESIZE_INTERACTION );
+			scaleAxisXZ.addToGroups( HandleSet.HandleGroup.X_AND_Z_AXIS, HandleSet.HandleGroup.VISUALIZATION );
+			scaleAxisXZ.addCondition( new ManipulationEventCriteria( ManipulationEvent.EventType.Scale, scaleAxisXZ.getMovementDescription(), PickHint.PickType.RESIZABLE.pickHint() ) );
+			scaleAxisXZ.setDragAdapterAndAddHandle( this );
+			scaleAxisXZ.setName( "scaleAxisXZ" );
+
+			LinearScaleHandle scaleAxisYZ = LinearScaleHandle.createFromResizer( edu.cmu.cs.dennisc.scenegraph.scale.Resizer.YZ_PLANE );
+			scaleAxisYZ.setManipulation( new ScaleDragManipulator() );
+			scaleAxisYZ.addToSet( HandleSet.RESIZE_INTERACTION );
+			scaleAxisYZ.addToGroups( HandleSet.HandleGroup.Y_AND_Z_AXIS, HandleSet.HandleGroup.VISUALIZATION );
+			scaleAxisYZ.addCondition( new ManipulationEventCriteria( ManipulationEvent.EventType.Scale, scaleAxisYZ.getMovementDescription(), PickHint.PickType.RESIZABLE.pickHint() ) );
+			scaleAxisYZ.setDragAdapterAndAddHandle( this );
+			scaleAxisYZ.setName( "scaleAxisYZ" );
+
+			// <lg> Selection Only Mode
+			//Selection visual handle
+			org.alice.interact.handle.SelectionIndicator selectionIndicator = new org.alice.interact.handle.SelectionIndicator();
+			selectionIndicator.addToGroup( HandleSet.HandleGroup.SELECTION );
+			this.addManipulationListener( selectionIndicator );
+			selectionIndicator.setDragAdapterAndAddHandle( this );
+
+			//Selection manipulator
+			this.selectManipulatorConditionSet = new ManipulatorConditionSet( new SelectObjectDragManipulator( this ) );
+			this.selectManipulatorConditionSet.addCondition( new MousePressCondition( java.awt.event.MouseEvent.BUTTON1, new PickCondition( PickHint.PickType.SELECTABLE.pickHint() ) ) );
+			this.addManipulatorConditionSet( this.selectManipulatorConditionSet );
+			// </lg>
+
+			if( this.sceneEditor != null ) {
+
+				final InteractionGroup.PossibleObjects notJointObjects = new InteractionGroup.PossibleObjects( ObjectType.MODEL, ObjectType.OBJECT_MARKER, ObjectType.CAMERA_MARKER );
+				final InteractionGroup.PossibleObjects joints = new InteractionGroup.PossibleObjects( ObjectType.JOINT );
+				final InteractionGroup.PossibleObjects anyObjects = new InteractionGroup.PossibleObjects( ObjectType.ANY );
+
+				InteractionGroup selectionOnly = new InteractionGroup( new InteractionGroup.InteractionInfo( anyObjects, HandleSet.DEFAULT_INTERACTION, leftClickMouseTranslateObject, org.alice.interact.PickHint.PickType.MOVEABLE ) );
+				InteractionGroup defaultInteraction = new InteractionGroup( new InteractionGroup.InteractionInfo( anyObjects, HandleSet.DEFAULT_INTERACTION, leftClickMouseTranslateObject, org.alice.interact.PickHint.PickType.MOVEABLE ) );
+
+				//TODO: Make joint and non joint interactions
+				InteractionGroup rotationInteraction = new InteractionGroup();
+				rotationInteraction.addInteractionInfo( notJointObjects, HandleSet.ROTATION_INTERACTION, leftClickMouseRotateObjectLeftRight, org.alice.interact.PickHint.PickType.TURNABLE );
+				rotationInteraction.addInteractionInfo( joints, HandleSet.JOINT_ROTATION_INTERACTION, leftClickMouseRotateObjectLeftRight, org.alice.interact.PickHint.PickType.TURNABLE );
+
+				InteractionGroup translationInteraction = new InteractionGroup();
+				translationInteraction.addInteractionInfo( notJointObjects, HandleSet.ABSOLUTE_TRANSLATION_INTERACTION, leftClickMouseTranslateObject, org.alice.interact.PickHint.PickType.MOVEABLE );
+				translationInteraction.addInteractionInfo( joints, HandleSet.JOINT_TRANSLATION_INTERACTION, leftClickMouseTranslateObject, org.alice.interact.PickHint.PickType.MOVEABLE );
+
+				InteractionGroup resizeInteraction = new InteractionGroup( new InteractionGroup.InteractionInfo( notJointObjects, HandleSet.RESIZE_INTERACTION, leftClickMouseResizeObject, org.alice.interact.PickHint.PickType.RESIZABLE ) );
+				InteractionGroup selectionInteraction = new InteractionGroup( new InteractionGroup.InteractionInfo( anyObjects, HandleSet.SELECTION_ONLY, this.selectManipulatorConditionSet, org.alice.interact.PickHint.PickType.SELECTABLE ) );
+
+				this.mapHandleStyleToInteractionGroup.put( org.alice.interact.handle.HandleStyle.DEFAULT, defaultInteraction );
+				this.mapHandleStyleToInteractionGroup.put( org.alice.interact.handle.HandleStyle.ROTATION, rotationInteraction );
+				this.mapHandleStyleToInteractionGroup.put( org.alice.interact.handle.HandleStyle.TRANSLATION, translationInteraction );
+				this.mapHandleStyleToInteractionGroup.put( org.alice.interact.handle.HandleStyle.RESIZE, resizeInteraction );
+				this.mapHandleStyleToInteractionGroup.put( org.alice.interact.handle.HandleStyle.SELECT, selectionInteraction );
+				org.alice.stageide.sceneeditor.side.SideComposite.getInstance().getHandleStyleState().addAndInvokeNewSchoolValueListener( this.handleStyleListener );
+				this.setHandleSelectionState( org.alice.interact.handle.HandleStyle.DEFAULT );
+
+				// <lg/> HACK! selection only mode doesn't seem to get initialized correctly
+				// unless it's setup later. Somehow if you set this here, now (instead of later)
+				// the initialization sequence doesn't quite finish correctly. This appears to be
+				// due to how the observers get setup later and don't pick up this change. But
+				// I don't have time to fix it. So this hack works for now.
+				SwingUtilities.invokeLater( () -> {
+					this.setSelectionOnlyMode( true );
+				} );
+			}
 		}
 
 		edu.cmu.cs.dennisc.render.RenderCapabilities renderCapabilities = this.sceneEditor.getOnscreenRenderTarget().getActualCapabilities();
@@ -705,11 +709,10 @@ public class GlobalDragAdapter extends org.alice.stageide.sceneeditor.interact.C
 					org.lgna.project.ast.UserField manipulatedField = org.alice.stageide.sceneeditor.StorytellingSceneEditor.getInstance().getFieldForInstanceInJavaVM( aliceThing );
 					undoOperation = new PredeterminedSetLocalTransformationActionOperation( org.lgna.croquet.Application.PROJECT_GROUP, false, this.getAnimator(), manipulatedField, originalTransformation, newTransformation, manipulator.getUndoRedoDescription() );
 				}
-				// <lg> ensure we're on the event dispatch thread
-				javax.swing.SwingUtilities.invokeLater( () -> {
+				// <lg/> ensure we're on the event dispatch thread
+				ThreadHelper.runOnSwingThread( () -> {
 					undoOperation.fire();
 				} );
-				// </lg>
 			} else {
 				//note: currently this condition can occur for manipulations of the scene editor's orthographic camera views
 			}

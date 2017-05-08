@@ -63,6 +63,8 @@ public enum AnimationStyle implements
 		SetScale.Detail, SetSize.Detail, SetWidth.Detail, SetHeight.Detail, SetDepth.Detail, Resize.Detail, ResizeWidth.Detail, ResizeHeight.Detail, ResizeDepth.Detail,
 		//JointedModel
 		StraightenOutJoints.Detail,
+		//Biped (for now?)
+		StrikePose.Detail,
 		//Flyer
 		UnfoldWings.Detail,
 		//Room

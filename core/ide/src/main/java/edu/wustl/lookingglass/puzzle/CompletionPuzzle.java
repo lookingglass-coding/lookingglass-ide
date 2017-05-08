@@ -89,7 +89,6 @@ import edu.cmu.cs.dennisc.property.event.RemoveListPropertyEvent;
 import edu.cmu.cs.dennisc.property.event.SimplifiedListPropertyAdapter;
 import edu.wustl.lookingglass.ide.LookingGlassIDE;
 import edu.wustl.lookingglass.ide.perspectives.puzzle.CompletionPuzzlePerspective;
-import edu.wustl.lookingglass.puzzle.ui.croquet.CompletionPuzzleComposite;
 import edu.wustl.lookingglass.study.StudyConfiguration;
 
 /**
@@ -334,9 +333,9 @@ public class CompletionPuzzle {
 				if( statementWithBody != null ) {
 					PuzzleStatementUtility.extractAllStatements( implicitDistractorStatements, statementWithBody, ( s ) -> {
 						return this.staticStatements.contains( s );
-					} , ( s ) -> {
+					}, ( s ) -> {
 						return this.nonMutableStatements.contains( s );
-					} , ( s ) -> {
+					}, ( s ) -> {
 						return !this.nonScrambledStatements.contains( s );
 					} );
 				}
@@ -507,9 +506,9 @@ public class CompletionPuzzle {
 					if( statementWithBody != null ) {
 						PuzzleStatementUtility.extractAllStatements( this.puzzleStatements, statementWithBody, ( s ) -> {
 							return this.staticStatements.contains( s );
-						} , ( s ) -> {
+						}, ( s ) -> {
 							return this.nonMutableStatements.contains( s );
-						} , ( s ) -> {
+						}, ( s ) -> {
 							return !this.nonScrambledStatements.contains( s );
 						} );
 					}
@@ -738,8 +737,12 @@ public class CompletionPuzzle {
 				this.puzzleTimer.schedule( new TimerTask() {
 					@Override
 					public void run() {
-						if( !CompletionPuzzle.this.isCorrect() ) {
-							CompletionPuzzle.this.getPuzzleComposite().showTimeOutPaneWhenAppropiate();
+						try {
+							if( !CompletionPuzzle.this.isCorrect() ) {
+								CompletionPuzzle.this.puzzlePerspective.getMainComposite().showTimeOutPaneWhenAppropiate();
+							}
+						} catch( Throwable t ) {
+							Logger.throwable( t, this );
 						}
 					}
 				}, this.puzzleTimeLimitMs );
@@ -766,10 +769,6 @@ public class CompletionPuzzle {
 				LookingGlassIDE.getActiveInstance().setCursor( java.awt.Cursor.DEFAULT_CURSOR );
 			} );
 		} );
-	}
-
-	public CompletionPuzzleComposite getPuzzleComposite() {
-		return this.puzzlePerspective.getMainComposite();
 	}
 
 	public void haltPuzzleEvaluationAndWork( Runnable worker ) {

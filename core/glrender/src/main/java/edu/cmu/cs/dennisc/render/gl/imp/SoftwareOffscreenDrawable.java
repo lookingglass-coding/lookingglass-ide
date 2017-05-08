@@ -44,7 +44,6 @@ package edu.cmu.cs.dennisc.render.gl.imp;
 
 import edu.cmu.cs.dennisc.render.gl.GlDrawableUtils;
 
-
 /**
  * @author Dennis Cosgrove
  */

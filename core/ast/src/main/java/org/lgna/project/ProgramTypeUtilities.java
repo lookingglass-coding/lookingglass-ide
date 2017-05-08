@@ -43,6 +43,8 @@
 
 package org.lgna.project;
 
+import org.lgna.project.ast.UserArrayType;
+
 /**
  * @author Dennis Cosgrove
  */
@@ -227,7 +229,7 @@ public class ProgramTypeUtilities {
 	public static boolean doProjectTypeClassesExist( Project project ) {
 		TypeNameClass[] types = getProjectTypeClasses( project );
 		for( TypeNameClass type : types ) {
-			if( type.cls == null ) {
+			if( ( type == null ) || ( type.cls == null ) ) {
 				return false;
 			}
 		}
@@ -239,7 +241,8 @@ public class ProgramTypeUtilities {
 
 		for( org.lgna.project.ast.NamedUserType type : project.getNamedUserTypes() ) {
 			for( org.lgna.project.ast.UserField field : type.fields ) {
-				typeClasses.add( getTypeClass( field ) );
+				TypeNameClass fieldClass = getTypeClass( field );
+				typeClasses.add( fieldClass );
 			}
 		}
 
@@ -268,6 +271,11 @@ public class ProgramTypeUtilities {
 		} else if( valueType instanceof org.lgna.project.ast.JavaType ) {
 			org.lgna.project.ast.JavaType javaType = (org.lgna.project.ast.JavaType)valueType;
 			return getTypeClass( javaType );
+		} else if( valueType instanceof UserArrayType ) {
+			TypeNameClass type = new TypeNameClass();
+			type.name = UserArrayType.class.getSimpleName();
+			type.cls = UserArrayType.class;
+			return type;
 		} else {
 			return null;
 		}

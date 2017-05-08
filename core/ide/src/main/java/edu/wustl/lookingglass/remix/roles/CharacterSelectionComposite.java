@@ -49,6 +49,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -93,7 +94,14 @@ import org.lgna.project.Project;
 import org.lgna.project.ast.AbstractField;
 import org.lgna.project.ast.AbstractMethod;
 import org.lgna.project.ast.AbstractType;
+import org.lgna.project.ast.ArrayInstanceCreation;
 import org.lgna.project.ast.AstUtilities;
+import org.lgna.project.ast.CrawlPolicy;
+import org.lgna.project.ast.EachInArrayTogether;
+import org.lgna.project.ast.Expression;
+import org.lgna.project.ast.FieldAccess;
+import org.lgna.project.ast.ForEachInArrayLoop;
+import org.lgna.project.ast.MethodInvocation;
 import org.lgna.project.ast.NamedUserType;
 import org.lgna.project.ast.Statement;
 import org.lgna.project.ast.ThisExpression;
@@ -115,6 +123,7 @@ import edu.cmu.cs.dennisc.java.util.DStack;
 import edu.cmu.cs.dennisc.java.util.Lists;
 import edu.cmu.cs.dennisc.java.util.Maps;
 import edu.cmu.cs.dennisc.java.util.Stacks;
+import edu.cmu.cs.dennisc.pattern.IsInstanceCrawler;
 import edu.wustl.lookingglass.community.CommunityProjectPropertyManager;
 import edu.wustl.lookingglass.croquetfx.FxComponent;
 import edu.wustl.lookingglass.croquetfx.ThreadHelper;
@@ -172,6 +181,8 @@ public class CharacterSelectionComposite extends SimpleOperationUnadornedDialogC
 		this.roleAssignments = Lists.newArrayList();
 
 		setJointMethodsOnRoles(); // needs to happen before getProjectFields() is called
+		identifyNonSubstitutableJoints();
+
 		this.declaredFields = Lists.newArrayList( getProjectSceneType().fields.toArray( UserField.class ) );
 
 		// Create a RoleAssignment for each Role
@@ -437,11 +448,13 @@ public class CharacterSelectionComposite extends SimpleOperationUnadornedDialogC
 	 * @param role the role to check for default joint substitutions
 	 */
 	private boolean validJointSubstitutions( UserField assignmentField, Role role ) {
+
 		boolean isValid = true;
 		if( ( assignmentField != null ) && ( role != null ) ) {
 			AbstractType<?, ?, ?> roleType = role.getOriginField().getValueType();
 			AbstractType<?, ?, ?> assignmentType = assignmentField.getValueType();
 
+			// if they are the same type we're good
 			if( assignmentType.getName().contentEquals( roleType.getName() ) ) {
 				return true;
 			}
@@ -453,11 +466,105 @@ public class CharacterSelectionComposite extends SimpleOperationUnadornedDialogC
 					break;
 				}
 			}
+
+			// if there are substitutions for everything, but we're not allowed to use them
+			if( isValid && ( role.getSubstitutionsAllowed() == false ) ) {
+				// if they share the same java type, there isn't really any substitution going on
+				if( assignmentType.getFirstEncounteredJavaType().equals( roleType.getFirstEncounteredJavaType() ) ) {
+					return true;
+				} else {
+					return false;
+				}
+			}
 		} else {
 			isValid = false;
 		}
 
 		return isValid;
+	}
+
+	private class JointCrawler extends IsInstanceCrawler<MethodInvocation> {
+
+		protected JointCrawler() {
+			super( MethodInvocation.class );
+		}
+
+		@Override
+		protected boolean isAcceptable( MethodInvocation e ) {
+			if( JointMethodUtilities.isJointGetter( e.method.getValue() ) ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+	}
+
+	/**
+	 * Helper method that identifies when joint substitutions aren't
+	 * permissable. This can happen with for each loops that access joints. This
+	 * can also happen with parameters, but need to flesh out those cases.
+	 */
+	private void identifyNonSubstitutableJoints() {
+		HashSet<UserField> noSubsFields = new HashSet<UserField>();
+
+		IsInstanceCrawler<EachInArrayTogether> eachTogetherCrawler = new IsInstanceCrawler<EachInArrayTogether>( EachInArrayTogether.class ) {
+
+			@Override
+			protected boolean isAcceptable( EachInArrayTogether e ) {
+				JointCrawler jointCrawler = new JointCrawler();
+				e.body.getValue().crawl( jointCrawler, CrawlPolicy.EXCLUDE_REFERENCES_ENTIRELY );
+
+				if( jointCrawler.getList().size() > 0 ) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		};
+		snippetScript.getMainMethod().crawl( eachTogetherCrawler, CrawlPolicy.COMPLETE );
+
+		for( EachInArrayTogether eachTogether : eachTogetherCrawler.getList() ) {
+			ArrayInstanceCreation array = (ArrayInstanceCreation)eachTogether.array.getValue();
+			for( Expression e : array.expressions.getValue() ) {
+				if( e instanceof FieldAccess ) {
+					FieldAccess f = (FieldAccess)e;
+					noSubsFields.add( (UserField)f.field.getValue() );
+				}
+			}
+		}
+
+		IsInstanceCrawler<ForEachInArrayLoop> forEachCrawler = new IsInstanceCrawler<ForEachInArrayLoop>( ForEachInArrayLoop.class ) {
+
+			@Override
+			protected boolean isAcceptable( ForEachInArrayLoop e ) {
+				JointCrawler jointCrawler = new JointCrawler();
+				e.body.getValue().crawl( jointCrawler, CrawlPolicy.EXCLUDE_REFERENCES_ENTIRELY );
+
+				if( jointCrawler.getList().size() > 0 ) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		};
+		snippetScript.getMainMethod().crawl( forEachCrawler, CrawlPolicy.COMPLETE );
+
+		for( ForEachInArrayLoop forEach : forEachCrawler.getList() ) {
+			ArrayInstanceCreation array = (ArrayInstanceCreation)forEach.array.getValue();
+			for( Expression e : array.expressions.getValue() ) {
+				if( e instanceof FieldAccess ) {
+					FieldAccess f = (FieldAccess)e;
+					noSubsFields.add( (UserField)f.field.getValue() );
+				}
+			}
+		}
+
+		for( Role r : snippetScript.getActiveRoles() ) {
+			if( noSubsFields.contains( r.getOriginField() ) ) {
+				r.setSubstitutionsAllowed( false );
+			}
+		}
 	}
 
 	/**
@@ -583,7 +690,7 @@ public class CharacterSelectionComposite extends SimpleOperationUnadornedDialogC
 	private void completeRemix( InsertSnippetEdit edit ) {
 		UserMethod method = edit.getRootMethod();
 
-		final Runnable showRemixDoneNote = () -> {
+		final Runnable showRemixDoneNote = ( ) -> {
 			assert typeToAddTo != null;
 
 			if( this.typeToAddTo.isAssignableFrom( IDE.getActiveInstance().getDocumentFrame().getInstanceFactoryState().getValue().getValueType() ) ) {
@@ -612,7 +719,7 @@ public class CharacterSelectionComposite extends SimpleOperationUnadornedDialogC
 			TemplateFactory.getProcedureInvocationTemplate( method ).scrollToVisible();
 
 			// Show note to user to help them use the remix...
-			ThreadHelper.runOnFxThread( () -> {
+			ThreadHelper.runOnFxThread( ( ) -> {
 				TitlePanePopOver methodNote = new TitlePanePopOver( FxComponent.DEFAULT_RESOURCES.getString( "Remix.popOver.title" ), FxComponent.DEFAULT_RESOURCES.getString( "Remix.popOver.message" ) );
 				methodNote.getPopOver().arrowLocationProperty().set( ArrowLocation.LEFT_CENTER );
 				methodNote.closeOnClickProperty().set( true );
@@ -634,8 +741,8 @@ public class CharacterSelectionComposite extends SimpleOperationUnadornedDialogC
 			CompletionPuzzle puzzle = new CompletionPuzzle( edit.getProject(), field, method );
 			assert puzzle != null;
 
-			SwingUtilities.invokeLater( () -> {
-				puzzle.beginPuzzle( () -> {
+			SwingUtilities.invokeLater( ( ) -> {
+				puzzle.beginPuzzle( ( ) -> {
 					org.alice.ide.ProjectDocumentFrame documentFrame = org.alice.ide.IDE.getActiveInstance().getDocumentFrame();
 					documentFrame.setToCodePerspectiveTransactionlessly();
 
@@ -796,14 +903,14 @@ public class CharacterSelectionComposite extends SimpleOperationUnadornedDialogC
 						//pass
 					} else {
 						this.caughtExceptions.add( t.getClass().toString() );
-						LookingGlassIDE.getActiveInstance().getExceptionHandler().uncaughtException( null, t );
+						Thread.getDefaultUncaughtExceptionHandler().uncaughtException( null, t );
 					}
 					edu.cmu.cs.dennisc.java.util.logging.Logger.throwable( t );
 				}
 			};
 		}
 
-		javax.swing.SwingUtilities.invokeLater( () -> {
+		javax.swing.SwingUtilities.invokeLater( ( ) -> {
 			this.programLock.acquireUninterruptibly();
 			this.cleanupRemixPreview();
 			this.startRemixPreview( shouldPause );

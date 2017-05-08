@@ -44,6 +44,7 @@ package org.alice.stageide.sceneeditor.interact;
 
 import org.alice.interact.AbstractDragAdapter;
 import org.alice.interact.InteractionGroup;
+import org.alice.interact.InteractionGroup.InteractionInfo;
 import org.alice.interact.PickHint;
 import org.alice.interact.PickUtilities;
 import org.lgna.croquet.SingleSelectListState;
@@ -87,19 +88,27 @@ public abstract class CroquetSupportingDragAdapter extends AbstractDragAdapter {
 	protected abstract SingleSelectListState<org.alice.interact.handle.HandleStyle, ?> getHandleStyleState();
 
 	@Override
+	protected void setHandleSelectionState( org.alice.interact.handle.HandleStyle handleStyle ) {
+		SingleSelectListState<org.alice.interact.handle.HandleStyle, ?> handleStyleListSelectionState = this.getHandleStyleState();
+		if( handleStyleListSelectionState != null ) {
+			handleStyleListSelectionState.setValueTransactionlessly( handleStyle );
+		}
+	}
+
+	@Override
 	protected void updateHandleSelection( AbstractTransformableImp selected ) {
 		SingleSelectListState<org.alice.interact.handle.HandleStyle, ?> handleStyleListSelectionState = this.getHandleStyleState();
 		if( handleStyleListSelectionState != null ) {
 			org.alice.interact.handle.HandleStyle currentHandleStyle = handleStyleListSelectionState.getValue();
-			InteractionGroup selectedState = this.mapHandleStyleToInteractionGroup.get( currentHandleStyle );
+			InteractionGroup selectedStateGroup = this.mapHandleStyleToInteractionGroup.get( currentHandleStyle );
+			InteractionInfo selectedState = selectedStateGroup.getMatchingInfo( ObjectType.getObjectType( selected ) );
 			if( selectedState != null ) { //Sometimes we don't support handles--like in the create-a-sim editor
 				PickHint pickHint = PickUtilities.getPickTypeForImp( selected );
 				if( !selectedState.canUseIteractionGroup( pickHint ) ) {
-					for( org.alice.interact.handle.HandleStyle handleStyle : handleStyleListSelectionState )
-					{
-						InteractionGroup interactionState = this.mapHandleStyleToInteractionGroup.get( handleStyle );
-						if( interactionState.canUseIteractionGroup( pickHint ) )
-						{
+					for( org.alice.interact.handle.HandleStyle handleStyle : handleStyleListSelectionState ) {
+						InteractionGroup interactionStateGroup = this.mapHandleStyleToInteractionGroup.get( handleStyle );
+						InteractionInfo interactionState = interactionStateGroup.getMatchingInfo( ObjectType.getObjectType( selected ) );
+						if( interactionState.canUseIteractionGroup( pickHint ) ) {
 							handleStyleListSelectionState.setValueTransactionlessly( handleStyle );
 							break;
 						}

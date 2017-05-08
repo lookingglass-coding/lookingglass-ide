@@ -44,15 +44,24 @@
  *******************************************************************************/
 package edu.wustl.lookingglass;
 
+import java.lang.Thread.UncaughtExceptionHandler;
+
+import org.alice.ide.issue.DefaultExceptionHandler;
+
 import edu.wustl.lookingglass.ide.LookingGlassIDE;
 import edu.wustl.lookingglass.utilities.memory.HeapWatchDog;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
 
 /**
  * @author Kyle J. Harms
  */
 public class LookingGlass {
 
-	public static HeapWatchDog heapMonitor;
+	private static HeapWatchDog heapMonitor;
+	private static JFXPanel initJavaFX;
+	private static UncaughtExceptionHandler exceptionHandler;
 
 	// Initialize all things non-swing. This is necessary to run the code tests on the community.
 	public static void initialize() {
@@ -89,7 +98,7 @@ public class LookingGlass {
 	}
 
 	// Initialize all things swing
-	public static void initializeInSwingThread() {
+	public static void initializeInterface() {
 		// Call this only after the other properties have been set just as a check.
 		assert java.awt.EventQueue.isDispatchThread();
 
@@ -152,10 +161,19 @@ public class LookingGlass {
 		// Check if this platform can run Looking Glass. Some versions of the mac can't!
 		checkAndWarnMacCompatibility();
 
+		// initialize JavaFX
+		Platform.setImplicitExit( false );
+		LookingGlass.initJavaFX = new JFXPanel();
+		Application.setUserAgentStylesheet( Application.STYLESHEET_MODENA );
+
+		// handle uncaught exceptions
+		LookingGlass.exceptionHandler = new DefaultExceptionHandler();
+		Thread.setDefaultUncaughtExceptionHandler( exceptionHandler );
+
 		org.lgna.project.ast.AbstractNode.setAstLocalizerFactory( new org.lgna.project.ast.localizer.DefaultAstLocalizerFactory() {
 			@Override
 			public org.lgna.project.ast.localizer.AstLocalizer createInstance( final java.lang.StringBuilder sb ) {
-				return new org.lgna.project.ast.localizer.DefaultAstLocalizer( sb) {
+				return new org.lgna.project.ast.localizer.DefaultAstLocalizer( sb ) {
 					@Override
 					public void appendThis() {
 						sb.append( "this" );
@@ -177,7 +195,7 @@ public class LookingGlass {
 			}
 		} );
 
-		heapMonitor = new HeapWatchDog();
+		LookingGlass.heapMonitor = new HeapWatchDog();
 	}
 
 	private static void checkAndWarnMacCompatibility() {
@@ -226,7 +244,7 @@ public class LookingGlass {
 		javax.swing.SwingUtilities.invokeLater( new Runnable() {
 			@Override
 			public void run() {
-				LookingGlass.initializeInSwingThread();
+				LookingGlass.initializeInterface();
 				LookingGlassIDE ide = new LookingGlassIDE( args );
 			}
 		} );

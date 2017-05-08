@@ -71,18 +71,15 @@ public class GoodLookAtUtils {
 		return createLookAtMatrix( eye.x, eye.y, eye.z, center.x, center.y, center.z, up.x, up.y, up.z );
 	}
 
-	public static double calculateGoodLookAtDistance( edu.cmu.cs.dennisc.scenegraph.Visual sgVisual, edu.cmu.cs.dennisc.math.Angle verticalViewingAngle, double aspectRatio, edu.cmu.cs.dennisc.scenegraph.AbstractCamera sgCamera ) {
-		edu.cmu.cs.dennisc.math.AxisAlignedBox axisAlignedBox = sgVisual.getAxisAlignedMinimumBoundingBox();
+	public static double calculateGoodLookAtDistance( edu.cmu.cs.dennisc.math.AxisAlignedBox axisAlignedBox, edu.cmu.cs.dennisc.math.AffineMatrix4x4 visualAbsoluteTransform, edu.cmu.cs.dennisc.math.Angle verticalViewingAngle, double aspectRatio, edu.cmu.cs.dennisc.scenegraph.AbstractCamera sgCamera ) {
 		final double THRESHOLD = 100.0;
 		if( axisAlignedBox.getWidth() > THRESHOLD ) {
 			return Double.NaN;
 		} else {
 			edu.cmu.cs.dennisc.math.Point3[] localPoints = axisAlignedBox.getPoints();
-			edu.cmu.cs.dennisc.math.AffineMatrix4x4 visualAbsolute = sgVisual.getAbsoluteTransformation();
-
 			edu.cmu.cs.dennisc.math.Point3[] transformedPoints = new edu.cmu.cs.dennisc.math.Point3[ localPoints.length ];
 			for( int i = 0; i < localPoints.length; i++ ) {
-				transformedPoints[ i ] = visualAbsolute.createTransformed( localPoints[ i ] );
+				transformedPoints[ i ] = visualAbsoluteTransform.createTransformed( localPoints[ i ] );
 			}
 
 			edu.cmu.cs.dennisc.math.Point3 averageAbsolutePoint = edu.cmu.cs.dennisc.math.Point3.createZero();
@@ -104,7 +101,7 @@ public class GoodLookAtUtils {
 				//todo: investigate
 				edu.cmu.cs.dennisc.math.AffineMatrix4x4 cameraAbsolute = sgCamera.getAbsoluteTransformation();
 
-				m = createLookAtMatrix( cameraAbsolute.translation, visualAbsolute.translation, cameraAbsolute.orientation.up );
+				m = createLookAtMatrix( cameraAbsolute.translation, visualAbsoluteTransform.translation, cameraAbsolute.orientation.up );
 
 				for( int i = 0; i < localPoints.length; i++ ) {
 					transformedPoints[ i ] = m.createTransformed( transformedPoints[ i ] );
@@ -148,4 +145,11 @@ public class GoodLookAtUtils {
 			return maxValue;
 		}
 	}
+
+	public static double calculateGoodLookAtDistance( edu.cmu.cs.dennisc.scenegraph.Visual sgVisual, edu.cmu.cs.dennisc.math.Angle verticalViewingAngle, double aspectRatio, edu.cmu.cs.dennisc.scenegraph.AbstractCamera sgCamera ) {
+		edu.cmu.cs.dennisc.math.AxisAlignedBox axisAlignedBox = sgVisual.getAxisAlignedMinimumBoundingBox();
+		edu.cmu.cs.dennisc.math.AffineMatrix4x4 visualAbsolute = sgVisual.getAbsoluteTransformation();
+		return calculateGoodLookAtDistance( axisAlignedBox, visualAbsolute, verticalViewingAngle, aspectRatio, sgCamera );
+	}
+
 }

@@ -1,3 +1,8 @@
+# Because of the way we use ant to build this rpm package, the debug package
+# isn't valuable and prevents the rpm from building. So we'll just turn it off
+# for now.
+%define debug_package %{nil}
+
 Summary: %{app_title}
 Name: %{app_file}
 Version: %{app_version}

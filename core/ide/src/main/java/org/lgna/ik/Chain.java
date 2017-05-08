@@ -48,7 +48,8 @@ package org.lgna.ik;
  */
 public class Chain {
 	public static Chain createInstance( org.lgna.story.implementation.JointedModelImp<?, ?> jointedModelImp, org.lgna.story.resources.JointId anchorId, org.lgna.story.resources.JointId endId, boolean isLinearEnabled, boolean isAngularEnabled ) {
-		java.util.List<org.lgna.story.implementation.JointImp> jointImps = jointedModelImp.getInclusiveListOfJointsBetween( anchorId, endId );
+		java.util.List<org.lgna.ik.core.solver.Bone.Direction> directions = edu.cmu.cs.dennisc.java.util.Lists.newArrayList();
+		java.util.List<org.lgna.story.implementation.JointImp> jointImps = jointedModelImp.getInclusiveListOfJointsBetween( anchorId, endId, directions );
 		return new Chain( jointImps, isLinearEnabled, isAngularEnabled );
 	}
 
@@ -114,8 +115,7 @@ public class Chain {
 			if( this.isLinearVelocityEnabled() ) {
 				edu.cmu.cs.dennisc.math.Vector3 v = edu.cmu.cs.dennisc.math.Vector3.createSubtraction(
 						endEffectorPos,
-						this.getAnchorPosition()
-						);
+						this.getAnchorPosition() );
 				bone.updateLinearContributions( v );
 			}
 			if( this.isAngularVelocityEnabled() ) {

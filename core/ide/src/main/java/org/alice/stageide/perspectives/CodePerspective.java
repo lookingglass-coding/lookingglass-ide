@@ -43,6 +43,8 @@
 
 package org.alice.stageide.perspectives;
 
+import edu.wustl.lookingglass.ide.LookingGlassIDE;
+
 /**
  * @author Dennis Cosgrove
  */
@@ -52,12 +54,20 @@ public class CodePerspective extends AbstractCodePerspective {
 	}
 
 	@Override
-	public org.alice.stageide.perspectives.code.CodePerspectiveComposite getMainComposite() {
+	public org.lgna.croquet.Composite<?> getMainComposite() {
+		if( LookingGlassIDE.getActiveInstance().isBatchPrintingModeEnabled() ) {
+			return edu.wustl.lookingglass.ide.LookingGlassIDE.getActiveInstance().getDocumentFrame().getDeclarationsEditorComposite();
+		}
+
 		return this.mainCompositeLazy.get();
 	}
 
 	@Override
 	public org.alice.stageide.perspectives.code.CodeToolBarComposite getToolBarComposite() {
+		if( LookingGlassIDE.getActiveInstance().isBatchPrintingModeEnabled() ) {
+			return null;
+		}
+
 		if( org.alice.ide.preferences.IsToolBarShowing.getValue() ) {
 			return this.toolBarLazy.get();
 		} else {

@@ -52,6 +52,7 @@ import org.lgna.croquet.history.CompletionStep;
 import org.lgna.project.ast.Statement;
 
 import edu.wustl.lookingglass.puzzle.CompletionPuzzle;
+import edu.wustl.lookingglass.puzzle.ui.croquet.CompletionPuzzleComposite;
 import edu.wustl.lookingglass.puzzle.ui.croquet.views.PuzzleStatementsBinView;
 
 /**
@@ -60,13 +61,15 @@ import edu.wustl.lookingglass.puzzle.ui.croquet.views.PuzzleStatementsBinView;
 public class InsertStatementIntoPuzzleEdit extends MoveStatementEdit {
 
 	private final CompletionPuzzle puzzle;
+	private final CompletionPuzzleComposite puzzleComposite;
 	private final PuzzleStatementsBinView binView;
 	private Point fromPosition;
 
-	public InsertStatementIntoPuzzleEdit( CompletionStep completionStep, BlockStatementIndexPair fromLocation, Statement statement, BlockStatementIndexPair toLocation, boolean isMultiple, CompletionPuzzle puzzle ) {
+	public InsertStatementIntoPuzzleEdit( CompletionStep completionStep, BlockStatementIndexPair fromLocation, Statement statement, BlockStatementIndexPair toLocation, boolean isMultiple, CompletionPuzzle puzzle, CompletionPuzzleComposite puzzleComposite ) {
 		super( completionStep, fromLocation, statement, toLocation, isMultiple );
 		this.puzzle = puzzle;
-		this.binView = puzzle.getPuzzleComposite().getResourcesBinComposite().getView().getStatementsBinView();
+		this.puzzleComposite = puzzleComposite;
+		this.binView = this.puzzleComposite.getResourcesBinComposite().getView().getStatementsBinView();
 	}
 
 	@Override

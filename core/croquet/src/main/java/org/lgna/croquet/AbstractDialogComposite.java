@@ -140,6 +140,8 @@ public abstract class AbstractDialogComposite<V extends org.lgna.croquet.views.C
 			dialog.setTitle( this.getDialogTitle( step ) );
 			this.handlePreShowDialog( step );
 			//application.pushWindow( dialog );
+
+			ModalFrameComposite.hideNonModalFrames();
 			dialog.setVisible( true );
 
 			if( isModal ) {

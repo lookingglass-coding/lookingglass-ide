@@ -46,25 +46,24 @@ package edu.wustl.lookingglass.utilities.community;
 
 import org.alice.stageide.ast.StoryApiSpecificAstUtilities;
 import org.lgna.project.Project;
-import org.lgna.project.ast.UserMethod;
 import org.lgna.project.io.IoUtilities;
+
+import edu.wustl.lookingglass.remix.SnippetScript;
 
 public class ProjectExtractor {
 
-	public static boolean isMainEmpty( org.lgna.project.Project project ) {
-		UserMethod main = StoryApiSpecificAstUtilities.getUserMain( project );
-		int numStatements = main.body.getValue().statements.getValue().size();
-		return ( numStatements == 0 );
+	public static int getMainSize( Project project ) {
+		return StoryApiSpecificAstUtilities.getUserMainBodySize( project );
+	}
+
+	public static int getMainSize( SnippetScript snippet ) {
+		return StoryApiSpecificAstUtilities.getUserMainBodySize( snippet );
 	}
 
 	public static void main( String[] args ) throws Exception {
 		String path = args[ 0 ];
 
 		Project project = IoUtilities.readProject( path );
-		if( ProjectExtractor.isMainEmpty( project ) ) {
-			System.out.println( path + " : empty main" );
-		} else {
-			System.out.println( path + " : non-empty main" );
-		}
+		System.out.println( path + " : " + ProjectExtractor.getMainSize( project ) );
 	}
 }

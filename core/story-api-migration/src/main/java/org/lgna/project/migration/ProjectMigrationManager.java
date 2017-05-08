@@ -52,6 +52,7 @@ public class ProjectMigrationManager extends AbstractMigrationManager {
 	private static final String PATTERN_WHITESPACE = "\\s*";
 	private static final String REPLACEMENT_WHITESPACE = " ";
 
+	// @formatter:off
 	private static String createMoreSpecificFieldString( String fieldName, String clsName, String whitespace ) {
 		StringBuilder sb = new StringBuilder();
 		sb.append( "name=\"" );
@@ -5309,80 +5310,80 @@ public class ProjectMigrationManager extends AbstractMigrationManager {
 					createMoreSpecificFieldPattern( "FANCY", "org.lgna.story.resources.prop.BiotechStationResource" ),
 					createMoreSpecificFieldReplacement( "BIOTECH_STATION", "org.lgna.story.resources.prop.BiotechStationResource" ),
 
-					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.biped.BlackCatResource" ),
-					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.biped.PandaResource" ),
+					//The textbook version needs to not remove these models, so for this branch leave this commented out.
+					//					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.biped.BlackCatResource" ),
+					//					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.biped.PandaResource" ),
+					//
+					//					"name=\"org.lgna.story.resources.biped.BlackCatResource",
+					//					"name=\"org.lgna.story.resources.biped.AliceResource",
+					//
+					//					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.biped.PumpkinHeadResource" ),
+					//					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.biped.PandaResource" ),
+					//
+					//					createMoreSpecificFieldPattern( "HEADLESS", "org.lgna.story.resources.biped.PumpkinHeadResource" ),
+					//					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.biped.PandaResource" ),
+					//
+					//					"name=\"org.lgna.story.resources.biped.PumpkinHeadResource",
+					//					"name=\"org.lgna.story.resources.biped.PandaResource",
+					//
 
-					"name=\"org.lgna.story.resources.biped.BlackCatResource",
-					"name=\"org.lgna.story.resources.biped.AliceResource",
+					//note: this is a doomed migration
+					////"name=\"org.lgna.story.resources.prop.TrainEngineResource",
+					////"name=\"org.lgna.story.resources.train.TrainEngineResource",
+					//
+					//					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.biped.GhostResource" ),
+					//					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.biped.ThorResource" ),
+					//
+					//					createMoreSpecificFieldPattern( "SHEET_GHOST", "org.lgna.story.resources.biped.GhostResource" ),
+					//					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.biped.ThorResource" ),
+					//
+					//					createMoreSpecificFieldPattern( "SHEET_GHOST_SHEET_TRANSPARENT", "org.lgna.story.resources.biped.GhostResource" ),
+					//					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.biped.ThorResource" ),
+					//
+					//					"name=\"org.lgna.story.resources.biped.GhostResource",
+					//					"name=\"org.lgna.story.resources.biped.ThorResource",
+					//
 
-					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.biped.PumpkinHeadResource" ),
-					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.biped.PandaResource" ),
+					//note: this is a doomed migration
+					////"name=\"org.lgna.story.resources.prop.TrainCarResource",
+					////"name=\"org.lgna.story.resources.train.TrainCarResource",
 
-					createMoreSpecificFieldPattern( "HEADLESS", "org.lgna.story.resources.biped.PumpkinHeadResource" ),
-					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.biped.PandaResource" ),
-
-					"name=\"org.lgna.story.resources.biped.PumpkinHeadResource",
-					"name=\"org.lgna.story.resources.biped.PandaResource",
-
-					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.prop.TrainEngineResource" ),
-					createMoreSpecificFieldReplacement( "MODERATE_BLUE_STRIPES_WOOD_FRAME", "org.lgna.story.resources.prop.BedSingleResource" ),
-
-					"name=\"org.lgna.story.resources.prop.TrainEngineResource",
-					"name=\"org.lgna.story.resources.prop.BedSingleResource",
-
-					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.biped.GhostResource" ),
-					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.biped.ThorResource" ),
-
-					createMoreSpecificFieldPattern( "SHEET_GHOST", "org.lgna.story.resources.biped.GhostResource" ),
-					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.biped.ThorResource" ),
-
-					createMoreSpecificFieldPattern( "SHEET_GHOST_SHEET_TRANSPARENT", "org.lgna.story.resources.biped.GhostResource" ),
-					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.biped.ThorResource" ),
-
-					"name=\"org.lgna.story.resources.biped.GhostResource",
-					"name=\"org.lgna.story.resources.biped.ThorResource",
-
-					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.prop.TrainCarResource" ),
-					createMoreSpecificFieldReplacement( "BASIC_GRAY_WOOD_FRAME", "org.lgna.story.resources.prop.BedDoubleResource" ),
-
-					"name=\"org.lgna.story.resources.prop.TrainCarResource",
-					"name=\"org.lgna.story.resources.prop.BedDoubleResource",
-
-					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.prop.TunnelResource" ),
-					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.prop.TentResource" ),
-
-					"name=\"org.lgna.story.resources.prop.TunnelResource",
-					"name=\"org.lgna.story.resources.prop.TentResource",
-
-					createMoreSpecificFieldPattern( "WITH_HAT", "org.lgna.story.resources.biped.SkeletonResource" ),
-					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.biped.YetiResource" ),
-
-					createMoreSpecificFieldPattern( "DEFAULT_SKELETON", "org.lgna.story.resources.biped.SkeletonResource" ),
-					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.biped.YetiResource" ),
-
-					createMoreSpecificFieldPattern( "DEFAULT_TOP_HAT", "org.lgna.story.resources.biped.SkeletonResource" ),
-					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.biped.YetiResource" ),
-
-					"name=\"org.lgna.story.resources.biped.SkeletonResource",
-					"name=\"org.lgna.story.resources.biped.YetiResource",
-
-					createMoreSpecificFieldPattern( "DIFFUSE", "org.lgna.story.resources.prop.FirTreeTrunkResource" ),
-					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.prop.TreeTrunkResource" ),
-
-					createMoreSpecificFieldPattern( "SKELETON", "org.lgna.story.resources.prop.FirTreeTrunkResource" ),
-					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.prop.TreeTrunkResource" ),
-
-					createMoreSpecificFieldPattern( "TOP_HAT", "org.lgna.story.resources.prop.FirTreeTrunkResource" ),
-					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.prop.TreeTrunkResource" ),
-
-					"name=\"org.lgna.story.resources.prop.FirTreeTrunkResource",
-					"name=\"org.lgna.story.resources.prop.TreeTrunkResource",
-
-					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.biped.BatResource" ),
-					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.biped.YetiResource" ),
-
-					"name=\"org.lgna.story.resources.biped.BatResource",
-					"name=\"org.lgna.story.resources.biped.YetiResource",
+					//
+					//					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.prop.TunnelResource" ),
+					//					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.prop.TentResource" ),
+					//
+					//					"name=\"org.lgna.story.resources.prop.TunnelResource",
+					//					"name=\"org.lgna.story.resources.prop.TentResource",
+					//
+					//					createMoreSpecificFieldPattern( "WITH_HAT", "org.lgna.story.resources.biped.SkeletonResource" ),
+					//					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.biped.YetiResource" ),
+					//
+					//					createMoreSpecificFieldPattern( "DEFAULT_SKELETON", "org.lgna.story.resources.biped.SkeletonResource" ),
+					//					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.biped.YetiResource" ),
+					//
+					//					createMoreSpecificFieldPattern( "DEFAULT_TOP_HAT", "org.lgna.story.resources.biped.SkeletonResource" ),
+					//					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.biped.YetiResource" ),
+					//
+					//					"name=\"org.lgna.story.resources.biped.SkeletonResource",
+					//					"name=\"org.lgna.story.resources.biped.YetiResource",
+					//
+					//					createMoreSpecificFieldPattern( "DIFFUSE", "org.lgna.story.resources.prop.FirTreeTrunkResource" ),
+					//					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.prop.TreeTrunkResource" ),
+					//
+					//					createMoreSpecificFieldPattern( "SKELETON", "org.lgna.story.resources.prop.FirTreeTrunkResource" ),
+					//					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.prop.TreeTrunkResource" ),
+					//
+					//					createMoreSpecificFieldPattern( "TOP_HAT", "org.lgna.story.resources.prop.FirTreeTrunkResource" ),
+					//					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.prop.TreeTrunkResource" ),
+					//
+					//					"name=\"org.lgna.story.resources.prop.FirTreeTrunkResource",
+					//					"name=\"org.lgna.story.resources.prop.TreeTrunkResource",
+					//
+					//					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.biped.BatResource" ),
+					//					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.biped.YetiResource" ),
+					//
+					//					"name=\"org.lgna.story.resources.biped.BatResource",
+					//					"name=\"org.lgna.story.resources.biped.YetiResource",
 
 					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.biped.AsuraResource" ),
 					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.biped.AlienResource" ),
@@ -5616,7 +5617,312 @@ public class ProjectMigrationManager extends AbstractMigrationManager {
 
 					createJointIdPattern( "TAIL_5", "quadruped.DalmatianResource" ),
 					createJointIdReplacement( "TAIL_4" )
-			)
+			),
+			new org.lgna.project.migration.TextMigration(
+					new org.lgna.project.Version( "3.1.93.0.0" ),
+					new org.lgna.project.Version( "3.2.108.0.0" )
+
+					),
+			new org.lgna.project.migration.TextMigration(
+					new org.lgna.project.Version( "3.2.108.0.0" ),
+					new org.lgna.project.Version( "3.2.110.0.0" ),
+
+					createMoreSpecificFieldPattern( "OVAL", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "OVAL_DESERT", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "CRESCENT", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "CRESCENT_DESERT", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "BLOB", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "BLOB_DESERT", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+
+					createMoreSpecificFieldPattern( "ARCHES", "org.lgna.story.resources.prop.AncientTempleBlockResource" ),
+					createMoreSpecificFieldReplacement( "ARCHES_INDIA_BRICK_D", "org.lgna.story.resources.prop.AncientTempleBlockResource" ),
+
+					createMoreSpecificFieldPattern( "PASSAGE", "org.lgna.story.resources.prop.AncientTempleBlockResource" ),
+					createMoreSpecificFieldReplacement( "PASSAGE_INDIA_BRICK_D", "org.lgna.story.resources.prop.AncientTempleBlockResource" ),
+
+					createMoreSpecificFieldPattern( "SHELF", "org.lgna.story.resources.prop.AncientTempleBlockResource" ),
+					createMoreSpecificFieldReplacement( "SHELF_INDIA_BRICK_D", "org.lgna.story.resources.prop.AncientTempleBlockResource" ),
+
+					createMoreSpecificFieldPattern( "SOLID", "org.lgna.story.resources.prop.AncientTempleBlockResource" ),
+					createMoreSpecificFieldReplacement( "SOLID_INDIA_BRICK_D", "org.lgna.story.resources.prop.AncientTempleBlockResource" ),
+
+
+					createMoreSpecificFieldPattern( "END", "org.lgna.story.resources.prop.AncientTemplePieceResource" ),
+					createMoreSpecificFieldReplacement( "END_INDIA_BRICK_D", "org.lgna.story.resources.prop.AncientTemplePieceResource" ),
+
+					createMoreSpecificFieldPattern( "LEDGE", "org.lgna.story.resources.prop.AncientTemplePieceResource" ),
+					createMoreSpecificFieldReplacement( "LEDGE_INDIA_BRICK_D", "org.lgna.story.resources.prop.AncientTemplePieceResource" ),
+
+					createMoreSpecificFieldPattern( "LEDGE_AND_STAIRS", "org.lgna.story.resources.prop.AncientTemplePieceResource" ),
+					createMoreSpecificFieldReplacement( "LEDGE_AND_STAIRS_INDIA_BRICK_D", "org.lgna.story.resources.prop.AncientTemplePieceResource" ),
+
+					createMoreSpecificFieldPattern( "PLAZA", "org.lgna.story.resources.prop.AncientTemplePieceResource" ),
+					createMoreSpecificFieldReplacement( "PLAZA_INDIA_BRICK_D", "org.lgna.story.resources.prop.AncientTemplePieceResource" ),
+
+					createMoreSpecificFieldPattern( "ROOM", "org.lgna.story.resources.prop.AncientTemplePieceResource" ),
+					createMoreSpecificFieldReplacement( "ROOM_INDIA_BRICK_D", "org.lgna.story.resources.prop.AncientTemplePieceResource" ),
+
+					createMoreSpecificFieldPattern( "STACK", "org.lgna.story.resources.prop.AncientTemplePieceResource" ),
+					createMoreSpecificFieldReplacement( "STACK_INDIA_BRICK_D", "org.lgna.story.resources.prop.AncientTemplePieceResource" ),
+
+					createMoreSpecificFieldPattern( "STAIRS", "org.lgna.story.resources.prop.AncientTemplePieceResource" ),
+					createMoreSpecificFieldReplacement( "STAIRS_INDIA_BRICK_D", "org.lgna.story.resources.prop.AncientTemplePieceResource" ),
+
+
+					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.prop.AncientTempleArchResource" ),
+					createMoreSpecificFieldReplacement( "INDIA_BRICK_D", "org.lgna.story.resources.prop.AncientTempleArchResource" ),
+
+
+					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.prop.AncientTemplePillarResource" ),
+					createMoreSpecificFieldReplacement( "INDIA_BRICK_D", "org.lgna.story.resources.prop.AncientTemplePillarResource" ),
+
+
+					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.prop.AncientTempleWallResource" ),
+					createMoreSpecificFieldReplacement( "INDIA_BRICK_D", "org.lgna.story.resources.prop.AncientTempleWallResource" ),
+
+
+					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.prop.AncientTempleWellResource" ),
+					createMoreSpecificFieldReplacement( "INDIA_BRICK_D", "org.lgna.story.resources.prop.AncientTempleWellResource" ),
+
+
+					createMoreSpecificFieldPattern( "NO_WATER", "org.lgna.story.resources.prop.WaterTankResource" ),
+					createMoreSpecificFieldReplacement( "NO_WATER_INDIA_WATER_TANK", "org.lgna.story.resources.prop.WaterTankResource" ),
+
+					createMoreSpecificFieldPattern( "WATER", "org.lgna.story.resources.prop.WaterTankResource" ),
+					createMoreSpecificFieldReplacement( "WATER_INDIA_WATER_TANK", "org.lgna.story.resources.prop.WaterTankResource" ),
+
+
+					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.prop.WaterTankPillarResource" ),
+					createMoreSpecificFieldReplacement( "INDIA_WATER_TANK", "org.lgna.story.resources.prop.WaterTankPillarResource" ),
+
+
+					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.prop.WaterTankShrineResource" ),
+					createMoreSpecificFieldReplacement( "INDIA_WATER_TANK", "org.lgna.story.resources.prop.WaterTankShrineResource" ),
+
+
+					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.prop.WaterTankTowerResource" ),
+					createMoreSpecificFieldReplacement( "INDIA_WATER_TANK", "org.lgna.story.resources.prop.WaterTankTowerResource" ),
+
+
+					createMoreSpecificFieldPattern( "ARCH", "org.lgna.story.resources.prop.WaterTankWallResource" ),
+					createMoreSpecificFieldReplacement( "ARCH_INDIA_WATER_TANK", "org.lgna.story.resources.prop.WaterTankWallResource" ),
+
+					createMoreSpecificFieldPattern( "CIRCLE", "org.lgna.story.resources.prop.WaterTankWallResource" ),
+					createMoreSpecificFieldReplacement( "CIRCLE_INDIA_WATER_TANK", "org.lgna.story.resources.prop.WaterTankWallResource" ),
+
+
+					createMoreSpecificFieldPattern( "NO_WATER", "org.lgna.story.resources.prop.WaterTankWellResource" ),
+					createMoreSpecificFieldReplacement( "NO_WATER_INDIA_WATER_TANK", "org.lgna.story.resources.prop.WaterTankWellResource" ),
+
+					createMoreSpecificFieldPattern( "WATER", "org.lgna.story.resources.prop.WaterTankWellResource" ),
+					createMoreSpecificFieldReplacement( "WATER_INDIA_WATER_TANK", "org.lgna.story.resources.prop.WaterTankWellResource" )
+					),
+			new org.lgna.project.migration.TextMigration(
+					new org.lgna.project.Version( "3.2.110.0.0" ),
+					new org.lgna.project.Version( "3.2.111.0.0" ),
+
+					createMoreSpecificFieldPattern( "BLEACHERS", "org.lgna.story.resources.prop.CircusBleachersResource" ),
+					createMoreSpecificFieldReplacement( "DEFAULT_BLEACHERS", "org.lgna.story.resources.prop.CircusBleachersResource" ),
+
+					createMoreSpecificFieldPattern( "BONE_PILE", "org.lgna.story.resources.prop.BonesResource" ),
+					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.prop.BonePileResource" ),
+
+					"org.lgna.story.resources.prop.BonesResource",
+					"org.lgna.story.resources.prop.BonePileResource",
+
+					createMoreSpecificFieldPattern( "SHORT", "org.lgna.story.resources.prop.WychElmResource" ),
+					createMoreSpecificFieldReplacement( "DEFAULT", "org.lgna.story.resources.prop.WychElmResource" )
+					),
+			new org.lgna.project.migration.TextMigration(
+					new org.lgna.project.Version( "3.2.111.0.0" ),
+					new org.lgna.project.Version( "3.2.112.0.0" )
+					),
+			new org.lgna.project.migration.TextMigration(
+					new org.lgna.project.Version( "3.2.112.0.0" ),
+					new org.lgna.project.Version( "3.2.113.0.0" ),
+
+					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.prop.FirTreeTrunkMirrorResource" ),
+					createMoreSpecificFieldReplacement( "MIRROR", "org.lgna.story.resources.prop.FirTreeTrunkResource" ),
+
+					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.prop.FirTreeTrunkTallResource" ),
+					createMoreSpecificFieldReplacement( "TALL", "org.lgna.story.resources.prop.FirTreeTrunkResource" ),
+
+					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.prop.FirTreeTrunkTallMirrorResource" ),
+					createMoreSpecificFieldReplacement( "TALL_MIRROR", "org.lgna.story.resources.prop.FirTreeTrunkResource" ),
+
+					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.prop.FirTreeTrunkSnowResource" ),
+					createMoreSpecificFieldReplacement( "SNOW", "org.lgna.story.resources.prop.FirTreeTrunkResource" ),
+
+					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.prop.FirTreeTrunkSnowMirrorResource" ),
+					createMoreSpecificFieldReplacement( "SNOW_MIRROR", "org.lgna.story.resources.prop.FirTreeTrunkResource" ),
+
+					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.prop.FirTreeTrunkSnowTallResource" ),
+					createMoreSpecificFieldReplacement( "SNOW_TALL", "org.lgna.story.resources.prop.FirTreeTrunkResource" ),
+
+					createMoreSpecificFieldPattern( "DEFAULT", "org.lgna.story.resources.prop.FirTreeTrunkSnowTallMirrorResource" ),
+					createMoreSpecificFieldReplacement( "SNOW_TALL_MIRROR", "org.lgna.story.resources.prop.FirTreeTrunkResource" ),
+
+
+					"org.lgna.story.resources.prop.FirTreeTrunkMirrorResource",
+					"org.lgna.story.resources.prop.FirTreeTrunkResource",
+
+					"org.lgna.story.resources.prop.FirTreeTrunkTallResource",
+					"org.lgna.story.resources.prop.FirTreeTrunkResource",
+
+					"org.lgna.story.resources.prop.FirTreeTrunkTallMirrorResource",
+					"org.lgna.story.resources.prop.FirTreeTrunkResource",
+
+					"org.lgna.story.resources.prop.FirTreeTrunkSnowResource",
+					"org.lgna.story.resources.prop.FirTreeTrunkResource",
+
+					"org.lgna.story.resources.prop.FirTreeTrunkSnowMirrorResource",
+					"org.lgna.story.resources.prop.FirTreeTrunkResource",
+
+					"org.lgna.story.resources.prop.FirTreeTrunkSnowTallResource",
+					"org.lgna.story.resources.prop.FirTreeTrunkResource",
+
+					"org.lgna.story.resources.prop.FirTreeTrunkSnowTallMirrorResource",
+					"org.lgna.story.resources.prop.FirTreeTrunkResource",
+
+					"FirTreeTrunkSnowTallMirror",
+					"FirTreeTrunk",
+
+					"FirTreeTrunkSnowTall",
+					"FirTreeTrunk",
+
+					"FirTreeTrunkTallMirror",
+					"FirTreeTrunk",
+
+					"FirTreeTrunkSnowMirror",
+					"FirTreeTrunk",
+
+					"FirTreeTrunkSnow",
+					"FirTreeTrunk",
+
+					"FirTreeTrunkMirror",
+					"FirTreeTrunk",
+
+					"FirTreeTrunkTall",
+					"FirTreeTrunk",
+
+
+
+					createMoreSpecificFieldPattern( "SQUARE_DRYGRASS", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "SQUARE_DRY_GRASS", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "SQUARE_FORESTFLOOR", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "SQUARE_FOREST_FLOOR", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "SQUARE_FORESTFLOORBROWN", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "SQUARE_FOREST_FLOOR_BROWN", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "SQUARE_FORESTFLOORRED", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "SQUARE_FOREST_FLOOR_RED", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "CRESCENT_DRYGRASS", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "CRESCENT_DRY_GRASS", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "CRESCENT_FORESTFLOOR", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "CRESCENT_FOREST_FLOOR", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "CRESCENT_FORESTFLOORBROWN", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "CRESCENT_FOREST_FLOOR_BROWN", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "CRESCENT_FORESTFLOORRED", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "CRESCENT_FOREST_FLOOR_RED", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "BLOB_DRYGRASS", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "BLOB_DRY_GRASS", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "BLOB_FORESTFLOOR", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "BLOB_FOREST_FLOOR", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "BLOB_FORESTFLOORBROWN", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "BLOB_FOREST_FLOOR_BROWN", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "BLOB_FORESTFLOORRED", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "BLOB_FOREST_FLOOR_RED", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "OVAL_DRYGRASS", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "OVAL_DRY_GRASS", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "OVAL_FORESTFLOOR", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "OVAL_FOREST_FLOOR", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "OVAL_FORESTFLOORBROWN", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "OVAL_FOREST_FLOOR_BROWN", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "OVAL_FORESTFLOORRED", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "OVAL_FOREST_FLOOR_RED", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "FLAT_DRYGRASS", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "FLAT_DRY_GRASS", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "FLAT_FORESTFLOOR", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "FLAT_FOREST_FLOOR", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "FLAT_FORESTFLOORBROWN", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "FLAT_FOREST_FLOOR_BROWN", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "FLAT_FORESTFLOORRED", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "FLAT_FOREST_FLOOR_RED", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "FLAT_OCEANNIGHT", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "FLAT_OCEAN_NIGHT", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "FLAT_OVAL_DRYGRASS", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "FLAT_OVAL_DRY_GRASS", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "FLAT_OVAL_FORESTFLOOR", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "FLAT_OVAL_FOREST_FLOOR", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "FLAT_OVAL_FORESTFLOORBROWN", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "FLAT_OVAL_FOREST_FLOOR_BROWN", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "FLAT_OVAL_FORESTFLOORRED", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "FLAT_OVAL_FOREST_FLOOR_RED", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					createMoreSpecificFieldPattern( "FLAT_OVAL_OCEANNIGHT", "org.lgna.story.resources.prop.SandDunesResource" ),
+					createMoreSpecificFieldReplacement( "FLAT_OVAL_OCEAN_NIGHT", "org.lgna.story.resources.prop.SandDunesResource" ),
+
+					"org.lgna.story.resources.prop.SandDunesResource",
+					"org.lgna.story.resources.prop.TerrainResource"
+
+					),
+
+			new org.lgna.project.migration.TextMigration(
+					new org.lgna.project.Version( "3.2.113.0.0" ),
+					new org.lgna.project.Version( "3.3.0.0.0" ),
+
+					"INDIA_BRICK_D",
+					"GRAY",
+
+					"INDIA_LIGHT_BRICK_D",
+					"GOLD",
+
+					"INDIA_LIGHTEST_BRICK_D",
+					"SAND",
+
+					"INDIA_MED_BRICK_D",
+					"RED",
+
+
+					"INDIA_WATER_TANK_LIGHTEST",
+					"SAND",
+
+					"INDIA_WATER_TANK_LIGHT",
+					"GOLD",
+
+					"INDIA_WATER_TANK_MED",
+					"RED",
+
+					"INDIA_WATER_TANK",
+					"GRAY"
+					)
+
 			//			, EventAstMigration.getTextMigration()
 	};
 
@@ -5640,8 +5946,14 @@ public class ProjectMigrationManager extends AbstractMigrationManager {
 			new org.lgna.project.migration.ast.RemoveGetMySceneMethodFromProgramTypeAstMigration(
 					new org.lgna.project.Version( "3.1.70.0.0" ),
 					new org.lgna.project.Version( "3.1.72.0.0" )
+			),
+			new org.lgna.project.migration.ast.ChangeDeclaringClassForAxesSetVehicle(
+					new org.lgna.project.Version( "3.2.5.0.0" ),
+					new org.lgna.project.Version( "3.2.113.0.0" )
 			)
 	};
+
+	// @formatter:on
 
 	private static class SingletonHolder {
 		private static ProjectMigrationManager instance = new ProjectMigrationManager();

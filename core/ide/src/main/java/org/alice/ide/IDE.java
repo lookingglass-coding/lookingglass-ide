@@ -51,18 +51,9 @@ public abstract class IDE extends org.alice.ide.ProjectApplication {
 	public static final org.lgna.croquet.Group RUN_GROUP = org.lgna.croquet.Group.getInstance( java.util.UUID.fromString( "f7a87645-567c-42c6-bf5f-ab218d93a226" ), "RUN_GROUP" );
 	public static final org.lgna.croquet.Group EXPORT_GROUP = org.lgna.croquet.Group.getInstance( java.util.UUID.fromString( "624d4db6-2e1a-43c2-b1df-c0bfd6407b35" ), "EXPORT_GROUP" );
 
-	private org.alice.ide.issue.DefaultExceptionHandler exceptionHandler;
-
 	public static IDE getActiveInstance() {
 		return edu.cmu.cs.dennisc.java.lang.ClassUtilities.getInstance( org.lgna.croquet.Application.getActiveInstance(), IDE.class );
 	}
-
-	//<lg>
-	public org.alice.ide.issue.DefaultExceptionHandler getExceptionHandler() {
-		return this.exceptionHandler;
-	}
-
-	//</lg>
 
 	private final org.lgna.croquet.event.ValueListener<org.alice.ide.perspectives.ProjectPerspective> perspectiveListener = new org.lgna.croquet.event.ValueListener<org.alice.ide.perspectives.ProjectPerspective>() {
 		@Override
@@ -70,6 +61,15 @@ public abstract class IDE extends org.alice.ide.ProjectApplication {
 			IDE.this.setPerspective( e.getNextValue() );
 		}
 	};
+
+	public org.alice.ide.codedrop.CodePanelWithDropReceptor getCodeEditorInFocus() {
+		org.alice.ide.perspectives.ProjectPerspective perspective = this.getDocumentFrame().getPerspectiveState().getValue();
+		if( perspective != null ) {
+			return perspective.getCodeDropReceptorInFocus();
+		} else {
+			return null;
+		}
+	}
 
 	private org.alice.ide.stencil.PotentialDropReceptorsFeedbackView potentialDropReceptorsStencil;
 
@@ -79,25 +79,7 @@ public abstract class IDE extends org.alice.ide.ProjectApplication {
 		super( ideConfiguration, apiConfigurationManager );
 		this.ideConfiguration = ideConfiguration;
 
-		// <lg/> do the exeception handler here to dell with JavaFx threading issues b/c of croquet's uncontrolled singleton initialization.
-		this.exceptionHandler = new org.alice.ide.issue.DefaultExceptionHandler();
-
-		if( edu.cmu.cs.dennisc.java.lang.SystemUtilities.isPropertyTrue( "org.alice.ide.IDE.isSupressionOfExceptionHandlerDesired" ) ) {
-			//pass
-		} else {
-			Thread.setDefaultUncaughtExceptionHandler( this.exceptionHandler );
-		}
-
-		//initialize locale
-		// <lg> Let the OS set the locale. We don't need to set it...
-		//initialize locale
-		//		org.alice.ide.croquet.models.ui.locale.LocaleState.getInstance().addAndInvokeNewSchoolValueListener( new org.lgna.croquet.event.ValueListener<java.util.Locale>() {
-		//			@Override
-		//			public void valueChanged( org.lgna.croquet.event.ValueEvent<java.util.Locale> e ) {
-		//				org.lgna.croquet.Application.getActiveInstance().setLocale( e.getNextValue() );
-		//			}
-		//		} );
-		// </lg>
+		// <lg/> Let the OS set the locale. We don't need to set it...
 	}
 
 	public IdeConfiguration getIdeConfiguration() {

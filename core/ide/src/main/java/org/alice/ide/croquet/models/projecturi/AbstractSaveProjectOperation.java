@@ -42,6 +42,15 @@
  *******************************************************************************/
 package org.alice.ide.croquet.models.projecturi;
 
+import java.io.File;
+
+import org.alice.ide.ProjectApplication;
+import org.alice.stageide.ast.StoryApiSpecificAstUtilities;
+import org.lgna.project.Project;
+import org.lgna.project.io.IoUtilities;
+
+import edu.cmu.cs.dennisc.java.util.logging.Logger;
+
 /**
  * @author Dennis Cosgrove
  */
@@ -52,7 +61,7 @@ public abstract class AbstractSaveProjectOperation extends AbstractSaveOperation
 
 	@Override
 	protected java.io.File getDefaultDirectory( org.alice.ide.ProjectApplication application ) {
-		return application.getMyProjectsDirectory();
+		return ProjectApplication.getMyProjectsDirectory();
 	}
 
 	@Override
@@ -61,8 +70,18 @@ public abstract class AbstractSaveProjectOperation extends AbstractSaveOperation
 	}
 
 	@Override
-	protected String getInitialFilename() {
-		return "Untitled.lgp";
+	protected String getInitialFilename( ProjectApplication application, File filePrevious ) {
+		if( filePrevious != null ) {
+			return filePrevious.getName();
+		} else {
+			try {
+				Project project = application.getUpToDateProject();
+				return StoryApiSpecificAstUtilities.getUserMain( project.getProgramType() ).getName() + "." + IoUtilities.PROJECT_EXTENSION;
+			} catch( Exception e ) {
+				Logger.throwable( e, this );
+				return "Untitled." + IoUtilities.PROJECT_EXTENSION;
+			}
+		}
 	}
 
 	@Override

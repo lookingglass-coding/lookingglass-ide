@@ -81,7 +81,7 @@ public class ShareTemplateComposite extends AbstractShareComposite {
 
 	@Override
 	protected String getShareDialogTitle() {
-		return "Template";
+		return "Share as Template";
 	}
 
 	@Override

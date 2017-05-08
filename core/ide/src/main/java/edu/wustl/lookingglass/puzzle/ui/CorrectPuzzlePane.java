@@ -52,6 +52,7 @@ import org.lgna.croquet.icon.IconSize;
 import edu.wustl.lookingglass.croquetfx.FxComponent;
 import edu.wustl.lookingglass.ide.LookingGlassTheme;
 import edu.wustl.lookingglass.puzzle.CompletionPuzzle;
+import edu.wustl.lookingglass.puzzle.ui.croquet.CompletionPuzzleComposite;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -65,6 +66,7 @@ import javafx.util.Duration;
 public class CorrectPuzzlePane extends FxComponent {
 
 	private final CompletionPuzzle puzzle;
+	private final CompletionPuzzleComposite puzzleComposite;
 
 	@FXML private javafx.scene.image.ImageView face;
 	@FXML private javafx.scene.control.Button cancel;
@@ -86,9 +88,10 @@ public class CorrectPuzzlePane extends FxComponent {
 	private int currentIndex = -1;
 	private final int[] faceIndex = new int[ 3 ];
 
-	public CorrectPuzzlePane( CompletionPuzzle puzzle ) {
+	public CorrectPuzzlePane( CompletionPuzzle puzzle, CompletionPuzzleComposite puzzleComposite ) {
 		super( CorrectPuzzlePane.class );
 		this.puzzle = puzzle;
+		this.puzzleComposite = puzzleComposite;
 
 		// Pick the faces...
 		ArrayList<Integer> index = new ArrayList<Integer>();
@@ -127,7 +130,7 @@ public class CorrectPuzzlePane extends FxComponent {
 	}
 
 	private void handleCancelAction( javafx.event.ActionEvent event ) {
-		this.puzzle.getPuzzleComposite().hideCorrectPane();
+		this.puzzleComposite.hideCorrectPane();
 	}
 
 	private void handleDoneAction( javafx.event.ActionEvent event ) {

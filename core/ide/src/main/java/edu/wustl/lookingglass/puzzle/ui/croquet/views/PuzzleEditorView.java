@@ -46,6 +46,7 @@ package edu.wustl.lookingglass.puzzle.ui.croquet.views;
 
 import edu.wustl.lookingglass.puzzle.CompletionPuzzle;
 import edu.wustl.lookingglass.puzzle.ui.PuzzleAstI18nFactory;
+import edu.wustl.lookingglass.puzzle.ui.croquet.CompletionPuzzleComposite;
 import edu.wustl.lookingglass.puzzle.ui.croquet.PuzzleEditorComposite;
 
 /**
@@ -56,13 +57,15 @@ public class PuzzleEditorView extends org.lgna.croquet.views.BorderPanel {
 	private final PuzzleCodeEditor codeEditor;
 
 	private final CompletionPuzzle puzzle;
+	private final CompletionPuzzleComposite puzzleComposite;
 
-	public PuzzleEditorView( PuzzleEditorComposite composite ) {
+	public PuzzleEditorView( PuzzleEditorComposite composite, CompletionPuzzle puzzle, CompletionPuzzleComposite puzzleComposite ) {
 		super( composite );
-		this.puzzle = this.getComposite().getPuzzle();
+		this.puzzle = puzzle;
+		this.puzzleComposite = puzzleComposite;
 
 		PuzzleAstI18nFactory statementFactory = new PuzzleAstI18nFactory( this.puzzle, true );
-		this.codeEditor = new PuzzleCodeEditor( statementFactory, this.puzzle );
+		this.codeEditor = new PuzzleCodeEditor( statementFactory, this.puzzle, this.puzzleComposite );
 		codeEditor.setJavaCodeOnTheSide( false, true );
 		this.addCenterComponent( this.codeEditor );
 	}

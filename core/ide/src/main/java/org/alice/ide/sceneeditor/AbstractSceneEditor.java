@@ -170,9 +170,7 @@ public abstract class AbstractSceneEditor extends org.lgna.croquet.views.BorderP
 		}
 		try {
 			Object[] values = ComponentThread.invokeOnComponentThreadAndWait( () -> {
-				return this.getVirtualMachine().ENTRY_POINT_evaluate(
-						getActiveSceneInstance(),
-						new Expression[] { expression } );
+				return this.getVirtualMachine().ENTRY_POINT_evaluate( getActiveSceneInstance(), new Expression[] { expression } );
 			} );
 			if( values.length > 0 ) {
 				return values[ 0 ];

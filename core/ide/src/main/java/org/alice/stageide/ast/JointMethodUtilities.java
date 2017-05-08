@@ -48,6 +48,7 @@ package org.alice.stageide.ast;
  */
 public class JointMethodUtilities {
 	private static final org.lgna.project.ast.JavaType JOINT_TYPE = org.lgna.project.ast.JavaType.getInstance( org.lgna.story.SJoint.class );
+	private static final org.lgna.project.ast.JavaType JOINT_ARRAY_TYPE = org.lgna.project.ast.JavaType.getInstance( org.lgna.story.SJoint[].class );
 	private static final String GETTER_PREFIX = "get";
 
 	public static boolean isJointGetter( org.lgna.project.ast.AbstractMethod method ) {
@@ -71,6 +72,64 @@ public class JointMethodUtilities {
 		return false;
 	}
 
+	public static boolean isJointArrayGetter( org.lgna.project.ast.AbstractMethod method ) {
+		if( method.isPublicAccess() ) {
+			if( method.getReturnType() == JOINT_ARRAY_TYPE ) {
+				if( ( method.getVisibility() == org.lgna.project.annotations.Visibility.PRIME_TIME ) || ( method.getVisibility() == null ) ) {
+					if( method.getName().startsWith( GETTER_PREFIX ) ) {
+						if( method instanceof org.lgna.project.ast.JavaMethod ) {
+							return true; //isNotAnnotatedOtherwise
+						} else if( method instanceof org.lgna.project.ast.UserMethod ) {
+							org.lgna.project.ast.UserMethod userMethod = (org.lgna.project.ast.UserMethod)method;
+							return userMethod.managementLevel.getValue() == org.lgna.project.ast.ManagementLevel.GENERATED;
+						} else {
+							//throw new AssertionError();
+							return false;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	public static int getJointArrayLength( org.lgna.project.ast.AbstractMethod method ) {
+		if( isJointArrayGetter( method ) ) {
+			if( method instanceof org.lgna.project.ast.JavaMethod ) {
+				java.lang.reflect.Method mthd = ( (org.lgna.project.ast.JavaMethod)method ).getMethodReflectionProxy().getReification();
+				if( mthd != null ) {
+					if( mthd.isAnnotationPresent( org.lgna.project.annotations.ArrayTemplate.class ) ) {
+						org.lgna.project.annotations.ArrayTemplate arrayTemplate = mthd.getAnnotation( org.lgna.project.annotations.ArrayTemplate.class );
+						return arrayTemplate.length();
+					} else {
+						return -1;
+					}
+				} else {
+					return -1;
+				}
+			} else if( method instanceof org.lgna.project.ast.UserMethod ) {
+				return -1;
+			} else {
+				return -1;
+			}
+		}
+		return -1;
+	}
+
+	public static String getJointName( org.lgna.project.ast.AbstractMethod method, java.util.Locale locale ) {
+		String name = method.getName();
+		if( name.startsWith( GETTER_PREFIX ) ) {
+			return name.substring( GETTER_PREFIX.length() );
+		} else {
+			return name;
+		}
+	}
+
+	//	public static org.lgna.project.ast.AbstractMethod getParentMethod( org.lgna.project.ast.AbstractMethod method ) {
+	//		//todo
+	//		return null;
+	//	}
+
 	//<lg> useful helper to get a joint method on a type
 	public static org.lgna.project.ast.AbstractMethod getJointGetter( String getterName, org.lgna.project.ast.AbstractType<?, ?, ?> type ) {
 		org.lgna.project.ast.AbstractMethod rv = null;
@@ -89,18 +148,4 @@ public class JointMethodUtilities {
 	public static boolean isValidJointGetter( org.lgna.project.ast.AbstractMethod method ) {
 		return ( isJointGetter( method ) && ( method instanceof org.lgna.project.ast.JavaMethod ) );
 	}
-
-	public static String getJointName( org.lgna.project.ast.AbstractMethod method, java.util.Locale locale ) {
-		String name = method.getName();
-		if( name.startsWith( GETTER_PREFIX ) ) {
-			return name.substring( GETTER_PREFIX.length() );
-		} else {
-			return name;
-		}
-	}
-
-	//	public static org.lgna.project.ast.AbstractMethod getParentMethod( org.lgna.project.ast.AbstractMethod method ) {
-	//		//todo
-	//		return null;
-	//	}
 }

@@ -46,8 +46,9 @@ package org.alice.stageide.icons;
  * @author Dennis Cosgrove
  */
 public class AxesIcon extends ShapeIcon {
-	private static void drawLine( java.awt.Graphics2D g2, java.awt.Paint paint, float x0, float y0, float x1, float y1 ) {
+	private static void drawLine( java.awt.Graphics2D g2, java.awt.Paint paint, java.awt.Stroke stroke, float x0, float y0, float x1, float y1 ) {
 		g2.setPaint( paint );
+		g2.setStroke( stroke );
 		drawLine( g2, x0, y0, x1, y1 );
 	}
 
@@ -57,12 +58,16 @@ public class AxesIcon extends ShapeIcon {
 
 	@Override
 	protected void paintIcon( java.awt.Component c, java.awt.Graphics2D g2, int width, int height, java.awt.Paint fillPaint, java.awt.Paint drawPaint ) {
-		float offsetOriginY = height * 0.2f;
+		float scaledWidth = width * .9f;
+		float scaledHeight = height * .9f;
+		float offsetOriginY = scaledHeight * 0.2f;
+		float xInset = ( width - scaledWidth );
 		float portion = 0.4f;
-		float originX = width * portion;
-		drawLine( g2, java.awt.Color.GREEN, originX, offsetOriginY, originX, height - offsetOriginY );
-		drawLine( g2, java.awt.Color.RED, 0.0f, height, originX, height - offsetOriginY );
-		drawLine( g2, java.awt.Color.BLUE, 0.0f, height - offsetOriginY - ( offsetOriginY * ( portion / ( 1 - portion ) ) ), originX, height - offsetOriginY );
-		drawLine( g2, java.awt.Color.GRAY, width, height, originX, height - offsetOriginY );
+		float originX = ( scaledWidth * portion ) + xInset;
+		java.awt.BasicStroke stroke = new java.awt.BasicStroke( scaledWidth * .04f, java.awt.BasicStroke.CAP_ROUND, java.awt.BasicStroke.JOIN_ROUND );
+		drawLine( g2, java.awt.Color.GREEN, stroke, originX, offsetOriginY, originX, scaledHeight - offsetOriginY );
+		drawLine( g2, java.awt.Color.RED, stroke, xInset, scaledHeight, originX, scaledHeight - offsetOriginY );
+		drawLine( g2, java.awt.Color.BLUE, stroke, xInset, scaledHeight - offsetOriginY - ( offsetOriginY * ( portion / ( 1 - portion ) ) ), originX, scaledHeight - offsetOriginY );
+		drawLine( g2, java.awt.Color.WHITE, stroke, scaledWidth, scaledHeight, originX, scaledHeight - offsetOriginY );
 	}
 }

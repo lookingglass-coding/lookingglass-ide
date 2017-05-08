@@ -81,7 +81,8 @@ public enum OneShotSorter implements org.alice.ide.ast.sort.MemberSorter {
 	public static final org.lgna.project.ast.JavaMethod MOVE_AND_ORIENT_TO_A_GOOD_VANTAGE_POINT_METHOD;
 
 	public static final org.lgna.project.ast.JavaMethod STRAIGHTEN_OUT_JOINTS_METHOD;
-	//	public static final org.lgna.project.ast.JavaMethod UNFOLD_WINGS_METHOD;
+	public static final org.lgna.project.ast.JavaMethod SPREAD_WINGS_METHOD;
+	public static final org.lgna.project.ast.JavaMethod FOLD_WINGS_METHOD;
 
 	public static final org.lgna.project.ast.JavaMethod GROUND_SET_PAINT_METHOD;
 	public static final org.lgna.project.ast.JavaMethod MODEL_SET_PAINT_METHOD;
@@ -128,8 +129,10 @@ public enum OneShotSorter implements org.alice.ide.ast.sort.MemberSorter {
 		STRAIGHTEN_OUT_JOINTS_METHOD = jointedModelType.getDeclaredMethod( "straightenOutJoints", org.lgna.story.StraightenOutJoints.Detail[].class );
 		assert STRAIGHTEN_OUT_JOINTS_METHOD != null;
 
-		//		UNFOLD_WINGS_METHOD = flyerType.getDeclaredMethod( "unfoldWings", org.lgna.story.UnfoldWings.Detail[].class );
-		//		assert UNFOLD_WINGS_METHOD != null;
+		FOLD_WINGS_METHOD = flyerType.getDeclaredMethod( "foldWings", org.lgna.story.StrikePose.Detail[].class );
+		assert FOLD_WINGS_METHOD != null;
+		SPREAD_WINGS_METHOD = flyerType.getDeclaredMethod( "spreadWings", org.lgna.story.StrikePose.Detail[].class );
+		assert SPREAD_WINGS_METHOD != null;
 
 		MOVE_AND_ORIENT_TO_A_GOOD_VANTAGE_POINT_METHOD = cameraType.getDeclaredMethod( "moveAndOrientToAGoodVantagePointOf", org.lgna.story.SThing.class, org.lgna.story.MoveAndOrientToAGoodVantagePointOf.Detail[].class );
 		assert MOVE_AND_ORIENT_TO_A_GOOD_VANTAGE_POINT_METHOD != null;

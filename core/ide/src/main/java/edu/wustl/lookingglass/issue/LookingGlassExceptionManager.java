@@ -44,6 +44,8 @@
  *******************************************************************************/
 package edu.wustl.lookingglass.issue;
 
+import edu.wustl.lookingglass.ide.LookingGlassIDE;
+
 /**
  * @author Michael Pogran
  */
@@ -51,31 +53,27 @@ public class LookingGlassExceptionManager {
 
 	private static final int MAX_DAYS_ALLOWED_REPORTING = 180;
 
-	private edu.wustl.lookingglass.issue.ExceptionDialog dialog;
+	private edu.wustl.lookingglass.issue.ExceptionDialog dialog = null;
 
 	public LookingGlassExceptionManager() {
-		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( ( ) -> {
+		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( () -> {
 			this.dialog = new edu.wustl.lookingglass.issue.ExceptionDialog();
 			ExceptionPaneFactory.createOutOfMemoryExceptionPane();
 		} );
 	}
 
-	public void handleUnableToOpenFileDialog() {
-		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( ( ) -> {
-
-		} );
-	}
-
 	public void handleThrowable( Thread thread, Throwable throwable ) {
 		System.gc();
-		if( getDaysSinceUpdate() > MAX_DAYS_ALLOWED_REPORTING ) {
-			edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( ( ) -> {
+
+		if( LookingGlassIDE.getCommunityController().isLookingGlassOutdated()
+				&& ( getDaysSinceUpdate() > MAX_DAYS_ALLOWED_REPORTING ) ) {
+			edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( () -> {
 				edu.wustl.lookingglass.issue.ExceptionPane exceptionPane = ExceptionPaneFactory.createOutOfDateExceptionPane( thread, throwable );
 				this.dialog.pushExceptionPane( exceptionPane, false );
 				this.dialog.show();
 			} );
 		} else {
-			edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( ( ) -> {
+			edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( () -> {
 				edu.wustl.lookingglass.issue.ExceptionPane exceptionPane = ExceptionPaneFactory.createExceptionPane( thread, throwable );
 
 				if( exceptionPane.getRootThrowable() instanceof OutOfMemoryError ) {
@@ -93,7 +91,7 @@ public class LookingGlassExceptionManager {
 	}
 
 	public void closeExceptionDialog() {
-		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( ( ) -> {
+		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( () -> {
 			if( this.dialog.isShowing() ) {
 				this.dialog.close();
 			}

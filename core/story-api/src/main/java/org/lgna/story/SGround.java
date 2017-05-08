@@ -50,7 +50,7 @@ import org.lgna.project.annotations.ValueTemplate;
 /**
  * @author Dennis Cosgrove
  */
-public class SGround extends SThing implements MutableRider, Visual {
+public class SGround extends SThing implements MutableRider, VisualWithPaint {
 	public static enum SurfaceAppearance implements ImagePaint {
 		GRASS( "grass" ),
 		DARK_GRASS( "dark_grass" ),
@@ -59,7 +59,7 @@ public class SGround extends SThing implements MutableRider, Visual {
 		SAND( "sand" ),
 		MARS( "mars" ),
 		DESERT( "desert" ),
-		SANDY_DESERT( "sandy_desert" ),
+		SANDY_DESERT( "desert_brown" ),
 		SNOW( "snow" ),
 		ICE( "ice" ),
 		SWAMP( "swamp" ),
@@ -72,7 +72,16 @@ public class SGround extends SThing implements MutableRider, Visual {
 		OCEAN_FLOOR( "underwater" ),
 		MOON( "moon" ),
 		BROWN_SAVANA_GRASS( "brown_savana_grass" ),
-		GREEN_SAVANA_GRASS( "green_savana_grass" );
+		GREEN_SAVANA_GRASS( "green_savana_grass" ),
+		FOREST_FLOOR( "forest_floor_brown" ),
+		RED_FOREST_FLOOR( "forest_floor_red" ),
+		DARK_FOREST_FLOOR( "forest_floor_dark" ),
+		GOLD_COINS( "gold_coins" ),
+		ROCKY_SAND( "rocky_sand" ),
+		ROCKY_BROWN( "rocky_brown" ),
+		ROCKY_RED( "rocky_red" ),
+		WOOD( "wood" ),
+		BRICK( "brick" );
 		private String resourceName;
 
 		SurfaceAppearance( String resourceName ) {
@@ -88,7 +97,7 @@ public class SGround extends SThing implements MutableRider, Visual {
 	private final org.lgna.story.implementation.GroundImp implementation = new org.lgna.story.implementation.GroundImp( this );
 
 	@Override
-	/* package-private */org.lgna.story.implementation.GroundImp getImplementation() {
+			/* package-private */org.lgna.story.implementation.GroundImp getImplementation() {
 		return this.implementation;
 	}
 

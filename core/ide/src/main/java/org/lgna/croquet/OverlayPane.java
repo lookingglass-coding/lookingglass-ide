@@ -49,6 +49,7 @@ import java.awt.GridBagConstraints;
 import org.lgna.croquet.history.Transaction;
 import org.lgna.croquet.triggers.Trigger;
 
+import edu.cmu.cs.dennisc.java.util.logging.Logger;
 import edu.wustl.lookingglass.croquetfx.ThreadHelper;
 
 public class OverlayPane extends org.lgna.croquet.views.LayerStencil {
@@ -146,7 +147,7 @@ public class OverlayPane extends org.lgna.croquet.views.LayerStencil {
 		this.overlayColor = builder.overlayColor == null ? DEFAULT_OVERLAY_COLOR : builder.overlayColor;
 		this.onClickRunnable = builder.onClickRunnable;
 
-		ThreadHelper.runOnSwingThread( () -> {
+		ThreadHelper.runOnSwingThread( ( ) -> {
 			if( builder.blockInput ) {
 				this.getAwtComponent().addMouseListener( new java.awt.event.MouseListener() {
 					private java.awt.Cursor prevCursor = null;
@@ -191,11 +192,14 @@ public class OverlayPane extends org.lgna.croquet.views.LayerStencil {
 
 					@Override
 					public void mousePressed( java.awt.event.MouseEvent e ) {
+						OverlayPane.this.onClickRunnable.run();
 					}
 
 					@Override
 					public void mouseReleased( java.awt.event.MouseEvent e ) {
-						OverlayPane.this.onClickRunnable.run();
+						// Mouse release doesn't happen on drag events, which is what most users do after remixing
+						// which results in freezing the interface.
+						//						OverlayPane.this.onClickRunnable.run();
 					}
 
 					@Override
@@ -250,14 +254,22 @@ public class OverlayPane extends org.lgna.croquet.views.LayerStencil {
 	}
 
 	public void show() {
-		ThreadHelper.runOnSwingThread( () -> {
-			this.setStencilShowing( true );
+		ThreadHelper.runOnSwingThread( ( ) -> {
+			try {
+				this.setStencilShowing( true );
+			} catch( NullPointerException e ) {
+				Logger.throwable( e, this );
+			}
 		} );
 	}
 
 	public void hide() {
-		ThreadHelper.runOnSwingThread( () -> {
-			this.setStencilShowing( false );
+		ThreadHelper.runOnSwingThread( ( ) -> {
+			try {
+				this.setStencilShowing( false );
+			} catch( NullPointerException e ) {
+				Logger.throwable( e, this );
+			}
 		} );
 	}
 
@@ -267,7 +279,7 @@ public class OverlayPane extends org.lgna.croquet.views.LayerStencil {
 
 	public void setOverlayColor( java.awt.Color overlayColor ) {
 		this.overlayColor = overlayColor;
-		ThreadHelper.runOnSwingThread( () -> {
+		ThreadHelper.runOnSwingThread( ( ) -> {
 			this.refreshLater();
 		} );
 	}
@@ -335,7 +347,7 @@ public class OverlayPane extends org.lgna.croquet.views.LayerStencil {
 			if( ( view != null ) && ( view instanceof edu.wustl.lookingglass.croquetfx.FxViewAdaptor ) ) {
 				edu.wustl.lookingglass.croquetfx.FxViewAdaptor fxViewAdaptor = (edu.wustl.lookingglass.croquetfx.FxViewAdaptor)view;
 				this.fxViewAdaptors.add( fxViewAdaptor );
-				org.lgna.stencil.Hole hole = new org.lgna.stencil.Hole( fxViewAdaptor) {
+				org.lgna.stencil.Hole hole = new org.lgna.stencil.Hole( fxViewAdaptor ) {
 					@Override
 					protected java.awt.Insets getPaintInsets() {
 						return new java.awt.Insets( 0, 0, 0, 0 );

@@ -42,6 +42,9 @@
  *******************************************************************************/
 package org.alice.ide.croquet.models.projecturi;
 
+import edu.cmu.cs.dennisc.java.util.logging.Logger;
+import edu.wustl.lookingglass.ide.LookingGlassIDE;
+
 /**
  * @author Dennis Cosgrove
  */
@@ -63,15 +66,19 @@ public final class SystemExitOperation extends org.lgna.croquet.ActionOperation 
 
 		edu.wustl.lookingglass.study.StudyConfiguration.INSTANCE.getStudyLogger().log( java.util.logging.Level.INFO, "exited ide" );
 
-		ide.getCollectionModuleManager().handleProgramClose();
+		LookingGlassIDE.getModuleManager().handleProgramClose();
 
 		ide.preservePreferences();
 		//</lg>
 
 		step.finish();
 
-		// Make jogl happy, clean up the resources...
-		ide.getDocumentFrame().getFrame().getAwtComponent().dispose();
+		try {
+			// Make jogl happy, try clean up the resources...
+			ide.getDocumentFrame().getFrame().getAwtComponent().dispose();
+		} catch( Throwable t ) {
+			Logger.throwable( t, this );
+		}
 
 		System.exit( 0 );
 	}

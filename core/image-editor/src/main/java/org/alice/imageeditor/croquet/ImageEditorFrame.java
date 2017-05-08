@@ -42,6 +42,8 @@
  *******************************************************************************/
 package org.alice.imageeditor.croquet;
 
+import org.lgna.croquet.ModalFrameComposite;
+
 /**
  * @author Dennis Cosgrove
  */
@@ -244,6 +246,7 @@ public class ImageEditorFrame extends org.lgna.croquet.FrameCompositeWithInterna
 	/* package-private */boolean isGoodToGoCroppingIfNecessary() {
 		java.awt.Rectangle cropSelection = this.getCropSelectHolder().getValue();
 		if( cropSelection != null ) {
+			ModalFrameComposite.hideNonModalFrames();
 			int result = javax.swing.JOptionPane.showConfirmDialog( this.getView().getAwtComponent(), "You have set a crop rectangle.  Commit this crop and continue?", "Crop?", javax.swing.JOptionPane.OK_CANCEL_OPTION );
 			if( result == javax.swing.JOptionPane.OK_OPTION ) {
 				this.crop();

@@ -49,6 +49,7 @@ import org.lgna.croquet.icon.IconSize;
 import edu.wustl.lookingglass.croquetfx.FxComponent;
 import edu.wustl.lookingglass.ide.LookingGlassTheme;
 import edu.wustl.lookingglass.puzzle.CompletionPuzzle;
+import edu.wustl.lookingglass.puzzle.ui.croquet.CompletionPuzzleComposite;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 
@@ -58,6 +59,7 @@ import javafx.scene.layout.VBox;
 public class IncorrectPuzzlePane extends FxComponent {
 
 	private final CompletionPuzzle puzzle;
+	private final CompletionPuzzleComposite puzzleComposite;
 
 	@FXML private javafx.scene.image.ImageView face;
 	@FXML private javafx.scene.control.Button cancel;
@@ -65,9 +67,10 @@ public class IncorrectPuzzlePane extends FxComponent {
 	@FXML private VBox bubbleBox;
 	private SpeechBubble bubble;
 
-	public IncorrectPuzzlePane( CompletionPuzzle puzzle ) {
+	public IncorrectPuzzlePane( CompletionPuzzle puzzle, CompletionPuzzleComposite puzzleComposite ) {
 		super( IncorrectPuzzlePane.class );
 		this.puzzle = puzzle;
+		this.puzzleComposite = puzzleComposite;
 
 		this.face.setImage( LookingGlassTheme.getFxImage( "face-frown-100", IconSize.FIXED ) );
 		this.bubble = new SpeechBubble( this.getLocalizedString( "IncorrectPuzzlePane.bubble" ) );
@@ -78,7 +81,7 @@ public class IncorrectPuzzlePane extends FxComponent {
 	}
 
 	private void handleCancelAction( javafx.event.ActionEvent event ) {
-		this.puzzle.getPuzzleComposite().hideIncorrectPane();
+		this.puzzleComposite.hideIncorrectPane();
 	}
 
 	private void handleDoneAction( javafx.event.ActionEvent event ) {

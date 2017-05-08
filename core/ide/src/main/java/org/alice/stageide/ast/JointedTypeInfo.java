@@ -101,12 +101,20 @@ public class JointedTypeInfo {
 
 	private final org.lgna.project.ast.AbstractType<?, ?, ?> type;
 	private final java.util.List<org.lgna.project.ast.AbstractMethod> jointGetters = edu.cmu.cs.dennisc.java.util.Lists.newLinkedList();
+	private final java.util.List<JointMethodArrayAccessInfo> jointArrayAccessGetters = edu.cmu.cs.dennisc.java.util.Lists.newLinkedList();
+
+	//Can we add in "joint array accessors"?
 
 	private JointedTypeInfo( org.lgna.project.ast.AbstractType<?, ?, ?> type ) {
 		this.type = type;
 		for( org.lgna.project.ast.AbstractMethod method : type.getDeclaredMethods() ) {
 			if( JointMethodUtilities.isJointGetter( method ) ) {
 				this.jointGetters.add( method );
+			} else if( JointMethodUtilities.isJointArrayGetter( method ) ) {
+				int length = JointMethodUtilities.getJointArrayLength( method );
+				for( int i = 0; i < length; i++ ) {
+					this.jointArrayAccessGetters.add( new JointMethodArrayAccessInfo( method, i ) );
+				}
 			}
 		}
 	}
@@ -117,6 +125,10 @@ public class JointedTypeInfo {
 
 	public java.util.List<org.lgna.project.ast.AbstractMethod> getJointGetters() {
 		return this.jointGetters;
+	}
+
+	public java.util.List<JointMethodArrayAccessInfo> getJointArrayAccessGetters() {
+		return this.jointArrayAccessGetters;
 	}
 
 	public static class Node {

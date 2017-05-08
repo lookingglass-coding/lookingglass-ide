@@ -68,6 +68,13 @@ package edu.cmu.cs.dennisc.render.gl;
 
 	@Override
 	protected java.awt.Dimension getSurfaceSize( java.awt.Dimension rv ) {
+		rv.setSize( this.width, this.height );
+		return rv;
+	}
+
+	@Override
+	protected java.awt.Dimension getDrawableSize( java.awt.Dimension rv ) {
+		rv.setSize( this.width, this.height );
 		return rv;
 	}
 

@@ -51,19 +51,22 @@ import edu.wustl.lookingglass.croquetfx.FxViewAdaptor;
 import edu.wustl.lookingglass.puzzle.CompletionPuzzle;
 import edu.wustl.lookingglass.puzzle.ui.InstructionsPane;
 import edu.wustl.lookingglass.puzzle.ui.PuzzleToolbar;
+import edu.wustl.lookingglass.puzzle.ui.croquet.CompletionPuzzleComposite;
 
 public class PuzzleWorkspaceView extends org.lgna.croquet.views.MigPanel {
 
 	private final CompletionPuzzle puzzle;
+	private final CompletionPuzzleComposite puzzleComposite;
 
 	private LineAxisPanel header;
 	private PuzzleToolbar toolbar;
 	private BorderPanel statementPane;
 	private InstructionsPane instructionsPane;
 
-	public PuzzleWorkspaceView( org.lgna.croquet.views.SwingComponentView<?> statementListComponent, CompletionPuzzle puzzle ) {
+	public PuzzleWorkspaceView( org.lgna.croquet.views.SwingComponentView<?> statementListComponent, CompletionPuzzle puzzle, CompletionPuzzleComposite puzzleComposite ) {
 		super( null, "gapx 0, gapy 10, fillx, insets 10 13 11 13" );
 		this.puzzle = puzzle;
+		this.puzzleComposite = puzzleComposite;
 
 		this.header = new org.lgna.croquet.views.LineAxisPanel();
 		header.setBorder( javax.swing.BorderFactory.createEmptyBorder() );
@@ -74,14 +77,14 @@ public class PuzzleWorkspaceView extends org.lgna.croquet.views.MigPanel {
 		this.statementPane.addCenterComponent( statementListComponent );
 		this.addComponent( statementPane, "growx, wrap" );
 
-		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( ( ) -> {
-			this.toolbar = new edu.wustl.lookingglass.puzzle.ui.PuzzleToolbar( this.puzzle );
+		edu.wustl.lookingglass.croquetfx.ThreadHelper.runOnFxThread( () -> {
+			this.toolbar = new edu.wustl.lookingglass.puzzle.ui.PuzzleToolbar( this.puzzle, this.puzzleComposite );
 			edu.wustl.lookingglass.croquetfx.FxViewAdaptor toolbarView = this.toolbar.getFxViewAdaptor();
 
 			this.instructionsPane = new InstructionsPane( this.puzzle );
 			FxViewAdaptor instructionsView = this.instructionsPane.getFxViewAdaptor();
 
-			javax.swing.SwingUtilities.invokeLater( ( ) -> {
+			javax.swing.SwingUtilities.invokeLater( () -> {
 				synchronized( this.getTreeLock() ) {
 					header.addComponent( toolbarView );
 					statementPane.addPageStartComponent( instructionsView );

@@ -43,13 +43,20 @@
 
 package org.lgna.story.implementation;
 
+import edu.cmu.cs.dennisc.math.Dimension3;
+import edu.cmu.cs.dennisc.scenegraph.SimpleAppearance;
+import edu.cmu.cs.dennisc.scenegraph.Visual;
+
 /**
  * @author Dennis Cosgrove
  */
-public class AxesImp extends AbstractTransformableImp {
+public class AxesImp extends VisualScaleModelImp {
 	public AxesImp( org.lgna.story.SAxes abstraction ) {
 		this.abstraction = abstraction;
-		this.putInstance( this.sgAxes );
+		for( Visual v : this.getSgVisuals() ) {
+			this.putInstance( v );
+		}
+		this.sgAxes.setParent( this.getSgComposite() );
 	}
 
 	@Override
@@ -58,16 +65,57 @@ public class AxesImp extends AbstractTransformableImp {
 	}
 
 	@Override
-	public edu.cmu.cs.dennisc.scenegraph.Transformable getSgComposite() {
-		return this.sgAxes;
+	protected edu.cmu.cs.dennisc.property.InstanceProperty[] getScaleProperties() {
+		return new edu.cmu.cs.dennisc.property.InstanceProperty[] { this.sgAxes.getScaleProperty() };
 	}
 
 	@Override
-	protected edu.cmu.cs.dennisc.scenegraph.bound.CumulativeBound updateCumulativeBound( edu.cmu.cs.dennisc.scenegraph.bound.CumulativeBound rv, edu.cmu.cs.dennisc.math.AffineMatrix4x4 trans ) {
-		edu.cmu.cs.dennisc.java.util.logging.Logger.todo();
-		return rv;
+	protected void setSgVisualsScale( edu.cmu.cs.dennisc.math.Matrix3x3 m ) {
+		sgAxes.setScale( m );
+	}
+
+	@Override
+	protected edu.cmu.cs.dennisc.math.Matrix3x3 getSgVisualsScale() {
+		return this.sgAxes.getScale();
+	}
+
+	@Override
+	protected void applyScale( edu.cmu.cs.dennisc.math.Vector3 axis, boolean isScootDesired ) {
+		if( isScootDesired ) {
+			edu.cmu.cs.dennisc.math.AffineMatrix4x4 m = this.getSgComposite().localTransformation.getValue();
+			m.translation.multiply( axis );
+			this.getSgComposite().localTransformation.setValue( m );
+		}
+		edu.cmu.cs.dennisc.math.Matrix3x3 scale = sgAxes.getScale();
+		edu.cmu.cs.dennisc.math.ScaleUtilities.applyScale( scale, axis );
+		setSgVisualsScale( scale );
+	}
+
+	//	@Override
+	//	public edu.cmu.cs.dennisc.scenegraph.Transformable getSgComposite() {
+	//		return this.sgAxes;
+	//	}
+
+	@Override
+	protected SimpleAppearance[] getSgPaintAppearances() {
+		return new SimpleAppearance[ 0 ];
+	}
+
+	@Override
+	protected SimpleAppearance[] getSgOpacityAppearances() {
+		return sgAxes.getSgOpacityAppearances();
+	}
+
+	@Override
+	public Visual[] getSgVisuals() {
+		return sgAxes.getSgVisuals();
+	}
+
+	@Override
+	public void setSize( Dimension3 size ) {
+		this.setScale( getScaleForSize( size ) );
 	}
 
 	private final org.lgna.story.SAxes abstraction;
-	private final edu.cmu.cs.dennisc.scenegraph.util.ExtravagantAxes sgAxes = new edu.cmu.cs.dennisc.scenegraph.util.ExtravagantAxes( 1.0 );
+	private final edu.cmu.cs.dennisc.scenegraph.util.ExtravagantAxes sgAxes = new edu.cmu.cs.dennisc.scenegraph.util.ExtravagantAxes( 1.0, 1.0, 2.0 );
 }

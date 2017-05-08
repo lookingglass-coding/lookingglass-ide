@@ -43,6 +43,7 @@
 package org.lgna.story;
 
 import org.alice.nonfree.NebulousStoryApi;
+import org.lgna.story.implementation.JointIdTransformationPair;
 
 /**
  * @author Dennis Cosgrove
@@ -136,6 +137,10 @@ public class EmployeesOnly {
 		}
 	}
 
+	public static edu.cmu.cs.dennisc.animation.Style getInternal( AnimationStyle animationStyle ) {
+		return animationStyle.getInternal();
+	}
+
 	private static final java.util.Map<ImagePaint, edu.cmu.cs.dennisc.texture.BufferedImageTexture> mapImagePaintToTexture = edu.cmu.cs.dennisc.java.util.Maps.newHashMap();
 
 	public static edu.cmu.cs.dennisc.texture.Texture getTexture( Paint paint, edu.cmu.cs.dennisc.texture.Texture defaultValue ) {
@@ -194,4 +199,13 @@ public class EmployeesOnly {
 			return argumentValue;
 		}
 	}
+
+	public static void addJointIdTransformationPair( PoseBuilder<?, ?> poseBuilder, org.lgna.story.implementation.JointIdTransformationPair jointIdQuaternionPair ) {
+		poseBuilder.addJointIdQuaternionPair( jointIdQuaternionPair );
+	}
+
+	public static JointIdTransformationPair[] getJointIdTransformationPairs( Pose<?> pose ) {
+		return pose.getJointIdTransformationPairs();
+	}
+
 }

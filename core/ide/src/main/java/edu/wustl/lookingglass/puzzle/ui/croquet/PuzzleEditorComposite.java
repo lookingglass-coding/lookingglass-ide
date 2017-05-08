@@ -53,10 +53,12 @@ import edu.wustl.lookingglass.puzzle.ui.croquet.views.PuzzleEditorView;
 public class PuzzleEditorComposite extends org.lgna.croquet.SimpleComposite<PuzzleEditorView> {
 
 	private final CompletionPuzzle puzzle;
+	private final CompletionPuzzleComposite puzzleComposite;
 
-	public PuzzleEditorComposite( CompletionPuzzle puzzle ) {
+	public PuzzleEditorComposite( CompletionPuzzle puzzle, CompletionPuzzleComposite puzzleComposite ) {
 		super( java.util.UUID.fromString( "429ba6cf-8ba8-4f21-8ccf-33cee650c808" ) );
 		this.puzzle = puzzle;
+		this.puzzleComposite = puzzleComposite;
 	}
 
 	public CompletionPuzzle getPuzzle() {
@@ -65,7 +67,7 @@ public class PuzzleEditorComposite extends org.lgna.croquet.SimpleComposite<Puzz
 
 	@Override
 	protected edu.wustl.lookingglass.puzzle.ui.croquet.views.PuzzleEditorView createView() {
-		return new PuzzleEditorView( this );
+		return new PuzzleEditorView( this, this.puzzle, this.puzzleComposite );
 	}
 
 	public edu.wustl.lookingglass.puzzle.ui.croquet.views.PuzzleCodeEditor getEditor() {

@@ -59,6 +59,7 @@ import static com.jogamp.opengl.GL.GL_STENCIL_BUFFER_BIT;
 import static com.jogamp.opengl.GL.GL_STENCIL_TEST;
 import static com.jogamp.opengl.GL2ES1.GL_CLIP_PLANE0;
 import static com.jogamp.opengl.fixedfunc.GLMatrixFunc.GL_MODELVIEW;
+
 import edu.cmu.cs.dennisc.render.gl.imp.RenderContext;
 
 /**
@@ -134,8 +135,7 @@ public class GlrScene extends GlrComposite<edu.cmu.cs.dennisc.scenegraph.Scene> 
 					if( ( visualAdapter.owner != null ) && ( visualAdapter.owner.getRoot() instanceof edu.cmu.cs.dennisc.scenegraph.Scene ) ) {
 						if( visualAdapter.isAllAlpha() ) {
 							visualAdapter.renderAllAlphaBlended( rc );
-						}
-						else {
+						} else {
 							visualAdapter.renderAlphaBlended( rc );
 						}
 					}
@@ -236,4 +236,5 @@ public class GlrScene extends GlrComposite<edu.cmu.cs.dennisc.scenegraph.Scene> 
 	private final java.util.List<GlrGhost> glrGhostDescendants = edu.cmu.cs.dennisc.java.util.Lists.newLinkedList();
 	private final java.util.List<GlrVisual<?>> glrVisualDescendants = edu.cmu.cs.dennisc.java.util.Lists.newLinkedList();
 	private final java.util.List<GlrPlanarReflector> glrPlanarReflectorDescendants = edu.cmu.cs.dennisc.java.util.Lists.newLinkedList();
+	private boolean isInitialized = false;
 }

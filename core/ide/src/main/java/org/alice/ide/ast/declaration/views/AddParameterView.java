@@ -54,17 +54,14 @@ public class AddParameterView extends DeclarationView<org.lgna.project.ast.UserP
 		org.lgna.croquet.views.PageAxisPanel pane = new org.lgna.croquet.views.PageAxisPanel();
 		pane.addComponent( this.label );
 		pane.addComponent( org.lgna.croquet.views.BoxUtilities.createVerticalSliver( 8 ) );
+		//TODO: Localize
 		pane.addComponent( new org.lgna.croquet.views.LineAxisPanel( new org.lgna.croquet.views.Label( "Tip: look for " ), org.alice.ide.x.PreviewAstI18nFactory.getInstance().createExpressionPane( new org.lgna.project.ast.NullLiteral() ) ) );
 		pane.addComponent( org.lgna.croquet.views.BoxUtilities.createVerticalSliver( 8 ) );
 		pane.addComponent( composite.getIsRequirementToUpdateInvocationsUnderstoodState().createCheckBox() );
 
 		org.lgna.croquet.views.Label warningLabel = new org.lgna.croquet.views.Label();
 		warningLabel.setIcon( javax.swing.UIManager.getIcon( "OptionPane.warningIcon" ) );
-		this.warningPanel = new org.lgna.croquet.views.BorderPanel.Builder()
-				.hgap( 32 )
-				.lineStart( warningLabel )
-				.center( pane )
-				.build();
+		this.warningPanel = new org.lgna.croquet.views.BorderPanel.Builder().hgap( 32 ).lineStart( warningLabel ).center( pane ).build();
 
 		this.warningPanel.setBorder( javax.swing.BorderFactory.createEmptyBorder( 32, 8, 32, 8 ) );
 		this.setBackgroundColor( org.alice.ide.ThemeUtilities.getActiveTheme().getParameterColor() );

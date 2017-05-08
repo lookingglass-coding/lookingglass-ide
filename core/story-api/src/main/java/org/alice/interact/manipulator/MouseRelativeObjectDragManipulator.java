@@ -111,7 +111,7 @@ public class MouseRelativeObjectDragManipulator extends AbstractManipulator impl
 
 	@Override
 	protected HandleSet getHandleSetToEnable() {
-		return HandleSet.STOOD_UP_GROUND_TRANSLATION_VISUALIZATION;
+		return HandleSet.ABSOLUTE_GROUND_TRANSLATION_VISUALIZATION;
 	}
 
 	private Vector3 getMouseMovementFromVector( InputState currentInput, InputState previousInput ) {
@@ -320,14 +320,12 @@ public class MouseRelativeObjectDragManipulator extends AbstractManipulator impl
 		worldUnitsPerPixelY = ( distancePerUpPixel + distancePerDownPixel ) / 2.0;
 	}
 
-	private Plane calculateCameraFacingPlane()
-	{
+	private Plane calculateCameraFacingPlane() {
 		AffineMatrix4x4 cameraTransform = this.camera.getParent().getAbsoluteTransformation();
 		Vector3 cameraFacingVector = cameraTransform.orientation.backward;
 		cameraFacingVector.y = 0.0;
 		cameraFacingVector.normalize();
-		if( !cameraFacingVector.isNaN() )
-		{
+		if( !cameraFacingVector.isNaN() ) {
 			Point3 planeLocation = Point3.createAddition( this.manipulatedTransformable.getAbsoluteTransformation().translation, this.offsetFromOrigin );
 			return Plane.createInstance( planeLocation, cameraFacingVector );
 		}

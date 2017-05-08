@@ -101,7 +101,8 @@ public enum IdentifierNameGenerator {
 								}
 							}
 						}
-						rv = this.convertFirstCharacterToLowerCase( typeName );
+						rv = typeName;
+						//						rv = this.convertFirstCharacterToLowerCase( typeName );
 					}
 				}
 			}

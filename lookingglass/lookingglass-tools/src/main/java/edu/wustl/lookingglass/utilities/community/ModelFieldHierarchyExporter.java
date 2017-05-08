@@ -57,6 +57,7 @@ public class ModelFieldHierarchyExporter {
 		map.put( org.lgna.story.resources.FlyerResource.class, org.lgna.story.SFlyer.class );
 		map.put( org.lgna.story.resources.PropResource.class, org.lgna.story.SProp.class );
 		map.put( org.lgna.story.resources.QuadrupedResource.class, org.lgna.story.SQuadruped.class );
+		map.put( org.lgna.story.resources.SlithererResource.class, org.lgna.story.SSlitherer.class );
 		map.put( org.lgna.story.resources.SwimmerResource.class, org.lgna.story.SSwimmer.class );
 		map.put( org.lgna.story.resources.TransportResource.class, org.lgna.story.STransport.class );
 		mapResourceClsToStoryApiCls = java.util.Collections.unmodifiableMap( map );

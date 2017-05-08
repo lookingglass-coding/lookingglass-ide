@@ -46,7 +46,8 @@ package org.alice.ide.issue;
  * @author Dennis Cosgrove
  */
 public class DefaultExceptionHandler extends ExceptionHandler {
-	private boolean isBugReportSubmissionPaneDesired = true;
+
+	public static boolean showExceptionPane = Boolean.valueOf( System.getProperty( "edu.wustl.lookingglass.reportExceptions", "true" ) );
 
 	private final edu.wustl.lookingglass.issue.LookingGlassExceptionManager lgExceptionManager;
 
@@ -65,35 +66,22 @@ public class DefaultExceptionHandler extends ExceptionHandler {
 
 	@Override
 	protected synchronized void handleThrowable( Thread thread, Throwable throwable ) {
+		if( !showExceptionPane ) {
+			return;
+		}
 
 		if( isInTheMidstOfHandlingAThrowable ) {
 			//pass
 		} else {
 			this.isInTheMidstOfHandlingAThrowable = true;
 			try {
-				if( this.isBugReportSubmissionPaneDesired ) {
-					try {
-						this.lgExceptionManager.handleThrowable( thread, throwable );
-					} catch( Throwable t ) {
-						edu.cmu.cs.dennisc.java.util.logging.Logger.throwable( t );
-					}
+				try {
+					this.lgExceptionManager.handleThrowable( thread, throwable );
+				} catch( Throwable t ) {
+					edu.cmu.cs.dennisc.java.util.logging.Logger.throwable( t );
 				}
 			} finally {
-				boolean isSystemExitDesired = true;
-				org.lgna.croquet.Application application = org.lgna.croquet.Application.getActiveInstance();
-				if( application != null ) {
-					org.lgna.croquet.views.Frame frame = application.getDocumentFrame().getFrame();
-					if( frame != null ) {
-						if( frame.isVisible() ) {
-							isSystemExitDesired = false;
-						}
-					}
-				}
 				this.isInTheMidstOfHandlingAThrowable = false;
-				if( isSystemExitDesired ) {
-					javax.swing.JOptionPane.showMessageDialog( null, "Exception occurred before application was able to show window.  Exiting." );
-					System.exit( -1 );
-				}
 			}
 		}
 	}

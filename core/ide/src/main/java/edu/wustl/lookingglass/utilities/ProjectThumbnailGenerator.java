@@ -44,6 +44,10 @@
  *******************************************************************************/
 package edu.wustl.lookingglass.utilities;
 
+import com.jogamp.opengl.GLException;
+
+import edu.cmu.cs.dennisc.java.util.logging.Logger;
+
 /**
  * @author Michael Pogran
  */
@@ -71,15 +75,25 @@ public class ProjectThumbnailGenerator {
 		} else {
 			isClearingAndAddingRequired = true;
 		}
-		if( isClearingAndAddingRequired ) {
-			offscreenRenderTarget.clearSgCameras();
-			offscreenRenderTarget.addSgCamera( camera );
+		try {
+			if( isClearingAndAddingRequired ) {
+				offscreenRenderTarget.clearSgCameras();
+				offscreenRenderTarget.addSgCamera( camera );
+			}
+		} catch( GLException e ) {
+			// If this doesn't work out... that's probably ok.
+			Logger.throwable( e );
 		}
-		java.awt.image.BufferedImage thumbImage = offscreenRenderTarget.getSynchronousImageCapturer().getColorBuffer();
 
-		edu.cmu.cs.dennisc.render.gl.GlrRenderFactory.getInstance().removeOffScreenLookingGlass( offscreenRenderTarget );
-
-		return thumbImage;
+		try {
+			java.awt.image.BufferedImage thumbImage = offscreenRenderTarget.getSynchronousImageCapturer().getColorBuffer();
+			edu.cmu.cs.dennisc.render.gl.GlrRenderFactory.getInstance().removeOffScreenLookingGlass( offscreenRenderTarget );
+			return thumbImage;
+		} catch( GLException e ) {
+			// If this doesn't work out... that's probably ok.
+			Logger.throwable( e );
+			return null;
+		}
 	}
 
 	private static edu.cmu.cs.dennisc.scenegraph.AbstractCamera getCamera( org.lgna.project.virtualmachine.UserInstance sceneInstance ) {

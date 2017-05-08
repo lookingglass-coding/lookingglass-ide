@@ -45,19 +45,22 @@
 package edu.wustl.lookingglass.puzzle.ui.croquet.views;
 
 import edu.wustl.lookingglass.puzzle.CompletionPuzzle;
+import edu.wustl.lookingglass.puzzle.ui.croquet.CompletionPuzzleComposite;
 
 public class PuzzleCodeEditor extends org.alice.ide.codeeditor.CodeEditor {
 
 	private final CompletionPuzzle puzzle;
+	private final CompletionPuzzleComposite puzzleComposite;
 
 	private final PuzzleBodyPane puzzleBodyPane;
 
-	public PuzzleCodeEditor( org.alice.ide.x.AbstractProjectEditorAstI18nFactory factory, CompletionPuzzle puzzle ) {
+	public PuzzleCodeEditor( org.alice.ide.x.AbstractProjectEditorAstI18nFactory factory, CompletionPuzzle puzzle, CompletionPuzzleComposite puzzleComposite ) {
 		super( factory, puzzle.getPuzzleMethod(), puzzle.getPuzzleDoInOrder().body.getValue().statements );
 		this.puzzle = puzzle;
+		this.puzzleComposite = puzzleComposite;
 
 		puzzleBodyPane = (PuzzleBodyPane)this.getBodyPane();
-		puzzleBodyPane.initialize( factory, this.puzzle );
+		puzzleBodyPane.initialize( factory, this.puzzle, this.puzzleComposite );
 	}
 
 	@Override

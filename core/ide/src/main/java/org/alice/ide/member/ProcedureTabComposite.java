@@ -48,7 +48,7 @@ import edu.wustl.lookingglass.ide.member.RemixableActionsSubComposite;
  * @author Dennis Cosgrove
  */
 public final class ProcedureTabComposite extends MemberTabComposite<org.alice.ide.member.views.ProcedureTabView> {
-	private final org.lgna.croquet.ImmutableDataSingleSelectListState<String> sortState = this.createImmutableListState( "sortState", String.class, org.alice.ide.croquet.codecs.StringCodec.SINGLETON, 0, GROUP_BY_CATEGORY /* <lg> , SORT_ALPHABETICALLY </lg> */);
+	private final org.lgna.croquet.ImmutableDataSingleSelectListState<String> sortState = this.createImmutableListState( "sortState", String.class, org.alice.ide.croquet.codecs.StringCodec.SINGLETON, 0, this.findLocalizedText( GROUP_BY_CATEGORY_KEY ) /*<lg>, this.findLocalizedText( SORT_ALPHABETICALLY_KEY ) </lg>*/ );
 	private final RemixableActionsSubComposite remixableActionsComposite = new RemixableActionsSubComposite();
 
 	public ProcedureTabComposite() {

@@ -53,27 +53,23 @@ public enum HandleStyle {
 	ROTATION( "rotationHandlesIcon.png", "Rotation handles: allow you to rotate the object about the X, Y, and Z axes." ),
 	TRANSLATION( "translateHandlesIcon.png", "Movement handles: allow you to move the object along the X, Y, and Z axes." ),
 	RESIZE( "resizeHandlesIcon.png", "Resize handles: allow you to change the total size of an object as well as stretch it along the X, Y, and Z axes." ),
-	SELECT( "resizeHandlesIcon.png", "Selection Only" );
+	SELECT( "selectHandlesIcon.png", "Selection handles: allow you to select objects." );
 
 	private javax.swing.Icon icon;
 	private String toolTipText;
 
-	private HandleStyle( String iconName, String toolTipText )
-	{
-		if( iconName != null )
-		{
+	private HandleStyle( String iconName, String toolTipText ) {
+		if( iconName != null ) {
 			this.icon = edu.cmu.cs.dennisc.javax.swing.IconUtilities.createImageIcon( HandleStyle.class.getResource( "images/" + iconName ) );
 		}
 		this.toolTipText = toolTipText;
 	}
 
-	public javax.swing.Icon getIcon()
-	{
+	public javax.swing.Icon getIcon() {
 		return this.icon;
 	}
 
-	public String getToolTipText()
-	{
+	public String getToolTipText() {
 		return this.toolTipText;
 	}
 }

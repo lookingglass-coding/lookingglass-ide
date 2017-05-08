@@ -58,11 +58,16 @@ public class OneShotUtilities {
 			org.alice.ide.instancefactory.ThisFieldAccessFactory thisFieldAccessFactory = (org.alice.ide.instancefactory.ThisFieldAccessFactory)instanceFactory;
 			org.lgna.project.ast.UserField field = thisFieldAccessFactory.getField();
 			models.add( org.alice.ide.ast.rename.RenameFieldComposite.getInstance( field ).getLaunchOperation().getMenuItemPrepModel() );
+			//Prevent users from deleting the camera or the scene
 			if( field.getValueType().isAssignableTo( org.lgna.story.SCamera.class ) || field.getValueType().isAssignableTo( org.lgna.story.SScene.class ) ) {
 				//pass
 			} else {
 				models.add( org.alice.ide.croquet.models.ast.DeleteFieldOperation.getInstance( field ).getMenuItemPrepModel() );
 			}
+			//			if( field.getValueType().isAssignableTo( SBiped.class ) && ( field.getValueType() instanceof NamedUserType ) ) {
+			//				models.add( new AnimatorInputDialogComposite( (NamedUserType)field.getValueType() ).getOperation().getMenuItemPrepModel() );
+			//				models.add( new PoserInputDialogComposite( (NamedUserType)field.getValueType() ).getOperation().getMenuItemPrepModel() );
+			//			}
 			models.add( org.alice.ide.croquet.models.ast.RevertFieldOperation.getInstance( field ).getMenuItemPrepModel() );
 		}
 		return models;

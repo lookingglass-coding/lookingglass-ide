@@ -45,6 +45,8 @@ package org.alice.stageide.run;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 
+import org.alice.ide.IDE;
+import org.lgna.croquet.OverlayPane;
 import org.lgna.croquet.views.AwtComponentView;
 import org.lgna.croquet.views.BorderPanel;
 import org.lgna.croquet.views.Frame;
@@ -55,6 +57,7 @@ import edu.wustl.lookingglass.croquetfx.ThreadHelper;
  * @author Dennis Cosgrove
  */
 public class RunComposite extends org.lgna.croquet.SimpleModalFrameComposite<org.alice.stageide.run.views.RunView> {
+
 	private static class SingletonHolder {
 		private static RunComposite instance = new RunComposite();
 	}
@@ -62,6 +65,10 @@ public class RunComposite extends org.lgna.croquet.SimpleModalFrameComposite<org
 	public static RunComposite getInstance() {
 		return SingletonHolder.instance;
 	}
+
+	private static final boolean isRunWindowModal = Boolean.valueOf( System.getProperty( "edu.wustl.lookingglass.isRunWindowModal", "true" ) );
+
+	private OverlayPane disableEditingOverlay = null;
 
 	private final org.lgna.croquet.PlainStringValue restartLabel = this.createStringValue( "restart" );
 
@@ -74,8 +81,28 @@ public class RunComposite extends org.lgna.croquet.SimpleModalFrameComposite<org
 		// in user testing it really makes sense to have this feature.
 		// This kinda messes up the transaction history. But restart, play, pause, fast forward, all
 		// skip the transaction history anyway... so why does it matter?
-		this.setModal( false );
-		this.setReuseFrame( true );
+
+		// Disable the non-modal run frame.
+		if( isRunWindowModal ) {
+			ThreadHelper.invokeInFxThreadAndWait( () -> {
+				this.disableEditingOverlay = new org.lgna.croquet.OverlayPane.Builder( IDE.getActiveInstance().getDocumentFrame().getFrame() )
+						.defaultClose( false )
+						.overlayColor( OverlayPane.DEFAULT_OVERLAY_COLOR )
+						.onClickRunnable( () -> {
+					ThreadHelper.runOnSwingThread( () -> {
+						Frame frame = this.getCurrentFrame();
+						if( frame != null ) {
+							frame.close();
+						}
+					} );
+				} )
+						.build();
+			} );
+		} else {
+			this.disableEditingOverlay = null;
+			this.setModal( false );
+			this.setReuseFrame( true );
+		}
 	}
 
 	private transient org.alice.stageide.program.RunProgramContext programContext;
@@ -186,6 +213,7 @@ public class RunComposite extends org.lgna.croquet.SimpleModalFrameComposite<org
 	protected void handlePreShowWindow( org.lgna.croquet.views.Frame frame ) {
 		// <lg/> study logger
 		edu.wustl.lookingglass.study.StudyConfiguration.INSTANCE.getStudyLogger().log( java.util.logging.Level.INFO, "started playing program" );
+
 		super.handlePreShowWindow( frame );
 		if( frame.isAlwaysOnTopSupported() ) {
 			frame.setAlwaysOnTop( true );
@@ -213,6 +241,10 @@ public class RunComposite extends org.lgna.croquet.SimpleModalFrameComposite<org
 		} else {
 			frame.restore();
 		}
+
+		if( isRunWindowModal && ( this.disableEditingOverlay != null ) ) {
+			this.disableEditingOverlay.setStencilShowing( true );
+		}
 	}
 
 	@Override
@@ -220,6 +252,10 @@ public class RunComposite extends org.lgna.croquet.SimpleModalFrameComposite<org
 		this.stopProgram();
 
 		super.handlePreHideWindow( frame );
+
+		if( isRunWindowModal && ( this.disableEditingOverlay != null ) ) {
+			this.disableEditingOverlay.setStencilShowing( false );
+		}
 	}
 
 	@Override

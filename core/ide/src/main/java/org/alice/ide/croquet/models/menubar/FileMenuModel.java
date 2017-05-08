@@ -43,6 +43,7 @@
 package org.alice.ide.croquet.models.menubar;
 
 import edu.wustl.lookingglass.ide.LookingGlassIDE;
+import edu.wustl.lookingglass.ide.operations.OpenProjectBrowseOperation;
 
 /**
  * @author Dennis Cosgrove
@@ -56,8 +57,10 @@ public class FileMenuModel extends org.lgna.croquet.StaticMenuModel {
 	@Override
 	protected org.lgna.croquet.StandardMenuItemPrepModel[] createModels() {
 		java.util.List<org.lgna.croquet.StandardMenuItemPrepModel> list = edu.cmu.cs.dennisc.java.util.Lists.newLinkedList(
-				edu.wustl.lookingglass.ide.perspectives.openproject.OpenProjectOperation.getInstance().getMenuItemPrepModel(),
 				edu.wustl.lookingglass.ide.perspectives.openproject.NewProjectOperation.getInstance().getMenuItemPrepModel(),
+				edu.wustl.lookingglass.ide.perspectives.openproject.OpenProjectOperation.getInstance().getMenuItemPrepModel(),
+				org.lgna.croquet.MenuModel.SEPARATOR,
+				new OpenProjectBrowseOperation().getMenuItemPrepModel(),
 				org.alice.ide.recentprojects.RecentProjectsMenuModel.getInstance(),
 				org.lgna.croquet.MenuModel.SEPARATOR,
 				org.alice.ide.croquet.models.projecturi.SaveProjectOperation.getInstance().getMenuItemPrepModel(),
@@ -65,8 +68,7 @@ public class FileMenuModel extends org.lgna.croquet.StaticMenuModel {
 				org.lgna.croquet.MenuModel.SEPARATOR,
 				org.alice.ide.croquet.models.projecturi.RevertProjectOperation.getInstance().getMenuItemPrepModel(),
 				this.projectDocumentFrame.getResourcesDialogLaunchOperation().getMenuItemPrepModel(),
-				org.lgna.croquet.MenuModel.SEPARATOR
-				);
+				org.lgna.croquet.MenuModel.SEPARATOR );
 
 		//<lg> no one is sharing from the menu anyways
 		list.add( org.alice.stageide.run.RunComposite.getInstance().getLaunchOperation().getMenuItemPrepModel() );

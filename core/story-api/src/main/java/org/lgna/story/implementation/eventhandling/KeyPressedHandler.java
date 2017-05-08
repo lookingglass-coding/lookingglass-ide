@@ -70,7 +70,7 @@ public class KeyPressedHandler extends AbstractEventHandler<Object, KeyEvent> {
 	private final Object empty = new Object();
 	private final Map<Object, HeldKeyPolicy> heldKeyMap = Maps.newConcurrentHashMap();
 	private final Map<Object, Map<Key, Boolean>> firePolicyMap = Maps.newConcurrentHashMap();
-	private long sleepTime = 500;
+	private long sleepTime = 33;
 
 	public KeyPressedHandler() {
 		keyToListenersMap.put( empty, new CopyOnWriteArrayList<Object>() );

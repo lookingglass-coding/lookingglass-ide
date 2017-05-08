@@ -49,15 +49,9 @@ public class UserProjectsDirectoryState extends DirectoryState {
 	// <lg/> Make this the worlds dir for LG users
 	public static String DEFAULT_VALUE = UserApplicationDirectoryState.KEY + URI_SEPARATOR + "Worlds";
 
-	private static class SingletonHolder {
-		private static UserProjectsDirectoryState instance = new UserProjectsDirectoryState();
-	}
+	// <lg/> stop the singletons.
 
-	public static UserProjectsDirectoryState getInstance() {
-		return SingletonHolder.instance;
-	}
-
-	private UserProjectsDirectoryState() {
+	public UserProjectsDirectoryState() {
 		super(
 				org.lgna.croquet.Application.DOCUMENT_UI_GROUP,
 				java.util.UUID.fromString( "b6cf8508-35ce-46b5-a208-b53784ebeca6" ),

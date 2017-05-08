@@ -44,9 +44,11 @@
  *******************************************************************************/
 package org.lgna.project;
 
+import org.lgna.project.ast.UserMethod;
+
 /**
  * @author Kyle J. Harms
  */
 public interface ProjectMain {
-	public org.lgna.project.ast.UserMethod getMainMethod();
+	public UserMethod getMainMethod();
 }
