@@ -83,16 +83,13 @@ Looking Glass is developed by the Looking Glass Team and Research Group at
   run configurations. (**Run** > **Run Configurations...**, **Maven Build** >
   **Release - RELEASE_PLATFORM**). To build at the command line, install the
   prerequisites instructions below and then run:
-  
+
   `mvn clean package -Ddistribution.package=RELEASE_PLATFORM`.
 
   * Where *RELEASE_PLATFORM* is one of the following:
     * linux-amd64-deb
     * linux-amd64-rpm
     * linux-amd64-tar
-    * linux-i586-deb
-    * linux-i586-rpm
-    * linux-i586-tar
     * mac-dmg
     * win32-exe
     * win32-zip
@@ -114,11 +111,12 @@ Looking Glass is developed by the Looking Glass Team and Research Group at
 
   * Linux
 
+    Note: 32-bit builds are no longer supported for Linux.
+
     For RPM package, you must build on RPM supported platform like Redhat or
     Fedora. For DEB package or TAR.GZ you may build on any Linux platform.
 
     1. Download the latest JRE TAR.GZ and place it in your *Downloads* folder.
-       (32-bit, 64-bit, or both).
 
 ## Differences between Open Source and Proprietary (Official) Looking Glass
 
@@ -141,8 +139,7 @@ opened in both the open source and proprietary versions.
 
 3. Is the Looking Glass Community (website) source code also available?
 
-  We are working to make the source code for our community website available
-  at some time in the future.
+  The Looking Glass Community website source code is proprietary.
 
 4. My project that was created in the Official Looking Glass won't open in the
   open source version that I compiled here. Why won't it open?
